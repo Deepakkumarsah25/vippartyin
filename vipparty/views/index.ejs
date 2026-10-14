@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'विकासशील इंसान पार्टी (VIP) – आधिकारिक वेबसाइट' %></title>
+  <meta name="title" content="विकासशील इंसान पार्टी (VIP) – आधिकारिक वेबसाइट">
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) का मुख्य उद्देश्य सामाजिक न्याय, समानता, निषाद आरक्षण और हर वर्ग का सशक्तीकरण है। 'सन ऑफ मल्लाह' श्री मुकेश सहनी के नेतृत्व में शिक्षित, विकसित, रोजगारयुक्त और समृद्ध बिहार बनाने के हमारे विजन, नेतृत्व, समाचार और कार्यक्रमों के बारे में जानें।">
+  <meta name="keywords" content="VIP Party, Vikassheel Insaan Party, Mukesh Sahani, Son of Mallah, Bihar Politics, Nishad Aarakshan, Jubba Sahani, Bihar Elections 2026">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vipparty.in/">
+  <meta property="og:title" content="विकासशील इंसान पार्टी (VIP) – आधिकारिक वेबसाइट">
+  <meta property="og:description" content="विकासशील इंसान पार्टी (VIP) का मुख्य उद्देश्य सामाजिक न्याय, समानता, निषाद आरक्षण और हर वर्ग का सशक्तीकरण है।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans Devanagari & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- ========================================================
+       SECTION 1: HERO SECTION
+       Identical to RJD layout with VIP Leader & Colors
+       ======================================================== -->
+  <section class="home-hero relative bg-gradient-to-br from-blue-50 via-white to-blue-100 overflow-hidden block min-h-0 md:flex md:items-center md:min-h-[620px]">
+    
+    <!-- Ambient Blur Blobs -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-amber-200/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-300/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+
+    <!-- Leader Illustration & Banner Visual Container -->
+    <div class="relative md:absolute md:inset-0 z-0 block md:flex md:justify-end hero-banner-container pointer-events-none">
+      <div class="h-full w-full max-w-[650px] flex items-center justify-center md:justify-end p-6 md:pr-16 hero-leader-blend">
+        <!-- Modern Hero Graphic Card -->
+        <div class="relative w-full max-w-md bg-gradient-to-br from-white/90 to-blue-50/90 rounded-3xl p-6 shadow-2xl border-2 border-primary/20 backdrop-blur-md text-center transform transition-all duration-700 hover:scale-[1.02] pointer-events-auto">
+          <div class="w-32 h-32 mx-auto mb-4 rounded-full p-2 bg-gradient-to-tr from-primary to-amber-400 shadow-xl relative">
+            <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+              <img src="/images/vip-logo.svg" alt="Mukesh Sahani VIP Party" class="w-24 h-24 object-contain">
+            </div>
+            <span class="absolute bottom-0 right-1 bg-amber-500 text-white text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md">
+              सन ऑफ मल्लाह
+            </span>
+          </div>
+          <span class="inline-block bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full mb-2">
+            संस्थापक एवं राष्ट्रीय अध्यक्ष
+          </span>
+          <h2 class="text-2xl font-black text-gray-900 leading-tight">श्री मुकेश सहनी</h2>
+          <p class="text-xs text-primary font-bold mb-3">पूर्व मंत्री, बिहार सरकार</p>
+          <p class="text-xs text-gray-600 leading-relaxed italic bg-white/70 p-3 rounded-xl border border-blue-100">
+            "हमारा संकल्प केवल सत्ता पाना नहीं, बल्कि समाज के अंतिम पंक्ति में खड़े व्यक्ति को मान-सम्मान, अधिकार और आत्मनिर्भरता दिलाना है।"
+          </p>
+          <div class="mt-4 flex items-center justify-center gap-2 text-xs font-bold text-primary">
+            <i class="fa-solid fa-water text-primary"></i>
+            <span>निषाद आरक्षण • सामाजिक न्याय • संपूर्ण विकास</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Election Symbol Badge (Bottom Right) -->
+    <div class="absolute bottom-10 right-4 lg:right-10 z-20 bg-white p-4 rounded-xl shadow-2xl border-4 border-primary text-center transform rotate-3 hover:rotate-0 hover:scale-110 transition-all duration-300 hidden sm:block">
+      <div class="w-16 h-16 mx-auto mb-2 flex items-center justify-center animate-pulse">
+        <img src="/images/vip-symbol-boat.svg" alt="VIP Election Symbol - Boat (नाव)" width="1024" height="1024" decoding="async" class="w-16 h-16 object-contain">
+      </div>
+      <p class="text-xs font-bold text-primary mb-1">विकासशील इंसान पार्टी<br>चुनाव चिन्ह</p>
+      <h3 class="text-xl font-black text-primary-900">नाव (Boat)</h3>
+    </div>
+
+    <!-- Hero Content (Text & CTAs) -->
+    <div class="home-hero-content max-w-7xl mb-0 pb-8 md:-mb-80 md:pb-20 mx-auto px-5 sm:px-6 lg:px-8 relative z-20 w-full">
+      <div class="max-w-2xl md:pb-12 md:mt-0 pt-12 md:pt-0 md:-translate-y-3">
+        
+        <div class="inline-flex items-center gap-2 bg-blue-100/80 text-primary px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider mb-4 border border-blue-200">
+          <i class="fa-solid fa-shield-halved"></i> सामाजिक न्याय एवं स्वाभिमान
+        </div>
+
+        <h1 class="text-3xl md:text-5xl font-black leading-tight text-gray-900 mb-4 md:mb-5 animate-fade-in-up">
+          विकासशील इंसान पार्टी
+        </h1>
+
+        <p class="hero-copy-width text-lg md:text-xl leading-relaxed text-gray-800 md:text-gray-700 mb-8 md:mb-8 font-normal animate-fade-in-up" style="animation-delay: 0.1s;">
+          हमारा लक्ष्य एक समतामूलक, प्रगतिशील और खुशहाल बिहार का निर्माण है, जहाँ हर व्यक्ति को सम्मान, समान अधिकार और बेहतर अवसर मिले।
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8 md:mb-10 animate-fade-in-up" style="animation-delay: 0.2s;">
+          <a href="/ideology" class="bg-primary hover:bg-primary-700 text-white px-7 py-3.5 rounded-xl text-base font-bold whitespace-nowrap shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl flex items-center justify-center group">
+            <span>हमारे विचार</span>
+            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+          <a href="/active-member" class="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white px-7 py-3.5 rounded-xl text-base font-bold whitespace-nowrap shadow-sm transition-all hover:-translate-y-1 hover:shadow-md flex items-center justify-center group">
+            <span>हमसे जुड़ें</span>
+            <i class="fa-solid fa-users ml-2 group-hover:scale-110 transition-transform"></i>
+          </a>
+        </div>
+
+        <!-- Social Media Links -->
+        <div class="flex w-full min-w-0 flex-col items-start mt-6 md:mt-0 md:flex-row md:items-center md:space-x-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+          <span class="text-base text-gray-900 font-bold whitespace-nowrap">हमसे जुड़ें:</span>
+          <div class="mt-4 md:mt-0 flex w-full min-w-0 items-center justify-start gap-3 md:w-auto md:flex-none">
+            <a href="https://whatsapp.com" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center hover:bg-green-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+              <i class="fa-brands fa-whatsapp text-lg"></i>
+            </a>
+            <a href="https://t.me" aria-label="Telegram" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center hover:bg-sky-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+              <i class="fa-brands fa-telegram text-lg"></i>
+            </a>
+            <a href="https://facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+              <i class="fa-brands fa-facebook-f text-lg"></i>
+            </a>
+            <a href="https://x.com" aria-label="Twitter / X" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 text-gray-800 flex items-center justify-center hover:bg-gray-800 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+              <i class="fa-brands fa-x-twitter text-lg"></i>
+            </a>
+            <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center hover:bg-pink-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+              <i class="fa-brands fa-instagram text-lg"></i>
+            </a>
+            <a href="https://youtube.com" aria-label="YouTube" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+              <i class="fa-brands fa-youtube text-lg"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 2: 3 QUICK ACTION CARDS
+       Identical to RJD layout with VIP Colors
+       ======================================================== -->
+  <section class="relative z-30 pt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- 1. सदस्य बनें -->
+      <a href="/active-member" class="group relative bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="p-7 relative z-10">
+          <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-primary mb-5 group-hover:bg-white/20 group-hover:text-white transition-colors duration-500 shadow-sm">
+            <i class="fa-solid fa-user-plus text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-2 transition-colors duration-500 tracking-tight">
+            सदस्य बनें
+          </h3>
+          <p class="text-sm text-gray-500 group-hover:text-blue-50 transition-colors duration-500 leading-relaxed">
+            VIP परिवार से जुड़ें और बिहार के नवनिर्माण व सामाजिक न्याय के आंदोलन में अपना बहुमूल्य योगदान दें।
+          </p>
+          <div class="mt-5 flex items-center text-primary group-hover:text-white font-bold text-sm tracking-wide">
+            अभी जुड़ें <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2. सक्रिय सदस्य बनें -->
+      <a href="/active-member" class="group relative bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+        <div class="absolute inset-0 bg-gradient-to-r from-sky-600 to-primary-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="p-7 relative z-10">
+          <div class="w-14 h-14 bg-sky-50 rounded-xl flex items-center justify-center text-sky-600 mb-5 group-hover:bg-white/20 group-hover:text-white transition-colors duration-500 shadow-sm">
+            <i class="fa-solid fa-handshake-angle text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-2 transition-colors duration-500 tracking-tight">
+            सक्रिय सदस्य बनें
+          </h3>
+          <p class="text-sm text-gray-500 group-hover:text-sky-50 transition-colors duration-500 leading-relaxed">
+            पार्टी के संगठनात्मक अभियानों और सामाजिक कार्यों में जमीनी स्तर पर बढ़-चढ़कर सक्रिय हिस्सा लें।
+          </p>
+          <div class="mt-5 flex items-center text-sky-600 group-hover:text-white font-bold text-sm tracking-wide">
+            रजिस्टर करें <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+          </div>
+        </div>
+      </a>
+
+      <!-- 3. सहयोग करें (दान दें) -->
+      <a href="/donate" class="group relative bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="p-7 relative z-10">
+          <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500 mb-5 group-hover:bg-white/20 group-hover:text-white transition-colors duration-500 shadow-sm">
+            <i class="fa-solid fa-hand-holding-dollar text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-black text-gray-900 group-hover:text-white mb-2 transition-colors duration-500 tracking-tight">
+            सहयोग करें
+          </h3>
+          <p class="text-sm text-gray-500 group-hover:text-orange-50 transition-colors duration-500 leading-relaxed">
+            पार्टी को मजबूत बनाने के लिए अपना आर्थिक सहयोग प्रदान कर सामाजिक न्याय के संघर्ष को सशक्त करें।
+          </p>
+          <div class="mt-5 flex items-center text-orange-500 group-hover:text-white font-bold text-sm tracking-wide">
+            दान दें <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 3: हमारा संकल्प (VISION FOR BIHAR)
+       3-Column Pillars Layout matching RJD
+       ======================================================== -->
+  <section class="py-16 bg-gray-50 border-t border-gray-100 relative overflow-hidden">
+    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-blue-100 opacity-50"></div>
+    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-amber-50 opacity-50"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-primary font-bold tracking-widest text-sm uppercase mb-2 block">हमारा संकल्प</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">बिहार के नवनिर्माण का दृष्टिकोण</h2>
+        <p class="text-gray-600 text-base leading-relaxed">
+          हम एक ऐसे बिहार के निर्माण के लिए प्रतिबद्ध हैं जहाँ हर युवा को रोजगार, हर किसान-मजदूर को सम्मान और हर नागरिक को न्याय मिले।
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- जन उत्थान -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border-b-4 border-primary group">
+          <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-user-graduate text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">जन उत्थान</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            बिहार के हर नागरिक, विशेषकर युवाओं और वंचितों को प्रगति के समान अवसर प्रदान करना। हमारी नीतियां जमीनी स्तर पर विकास सुनिश्चित कर एक आत्मनिर्भर और सशक्त समाज के निर्माण के लिए प्रतिबद्ध हैं।
+          </p>
+        </div>
+
+        <!-- जन कल्याण -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border-b-4 border-sky-500 group">
+          <div class="w-16 h-16 bg-sky-50 rounded-full flex items-center justify-center text-sky-500 mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-seedling text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">जन कल्याण</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            किसानों, मत्स्यपालकों, मजदूरों और आम जनता के जीवन को खुशहाल बनाने के लिए समर्पित। बेहतर स्वास्थ्य, गुणवत्तापूर्ण शिक्षा और सर्वसुलभ बुनियादी सुविधाएं प्रदान कर हर चेहरे पर मुस्कान लाना ही हमारा संकल्प है।
+          </p>
+        </div>
+
+        <!-- जन-सम्मान -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border-b-4 border-amber-500 group">
+          <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center text-amber-500 mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-scale-balanced text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">जन-सम्मान</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            सामाजिक न्याय की अडिग विचारधारा के साथ, समाज के अंतिम पायदान पर खड़े हर व्यक्ति को उसका वास्तविक अधिकार दिलाना। हम एक ऐसे समतामूलक समाज के पैरोकार हैं जहाँ हर नागरिक स्वाभिमान से जिए।
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 4: महत्वपूर्ण जानकारी (KEY PAGES GRID)
+       6-Card Navigation Grid matching RJD
+       ======================================================== -->
+  <section class="py-14 bg-white border-t border-gray-100" aria-labelledby="important-pages-heading">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-9">
+        <span class="text-primary font-bold tracking-widest text-sm uppercase block mb-2">महत्वपूर्ण जानकारी</span>
+        <h2 id="important-pages-heading" class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+          विकासशील इंसान पार्टी के प्रमुख पृष्ठ
+        </h2>
+        <p class="text-gray-600 leading-relaxed">
+          वीआईपी के इतिहास, नेतृत्व, संगठन, प्रमुख योजनाओं, समाचार और कार्यक्रमों की आधिकारिक जानकारी सीधे प्राप्त करें।
+        </p>
+      </div>
+
+      <nav aria-label="विकासशील इंसान पार्टी के प्रमुख पृष्ठ" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <a href="/about" class="group rounded-xl border border-gray-200 p-5 hover:border-primary hover:shadow-md transition-all">
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary mb-2">वीआईपी के बारे में</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">विकासशील इंसान पार्टी का परिचय, मिशन, उद्देश्य और जनसेवा का संघर्षशील सफर जानें।</p>
+        </a>
+
+        <a href="/leaders" class="group rounded-xl border border-gray-200 p-5 hover:border-primary hover:shadow-md transition-all">
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary mb-2">वीआईपी नेतृत्व</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">श्री मुकेश सहनी (सन ऑफ मल्लाह) और वीआईपी के प्रमुख राष्ट्रीय व प्रदेश नेताओं के बारे में पढ़ें।</p>
+        </a>
+
+        <a href="/organization" class="group rounded-xl border border-gray-200 p-5 hover:border-primary hover:shadow-md transition-all">
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary mb-2">पार्टी संगठन</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">वीआईपी की संगठनात्मक संरचना, पदाधिकारियों और जिला अध्यक्षों की विस्तृत जानकारी देखें।</p>
+        </a>
+
+        <a href="/news" class="group rounded-xl border border-gray-200 p-5 hover:border-primary hover:shadow-md transition-all">
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary mb-2">ताजा वीआईपी समाचार</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">पार्टी के नवीनतम समाचार, आधिकारिक बयान, प्रेस विज्ञप्तियां और जनहित के मुद्दे पढ़ें।</p>
+        </a>
+
+        <a href="/events" class="group rounded-xl border border-gray-200 p-5 hover:border-primary hover:shadow-md transition-all">
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary mb-2">कार्यक्रम और रैलियां</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">विकासशील इंसान पार्टी के आगामी कार्यक्रमों, सम्मेलनों और रैलियों की पूरी समय-सारणी देखें।</p>
+        </a>
+
+        <a href="/active-member" class="group rounded-xl border border-gray-200 p-5 hover:border-primary hover:shadow-md transition-all">
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary mb-2">वीआईपी सदस्य बनें</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">विकासशील इंसान पार्टी की सदस्यता लेकर निषाद आरक्षण और सामाजिक न्याय के आंदोलन से जुड़ें।</p>
+        </a>
+
+      </nav>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 5: हमारी प्रेरणा (INTERACTIVE INSPIRATION SLIDER)
+       Full interactive drag/touch carousel matching RJD
+       ======================================================== -->
+  <section class="py-16 bg-white overflow-hidden border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header with Arrows -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-primary font-bold tracking-widest text-sm uppercase block mb-1">प्रेरणा</span>
+          <h2 class="text-3xl font-black text-gray-900 uppercase tracking-wide" style="font-family: Impact, sans-serif; letter-spacing: 1px;">
+            हमारी प्रेरणा
+          </h2>
+        </div>
+        <div class="flex space-x-2">
+          <button id="insp-prev" aria-label="पिछला" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all shadow-sm">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+          </button>
+          <button id="insp-next" aria-label="अगला" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all shadow-sm">
+            <i class="fa-solid fa-chevron-right text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Carousel Cards Track -->
+      <div class="relative">
+        <div id="inspiration-slider" class="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-6 scroll-smooth select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          
+          <!-- Leader 1: Amar Shaheed Jubba Sahani -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-fire text-5xl mb-3 text-amber-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-amber-100">अमर स्वतंत्रता सेनानी</span>
+                <span class="text-xl font-black">अमर शहीद जुब्बा सहनी</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Amar Shaheed Jubba Sahani</h3>
+              <p class="text-xs text-primary font-semibold mt-1">सर्वोच्च बलिदान व स्वाभिमान के प्रतीक</p>
+            </div>
+          </div>
+
+          <!-- Leader 2: Dr. B.R. Ambedkar -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-blue-700 via-primary to-indigo-800 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-scale-balanced text-5xl mb-3 text-blue-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-blue-100">संविधान निर्माता</span>
+                <span class="text-xl font-black">बाबा साहेब डॉ. भीमराव अंबेडकर</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Dr. Bhimrao Ramji Ambedkar</h3>
+              <p class="text-xs text-primary font-semibold mt-1">सामाजिक समरसता एवं समानता</p>
+            </div>
+          </div>
+
+          <!-- Leader 3: Lok Nayak Jayaprakash Narayan -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-sky-600 via-blue-600 to-cyan-700 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-users-rays text-5xl mb-3 text-sky-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-sky-100">सम्पूर्ण क्रांति के प्रणेता</span>
+                <span class="text-xl font-black">लोकनायक जयप्रकाश नारायण</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Lok Nayak Jayaprakash Narayan</h3>
+              <p class="text-xs text-primary font-semibold mt-1">जन-आंदोलन व लोकतंत्र की रक्षा</p>
+            </div>
+          </div>
+
+          <!-- Leader 4: Maulana Abul Kalam Azad -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-teal-600 via-emerald-700 to-green-800 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-book-open-reader text-5xl mb-3 text-teal-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-teal-100">महान शिक्षाविद् व स्वतंत्रता सेनानी</span>
+                <span class="text-xl font-black">मौलाना अबुल कलाम आजाद</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Maulana Abul Kalam Azad</h3>
+              <p class="text-xs text-primary font-semibold mt-1">राष्ट्रीय एकता एवं शिक्षा क्रांति</p>
+            </div>
+          </div>
+
+          <!-- Leader 5: Mahatma Jyotirao Phule -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-rose-600 via-red-600 to-orange-700 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-hand-holding-heart text-5xl mb-3 text-rose-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-rose-100">सत्यशोधक समाज के जनक</span>
+                <span class="text-xl font-black">महात्मा ज्योतिराव फुले</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Mahatma Jyotirao Phule</h3>
+              <p class="text-xs text-primary font-semibold mt-1">शोषित वर्गों का उत्थान</p>
+            </div>
+          </div>
+
+          <!-- Leader 6: Savitribai Phule -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-purple-600 via-violet-700 to-indigo-800 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-graduation-cap text-5xl mb-3 text-purple-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-purple-100">प्रथम महिला शिक्षिका</span>
+                <span class="text-xl font-black">क्रांतिज्योति सावित्रीबाई फुले</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Savitribai Phule</h3>
+              <p class="text-xs text-primary font-semibold mt-1">स्त्री शिक्षा एवं सशक्तिकरण</p>
+            </div>
+          </div>
+
+          <!-- Leader 7: Chaudhary Charan Singh -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-amber-600 via-yellow-600 to-amber-700 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-wheat-awn text-5xl mb-3 text-amber-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-amber-100">किसानों के मसीहा</span>
+                <span class="text-xl font-black">चौधरी चरण सिंह</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Chaudhary Charan Singh</h3>
+              <p class="text-xs text-primary font-semibold mt-1">कृषि व ग्रामीण स्वावलंबन</p>
+            </div>
+          </div>
+
+          <!-- Leader 8: Bhagwan Birsa Munda -->
+          <div class="insp-card flex-none w-full sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col">
+            <div class="aspect-video sm:aspect-auto sm:h-60 overflow-hidden bg-gradient-to-br from-green-700 via-emerald-800 to-slate-900 flex items-center justify-center relative p-6">
+              <div class="text-center text-white">
+                <i class="fa-solid fa-shield-halved text-5xl mb-3 text-green-200"></i>
+                <span class="block text-xs font-bold uppercase tracking-widest text-green-100">धरती आबा</span>
+                <span class="text-xl font-black">भगवान बिरसा मुंडा</span>
+              </div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Bhagwan Birsa Munda</h3>
+              <p class="text-xs text-primary font-semibold mt-1">जल, जंगल, जमीन व स्वाभिमान</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Dynamic Indicator Dots -->
+      <div id="insp-dots-container" class="flex justify-center items-center space-x-1.5 mt-2 animate-fade-in"></div>
+
+      <!-- View All Button -->
+      <div class="text-center mt-6">
+        <a href="/prerna" class="inline-flex items-center gap-2 bg-primary text-white text-xs font-bold px-6 py-2.5 rounded-full hover:bg-primary-700 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 transform">
+          <span>सभी प्रेरणा पुंज देखें</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 6: VIDEO SHOWCASE ("सुनहरा कल हो" / स्वाभिमान की गूंज)
+       Dark background with crowd overlay & click-to-play video
+       ======================================================== -->
+  <section class="relative py-24 overflow-hidden bg-black">
+    
+    <div class="absolute inset-0 z-0">
+      <img src="/images/event_rally.jpg" alt="VIP Public Rally" width="1600" height="410" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-25 filter grayscale">
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+    </div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="text-amber-400 font-bold tracking-widest text-xs uppercase mb-2 block">
+        जन-आकांक्षाओं की गूंज
+      </span>
+      <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-widest mb-12 drop-shadow-lg" style="font-family: Impact, sans-serif;">
+        स्वाभिमान और सुनहरे कल का संकल्प
+      </h2>
+
+      <div class="relative max-w-4xl mx-auto">
+        
+        <!-- Video Thumbnail Card -->
+        <div id="videoThumbnail" class="relative rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,102,178,0.3)] border border-white/20 group cursor-pointer aspect-video bg-gray-900">
+          <img src="/images/event_rally.jpg" alt="Mukesh Sahani VIP Party Video" width="1280" height="720" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80">
+          
+          <!-- Play Overlay -->
+          <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex flex-col items-center justify-center transition-colors">
+            <div class="w-16 h-12 md:w-20 md:h-14 bg-red-600 rounded-2xl flex items-center justify-center text-white shadow-2xl group-hover:bg-red-700 group-hover:scale-110 transition-all duration-300">
+              <i class="fa-solid fa-play text-xl md:text-2xl ml-1"></i>
+            </div>
+            <span class="text-white font-bold text-sm md:text-base mt-4 drop-shadow-md">
+              'सन ऑफ मल्लाह' श्री मुकेश सहनी का ऐतिहासिक संबोधन
+            </span>
+          </div>
+
+          <div class="absolute bottom-0 left-0 right-0 p-4 md:p-5 bg-gradient-to-t from-black/95 to-transparent flex justify-between items-end">
+            <div class="hidden sm:flex text-white/90 items-center text-xs md:text-sm font-medium">
+              Watch on <i class="fa-brands fa-youtube text-red-500 mx-1.5 text-lg"></i> YouTube
+            </div>
+            <span class="text-xs bg-red-600 text-white font-bold px-2 py-0.5 rounded">
+              OFFICIAL SPEECH
+            </span>
+          </div>
+        </div>
+
+        <!-- Embedded Iframe (Activated on click) -->
+        <div id="videoContainer" class="hidden aspect-video rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
+          <iframe class="w-full h-full" src="" id="youtubeVideo" title="VIP Party Video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 7: हमारा फोकस (6-PILLAR GRID)
+       6 Core Values matching RJD layout
+       ======================================================== -->
+  <section class="py-16 bg-blue-50/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="mb-10 text-center md:text-left">
+        <span class="text-primary font-bold tracking-wider uppercase text-sm">हमारा फोकस</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 hover:text-primary transition-colors cursor-default">
+          बेहतर बिहार के लिए हमारी लड़ाई
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- 1. पढ़ाई -->
+        <a href="/ideology">
+          <div class="group bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-xl hover:border-primary/30 transition-all transform hover:-translate-y-2 duration-300">
+            <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-primary text-3xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">पढ़ाई</h3>
+            <p class="text-sm text-gray-500">बिहार के हर बच्चे को एक समान, गुणवत्तापूर्ण और आधुनिक शिक्षा का सुअवसर मिले।</p>
+          </div>
+        </a>
+
+        <!-- 2. दवाई -->
+        <a href="/ideology">
+          <div class="group bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-xl hover:border-primary/30 transition-all transform hover:-translate-y-2 duration-300">
+            <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-primary text-3xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <i class="fa-solid fa-house-medical"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">दवाई</h3>
+            <p class="text-sm text-gray-500">स्वास्थ्य व्यवस्था सुदृढ़ हो, पंचायत स्तर पर बेहतर इलाज और निशुल्क दवाएं सुलभ हों।</p>
+          </div>
+        </a>
+
+        <!-- 3. कमाई -->
+        <a href="/ideology">
+          <div class="group bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-xl hover:border-primary/30 transition-all transform hover:-translate-y-2 duration-300">
+            <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-primary text-3xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">कमाई</h3>
+            <p class="text-sm text-gray-500">युवाओं को बिहार में ही रोजगार और उद्योग मिले, पलायन का दंश हमेशा के लिए खत्म हो।</p>
+          </div>
+        </a>
+
+        <!-- 4. सिंचाई एवं मत्स्य संपदा -->
+        <a href="/ideology">
+          <div class="group bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-xl hover:border-primary/30 transition-all transform hover:-translate-y-2 duration-300">
+            <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-primary text-3xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <i class="fa-solid fa-water"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">सिंचाई व मत्स्य संपदा</h3>
+            <p class="text-sm text-gray-500">किसानों और निषाद/मत्स्यजीवी भाइयों के लिए आधुनिक सुविधाएं और लाभकारी योजनाएं हों।</p>
+          </div>
+        </a>
+
+        <!-- 5. सुनवाई -->
+        <a href="/ideology">
+          <div class="group bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-xl hover:border-primary/30 transition-all transform hover:-translate-y-2 duration-300">
+            <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-primary text-3xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <i class="fa-solid fa-hands-holding-child"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">सुनवाई</h3>
+            <p class="text-sm text-gray-500">जनता की बात सम्मानपूर्वक सुनी जाए, प्रशासन पारदर्शी, जवाबदेह और संवेदनशील बने।</p>
+          </div>
+        </a>
+
+        <!-- 6. कार्रवाई (न्याय) -->
+        <a href="/ideology">
+          <div class="group bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-xl hover:border-primary/30 transition-all transform hover:-translate-y-2 duration-300">
+            <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-primary text-3xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">कार्रवाई</h3>
+            <p class="text-sm text-gray-500">अपराध, अन्याय और भ्रष्टाचार पर त्वरित सख्त कार्रवाई हो, हर नागरिक को न्याय मिले।</p>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="/ideology" class="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white px-7 py-2.5 rounded-xl font-bold transition-all hover:shadow-md inline-flex items-center group">
+          <span>हमारे विचार देखें</span>
+          <i class="fa-solid fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 8: सोशल मीडिया अपडेट्स (4-CARD HUB)
+       X, Facebook, Instagram, YouTube matching RJD layout
+       ======================================================== -->
+  <section class="py-20 relative overflow-hidden bg-gray-50">
+    <div class="absolute inset-0 opacity-[0.03] z-0" style="background-image: radial-gradient(#0066b2 1px, transparent 1px); background-size: 32px 32px;"></div>
+    <div class="absolute -left-40 top-20 w-96 h-96 bg-primary/10 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+    <div class="absolute -right-40 bottom-10 w-96 h-96 bg-amber-400/10 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-16">
+        <span class="text-primary font-bold tracking-widest uppercase text-sm border-b-2 border-primary pb-1">डिजिटल उपस्थिति</span>
+        <h2 class="text-4xl md:text-5xl font-black text-gray-900 mt-6 mb-4 tracking-tight">
+          सोशल मीडिया <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-500">अपडेट्स</span>
+        </h2>
+        <p class="text-gray-500 max-w-2xl mx-auto text-lg">
+          विकासशील इंसान पार्टी के नवीनतम विचारों, गतिविधियों, जनसंवाद और रैलियों को हमारे आधिकारिक सोशल चैनल्स पर लाइव फॉलो करें।
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        
+        <!-- 1. X (Twitter) Card -->
+        <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="block bg-black rounded-2xl p-6 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 relative group cursor-pointer flex flex-col h-full min-h-[350px]">
+          <div class="flex items-center justify-between mb-4 z-0">
+            <div class="flex items-center space-x-3">
+              <div class="bg-white rounded-full p-1">
+                <img src="/images/vip-logo.svg" class="w-8 h-8 rounded-full object-contain" alt="VIP Logo on X">
+              </div>
+              <div>
+                <h4 class="font-bold text-white text-sm leading-tight group-hover:text-gray-300">VIP Party</h4>
+                <span class="text-[11px] text-gray-400">@VIPpartyBihar</span>
+              </div>
+            </div>
+            <i class="fa-brands fa-x-twitter text-white text-2xl group-hover:scale-110 transition-transform"></i>
+          </div>
+          <div class="flex-grow flex flex-col justify-center z-0">
+            <p class="text-gray-300 text-sm md:text-base mb-6 leading-relaxed text-center italic">
+              "ताज़ा राजनीतिक अपडेट्स, जनहित के मुद्दों और पार्टी के आधिकारिक बयानों के लिए हमें X पर फॉलो करें।"
+            </p>
+          </div>
+          <div class="mt-auto z-0">
+            <div class="bg-white text-black font-bold text-sm text-center py-3 rounded-xl hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+              <i class="fa-brands fa-x-twitter"></i> X पर फॉलो करें
+            </div>
+          </div>
+        </a>
+
+        <!-- 2. Facebook Card -->
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="block bg-[#1877F2] rounded-2xl p-6 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 relative group cursor-pointer flex flex-col h-full min-h-[350px]">
+          <div class="flex items-center justify-between mb-4 z-0">
+            <div class="flex items-center space-x-3">
+              <div class="bg-white rounded-full p-1">
+                <img src="/images/vip-logo.svg" class="w-8 h-8 rounded-full object-contain" alt="VIP Logo on Facebook">
+              </div>
+              <div>
+                <h4 class="font-bold text-white text-sm leading-tight group-hover:text-blue-100">Vikassheel Insaan Party</h4>
+                <span class="text-[11px] text-blue-200">@VIPPartyOfficial</span>
+              </div>
+            </div>
+            <i class="fa-brands fa-facebook text-white text-3xl group-hover:scale-110 transition-transform"></i>
+          </div>
+          <div class="flex-grow flex flex-col justify-center z-0">
+            <p class="text-white/95 text-sm md:text-base mb-6 leading-relaxed text-center font-medium">
+              हमारे फेसबुक परिवार से जुड़ें।<br><br>लाइव इवेंट्स, जनसभाओं की तस्वीरें और विस्तृत रिपोर्ट देखें।
+            </p>
+          </div>
+          <div class="mt-auto z-0">
+            <div class="bg-white text-[#1877F2] font-bold text-sm text-center py-3 rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+              <i class="fa-brands fa-facebook"></i> फेसबुक पर जुड़ें
+            </div>
+          </div>
+        </a>
+
+        <!-- 3. Instagram Card -->
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 relative group cursor-pointer flex flex-col h-full min-h-[350px]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+              <img src="/images/vip-logo.svg" width="1024" height="1024" loading="lazy" decoding="async" class="w-10 h-10 rounded-full object-contain p-1 border border-gray-100" alt="VIP Instagram Profile">
+              <div>
+                <h4 class="font-bold text-gray-900 text-sm leading-tight hover:text-pink-600">VIP Reels & Updates</h4>
+                <span class="text-[11px] text-gray-500">@vippartybihar</span>
+              </div>
+            </div>
+            <i class="fa-brands fa-instagram text-transparent bg-clip-text bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 text-2xl group-hover:scale-110 transition-transform"></i>
+          </div>
+          <p class="text-gray-700 text-sm mb-4 leading-relaxed line-clamp-3">
+            इंस्टाग्राम पर हमें फॉलो करें। युवा ऊर्जा, प्रेरणादायक रील्स और जनसभाओं के महत्वपूर्ण पलों के वीडियो देखें।
+          </p>
+          <div class="grid grid-cols-3 gap-1 rounded-xl overflow-hidden mb-4 h-32 bg-gray-100">
+            <div class="bg-blue-100 flex items-center justify-center"><i class="fa-solid fa-play text-primary"></i></div>
+            <div class="bg-amber-100 flex items-center justify-center"><i class="fa-solid fa-camera text-amber-600"></i></div>
+            <div class="bg-sky-100 flex items-center justify-center"><i class="fa-solid fa-clapperboard text-sky-600"></i></div>
+          </div>
+          <div class="mt-auto text-pink-600 font-bold text-sm text-center">फॉलो करें ➔</div>
+        </a>
+
+        <!-- 4. YouTube Channel Card -->
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="block bg-gray-900 rounded-2xl p-1 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 relative overflow-hidden group cursor-pointer flex flex-col h-full min-h-[350px]">
+          <div class="relative h-full p-6 flex flex-col justify-between z-0">
+            <div class="flex items-center justify-between">
+              <span class="bg-white text-gray-900 text-[10px] font-black px-2 py-1 rounded flex items-center">
+                <i class="fa-brands fa-youtube text-red-600 text-lg mr-1.5"></i> YouTube
+              </span>
+              <i class="fa-solid fa-play text-red-500 text-xl"></i>
+            </div>
+            <div class="text-center my-auto py-4">
+              <div class="w-14 h-14 bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play text-xl ml-1"></i>
+              </div>
+              <h3 class="text-white font-bold text-xl leading-tight mb-2">VIP Bihar Official</h3>
+              <p class="text-gray-300 text-xs line-clamp-3">भाषण, रैलियां, प्रेस वार्ता और पार्टी के सभी आधिकारिक वीडियो के लिए हमारा यूट्यूब चैनल सब्सक्राइब करें।</p>
+            </div>
+            <div class="text-center">
+              <span class="text-red-400 text-sm font-bold">चैनल पर जाएं ➔</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- WhatsApp Channel Pill Banner -->
+      <div class="text-center mt-12">
+        <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-3.5 bg-white border border-gray-200 hover:border-green-500 text-gray-800 rounded-full font-bold transition-all shadow-md hover:shadow-xl transform hover:-translate-y-1 group">
+          <i class="fa-brands fa-whatsapp mr-3 text-green-500 text-2xl group-hover:scale-110 transition-transform"></i>
+          <span>व्हाट्सएप चैनल से जुड़ें और सीधे अपडेट पाएं</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 9: ताजा समाचार & आगामी कार्यक्रम (SPLIT 2:1 GRID)
+       News on Left, Calendar Events on Right matching RJD
+       ======================================================== -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+        <!-- Left 2 Cols: ताजा समाचार -->
+        <div class="lg:col-span-2">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-black text-gray-900 hover:text-primary transition-colors">ताजा समाचार</h2>
+            <a href="/news" class="text-primary font-bold hover:underline flex items-center text-sm group">
+              <span>सभी देखें</span>
+              <i class="fa-solid fa-arrow-right ml-1.5 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+          </div>
+
+          <div class="space-y-6">
+            
+            <!-- News Item 1 -->
+            <a href="/news" class="flex flex-col sm:flex-row gap-4 group bg-white p-3 rounded-2xl hover:shadow-md transition-shadow border border-gray-100">
+              <div class="w-full sm:w-1/3 overflow-hidden rounded-xl relative bg-blue-100 flex items-center justify-center h-36">
+                <i class="fa-solid fa-newspaper text-primary text-4xl"></i>
+              </div>
+              <div class="w-full sm:w-2/3 flex flex-col justify-center">
+                <span class="text-xs text-primary font-bold mb-1 block">12 अक्टूबर 2026</span>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary transition mb-2 line-clamp-2">
+                  निषाद आरक्षण संकल्प यात्रा को लेकर युवाओं में भारी उत्साह, श्री मुकेश सहनी ने भरी हुंकार
+                </h3>
+                <p class="text-sm text-gray-600 line-clamp-2 mb-2">
+                  विकासशील इंसान पार्टी के राष्ट्रीय अध्यक्ष श्री मुकेश सहनी जी ने कहा कि जब तक निषाद समाज को उनका संवैधानिक आरक्षण नहीं मिल जाता, संघर्ष अनवरत जारी रहेगा...
+                </p>
+                <span class="text-primary text-sm font-semibold flex items-center mt-auto">
+                  और पढ़ें <i class="fa-solid fa-arrow-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
+                </span>
+              </div>
+            </a>
+
+            <hr class="border-gray-100">
+
+            <!-- News Item 2 -->
+            <a href="/scholarship" class="flex flex-col sm:flex-row gap-4 group bg-white p-3 rounded-2xl hover:shadow-md transition-shadow border border-gray-100">
+              <div class="w-full sm:w-1/3 overflow-hidden rounded-xl relative bg-amber-100 flex items-center justify-center h-36">
+                <i class="fa-solid fa-graduation-cap text-amber-600 text-4xl"></i>
+              </div>
+              <div class="w-full sm:w-2/3 flex flex-col justify-center">
+                <span class="text-xs text-amber-600 font-bold mb-1 block">10 अक्टूबर 2026</span>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary transition mb-2 line-clamp-2">
+                  जुब्बा सहनी मेधा छात्रवृत्ति के तहत हजारों मेधावी छात्र-छात्राओं को मिला आर्थिक संबल
+                </h3>
+                <p class="text-sm text-gray-600 line-clamp-2 mb-2">
+                  अमर शहीद जुब्बा सहनी की स्मृति में उच्च शिक्षा और प्रतियोगी परीक्षाओं की तैयारी करने वाले आर्थिक रूप से कमजोर छात्र-छात्राओं के लिए विशेष छात्रवृत्ति पोर्टल प्रारंभ...
+                </p>
+                <span class="text-primary text-sm font-semibold flex items-center mt-auto">
+                  और पढ़ें <i class="fa-solid fa-arrow-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
+                </span>
+              </div>
+            </a>
+
+            <hr class="border-gray-100">
+
+            <!-- News Item 3 -->
+            <a href="/news" class="flex flex-col sm:flex-row gap-4 group bg-white p-3 rounded-2xl hover:shadow-md transition-shadow border border-gray-100">
+              <div class="w-full sm:w-1/3 overflow-hidden rounded-xl relative bg-sky-100 flex items-center justify-center h-36">
+                <i class="fa-solid fa-bullhorn text-sky-600 text-4xl"></i>
+              </div>
+              <div class="w-full sm:w-2/3 flex flex-col justify-center">
+                <span class="text-xs text-primary font-bold mb-1 block">08 अक्टूबर 2026</span>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary transition mb-2 line-clamp-2">
+                  बिहार में स्थानीय रोजगार और मत्स्य संपदा नीति को लेकर वीआईपी पार्टी ने जारी किया विज़न पत्र
+                </h3>
+                <p class="text-sm text-gray-600 line-clamp-2 mb-2">
+                  विकासशील इंसान पार्टी ने बिहार के किसानों, पशुपालकों और मत्स्यजीवी भाइयों के लिए आधुनिक बाजारों और कोल्ड स्टोरेज चेन की स्थापना की मांग उठाई...
+                </p>
+                <span class="text-primary text-sm font-semibold flex items-center mt-auto">
+                  और पढ़ें <i class="fa-solid fa-arrow-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i>
+                </span>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Right 1 Col: आगामी कार्यक्रम -->
+        <div class="bg-blue-50/60 p-6 rounded-2xl border border-blue-100 hover:shadow-lg transition-shadow">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-black text-gray-900">आगामी कार्यक्रम</h2>
+            <a href="/events" class="text-primary font-bold hover:underline flex items-center text-sm group">
+              <span>सभी देखें</span>
+              <i class="fa-solid fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+          </div>
+
+          <div class="space-y-4 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
+            
+            <!-- Event 1 -->
+            <a href="/events" class="block bg-white p-4 rounded-xl shadow-sm flex gap-4 items-start hover:shadow-md transition-all hover:-translate-y-1 group border border-gray-50">
+              <div class="bg-primary text-white text-center rounded-lg p-2.5 min-w-[62px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
+                <span class="block text-2xl font-black leading-none">15</span>
+                <span class="block text-[10px] mt-1 uppercase font-bold text-blue-200">Nov '26</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-sm leading-snug">
+                  विशाल निषाद आरक्षण महासम्मेलन
+                </h4>
+                <div class="text-xs text-gray-500 mt-2 space-y-1">
+                  <p><i class="fa-solid fa-location-dot w-4 text-primary"></i> गांधी मैदान, पटना</p>
+                </div>
+              </div>
+            </a>
+
+            <!-- Event 2 -->
+            <a href="/events" class="block bg-white p-4 rounded-xl shadow-sm flex gap-4 items-start hover:shadow-md transition-all hover:-translate-y-1 group border border-gray-50">
+              <div class="bg-primary text-white text-center rounded-lg p-2.5 min-w-[62px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
+                <span class="block text-2xl font-black leading-none">22</span>
+                <span class="block text-[10px] mt-1 uppercase font-bold text-blue-200">Nov '26</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-sm leading-snug">
+                  जनसंवाद एवं कार्यकर्ता मिलन समारोह
+                </h4>
+                <div class="text-xs text-gray-500 mt-2 space-y-1">
+                  <p><i class="fa-solid fa-location-dot w-4 text-primary"></i> जिला परिषद मैदान, मुजफ्फरपुर</p>
+                </div>
+              </div>
+            </a>
+
+            <!-- Event 3 -->
+            <a href="/events" class="block bg-white p-4 rounded-xl shadow-sm flex gap-4 items-start hover:shadow-md transition-all hover:-translate-y-1 group border border-gray-50">
+              <div class="bg-primary text-white text-center rounded-lg p-2.5 min-w-[62px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
+                <span class="block text-2xl font-black leading-none">05</span>
+                <span class="block text-[10px] mt-1 uppercase font-bold text-blue-200">Dec '26</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-sm leading-snug">
+                  अमर शहीद जुब्बा सहनी स्मृति दिवस
+                </h4>
+                <div class="text-xs text-gray-500 mt-2 space-y-1">
+                  <p><i class="fa-solid fa-location-dot w-4 text-primary"></i> टाउन हॉल, दरभंगा</p>
+                </div>
+              </div>
+            </a>
+
+            <!-- Event 4 -->
+            <a href="/events" class="block bg-white p-4 rounded-xl shadow-sm flex gap-4 items-start hover:shadow-md transition-all hover:-translate-y-1 group border border-gray-50">
+              <div class="bg-primary text-white text-center rounded-lg p-2.5 min-w-[62px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
+                <span class="block text-2xl font-black leading-none">18</span>
+                <span class="block text-[10px] mt-1 uppercase font-bold text-blue-200">Dec '26</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-sm leading-snug">
+                  युवा वीआईपी रोजगार अधिकार मार्च
+                </h4>
+                <div class="text-xs text-gray-500 mt-2 space-y-1">
+                  <p><i class="fa-solid fa-location-dot w-4 text-primary"></i> सैंडिस कंपाउंड, भागलपुर</p>
+                </div>
+              </div>
+            </a>
+
+          </div>
+
+          <a href="/events" class="w-full mt-6 bg-primary hover:bg-primary-700 text-white py-3 rounded-xl font-bold transition shadow-md flex items-center justify-center hover:-translate-y-1 group">
+            <span>कार्यक्रम में शामिल हों</span>
+            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 10: प्रेस कॉन्फ्रेंस (4-VIDEO GRID)
+       Media Grid matching RJD
+       ======================================================== -->
+  <section class="py-16 bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row justify-between items-center mb-10">
+        <div class="text-center md:text-left">
+          <span class="text-primary font-bold tracking-wider uppercase text-sm border-b-2 border-primary pb-1">मीडिया</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4">प्रेस कॉन्फ्रेंस एवं मीडिया संबोधन</h2>
+        </div>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="mt-6 md:mt-0 inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-full transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group">
+          <i class="fa-brands fa-youtube text-lg"></i>
+          <span>सभी वीडियो देखें</span>
+          <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Video 1 -->
+        <div class="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="relative bg-gray-900 overflow-hidden" style="aspect-ratio:16/9;">
+            <div class="w-full h-full bg-gradient-to-tr from-blue-900 to-primary flex items-center justify-center">
+              <i class="fa-solid fa-video text-white/50 text-4xl"></i>
+            </div>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+              <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play ml-1"></i>
+              </div>
+            </a>
+            <span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 shadow">
+              <i class="fa-brands fa-youtube text-xs"></i> LATEST
+            </span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+              निषाद समाज के संवैधानिक अधिकारों पर श्री मुकेश सहनी का कड़ा बयान
+            </h3>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-1">
+              <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
+            </a>
+          </div>
+        </div>
+
+        <!-- Video 2 -->
+        <div class="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="relative bg-gray-900 overflow-hidden" style="aspect-ratio:16/9;">
+            <div class="w-full h-full bg-gradient-to-tr from-slate-800 to-blue-900 flex items-center justify-center">
+              <i class="fa-solid fa-microphone-lines text-white/50 text-4xl"></i>
+            </div>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+              <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play ml-1"></i>
+              </div>
+            </a>
+          </div>
+          <div class="p-4">
+            <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+              वीआईपी प्रदेश कार्यालय, पटना में आयोजित महत्वपूर्ण प्रेस वार्ता
+            </h3>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-1">
+              <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
+            </a>
+          </div>
+        </div>
+
+        <!-- Video 3 -->
+        <div class="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="relative bg-gray-900 overflow-hidden" style="aspect-ratio:16/9;">
+            <div class="w-full h-full bg-gradient-to-tr from-primary-900 to-blue-800 flex items-center justify-center">
+              <i class="fa-solid fa-users text-white/50 text-4xl"></i>
+            </div>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+              <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play ml-1"></i>
+              </div>
+            </a>
+          </div>
+          <div class="p-4">
+            <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+              युवाओं और छात्रों के भविष्य के लिए वीआईपी की नई कल्याणकारी नीतियां
+            </h3>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-1">
+              <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
+            </a>
+          </div>
+        </div>
+
+        <!-- Video 4 -->
+        <div class="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="relative bg-gray-900 overflow-hidden" style="aspect-ratio:16/9;">
+            <div class="w-full h-full bg-gradient-to-tr from-amber-900 to-primary flex items-center justify-center">
+              <i class="fa-solid fa-bullhorn text-white/50 text-4xl"></i>
+            </div>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+              <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-play ml-1"></i>
+              </div>
+            </a>
+          </div>
+          <div class="p-4">
+            <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+              आगामी विधानसभा चुनाव हेतु संगठनात्मक तैयारियों पर राष्ट्रीय अध्यक्ष का संबोधन
+            </h3>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-1">
+              <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-3.5 rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 group">
+          <i class="fa-brands fa-youtube text-xl group-hover:scale-110 transition-transform"></i>
+          <span>सभी वीडियो देखें</span>
+          <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION 11: बड़ा बैनर ("आपका साथ, हमारा संकल्प")
+       Wide Curved Banner matching RJD
+       ======================================================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+    <div class="bg-gradient-to-r from-primary-900 via-primary to-primary-700 rounded-3xl overflow-hidden relative shadow-2xl hover:shadow-3xl transition-shadow duration-500 group border border-primary-600">
+      
+      <!-- Rally Background Blend Overlay -->
+      <div class="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000" style="background-image: url('/images/event_rally.jpg');"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-900 to-transparent opacity-90"></div>
+
+      <div class="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between">
+        
+        <div class="text-white mb-6 md:mb-0 md:w-2/3">
+          <div class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+            जन-आंदोलन से सत्ता परिवर्तन
+          </div>
+          <h2 class="text-3xl md:text-4xl font-black mb-3 transform transition-transform group-hover:translate-x-2 tracking-tight">
+            आपका साथ, हमारा संकल्प
+          </h2>
+          <p class="text-blue-100 text-base md:text-lg mb-6 max-w-xl transform transition-transform group-hover:translate-x-2 delay-75">
+            आइए, मिलकर एक स्वाभिमानी, शिक्षित और समृद्ध बिहार के निर्माण में अपना योगदान दें।
+          </p>
+
+          <div class="flex flex-wrap gap-4">
+            <a href="/active-member" class="bg-white/10 hover:bg-white/30 border border-white/30 text-white px-5 py-3 rounded-xl flex items-center transition-all backdrop-blur-sm hover:-translate-y-1">
+              <i class="fa-solid fa-user-plus mr-3 text-lg text-amber-300"></i>
+              <div class="text-left">
+                <span class="block text-sm font-bold">सदस्य बनें</span>
+                <span class="block text-xs text-blue-200">VIP परिवार का हिस्सा बनें</span>
+              </div>
+            </a>
+
+            <a href="/donate" class="bg-white/10 hover:bg-white/30 border border-white/30 text-white px-5 py-3 rounded-xl flex items-center transition-all backdrop-blur-sm hover:-translate-y-1">
+              <i class="fa-regular fa-heart mr-3 text-lg text-red-400"></i>
+              <div class="text-left">
+                <span class="block text-sm font-bold">दान करें</span>
+                <span class="block text-xs text-blue-200">आपका सहयोग, हमारी ताकत</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="md:w-1/3 flex justify-end">
+          <a href="/active-member" class="bg-amber-400 hover:bg-amber-300 text-gray-950 font-black px-8 py-3.5 rounded-xl shadow-xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-2">
+            <span>अभी जुड़ें</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Custom VIP Interactions Script -->
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

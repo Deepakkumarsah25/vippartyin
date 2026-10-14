@@ -1,0 +1,340 @@
+<!-- ==============================================
+     VIP PARTY (विकासशील इंसान पार्टी) HEADER & NAVBAR
+     Structured like RJD with VIP Party Colors & Identity
+     ============================================== -->
+
+<!-- 1. Top News / Announcement Ticker (Sticky Ticker) -->
+<div class="sticky-ticker bg-primary-900 text-white text-sm font-semibold flex items-center h-10 overflow-hidden shadow-sm select-none border-b border-primary-700">
+  <div class="bg-primary-950 text-white font-bold px-4 h-full flex items-center z-20 shadow-[4px_0_12px_rgba(0,0,0,0.25)] whitespace-nowrap relative select-none">
+    <i class="fa-solid fa-bullhorn mr-2 text-amber-400 animate-pulse"></i>
+    आगामी कार्यक्रम
+  </div>
+
+  <div class="flex-grow overflow-hidden relative h-full flex items-center bg-primary-800">
+    <div class="animate-marquee-custom whitespace-nowrap flex items-center gap-16 pl-4">
+      <a href="/events" class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center">
+        🎯 विशाल निषाद आरक्षण महासम्मेलन | 📅 दिनांक: 15 नवम्बर 2026 | 📍 स्थान: गांधी मैदान, पटना ➔ विवरण देखने के लिए यहाँ क्लिक करें
+      </a>
+      <a href="/events" class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center">
+        ★ 'सन ऑफ मल्लाह' श्री मुकेश सहनी का जनसंवाद कार्यक्रम | 📍 मुजफ्फरपुर | ➔ पार्टी से जुड़ने के लिए ऑनलाइन आवेदन करें
+      </a>
+      <a href="/scholarship" class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center">
+        🎓 अमर शहीद जुब्बा सहनी मेधा छात्रवृत्ति के लिए ऑनलाइन आवेदन शुरू ➔ अभी आवेदन करें
+      </a>
+    </div>
+  </div>
+
+  <div class="hidden md:flex items-center px-4 h-full bg-primary-950 text-xs font-medium text-blue-200 whitespace-nowrap border-l border-primary-700">
+    <a href="tel:06122506830" class="hover:text-white flex items-center gap-1.5 transition-colors">
+      <i class="fa-solid fa-phone-volume text-amber-400"></i>
+      <span>हेल्पलाइन: 0612-2506830</span>
+    </a>
+  </div>
+</div>
+
+<!-- 2. Main Navigation Bar (Sticky Nav) -->
+<nav class="sticky z-50 bg-white shadow-sm border-b border-gray-100 transition-all duration-300 hover:shadow-md sticky-nav-offset">
+  <div class="max-w-[1800px] mx-auto px-4 sm:px-6 xl:px-8">
+    <div class="flex justify-between items-center h-20">
+
+      <!-- Brand Logo & Name -->
+      <a href="/" class="flex-shrink-0 flex items-center space-x-3 cursor-pointer group whitespace-nowrap">
+        <img src="/images/vip-logo.svg" alt="VIP Logo" width="1024" height="1024" decoding="async" class="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+        <div>
+          <div class="text-2xl font-black text-primary leading-tight transition-colors duration-300 group-hover:text-primary-700">
+            VIP
+          </div>
+          <p class="text-xs font-bold text-gray-500">विकासशील इंसान पार्टी</p>
+        </div>
+      </a>
+
+      <!-- Desktop Primary Nav Links -->
+      <div class="desktop-primary-nav hidden xl:flex flex-1 flex-nowrap items-center justify-center gap-2 2xl:gap-3 mx-4 text-[13px] 2xl:text-[15px] font-bold">
+        
+        <!-- Home -->
+        <a href="/" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition <%= typeof activeNav !== 'undefined' && activeNav === 'home' ? 'text-primary' : '' %>">
+          होम
+        </a>
+
+        <!-- हमारे बारे में Dropdown -->
+        <div class="relative group">
+          <a href="/about" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center">
+            हमारे बारे में <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
+          </a>
+          <div class="absolute top-full left-0 pt-3 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]">
+            <div class="bg-white rounded-xl shadow-xl border border-gray-100 transform origin-top-left scale-95 group-hover:scale-100 transition-all duration-300 overflow-hidden">
+              <div class="py-2">
+                <a href="/about" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  पार्टी के बारे में
+                </a>
+                <a href="/journey-of-mukesh-sahani" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-semibold">
+                  श्री मुकेश सहनी (सन ऑफ मल्लाह)
+                </a>
+                <a href="/jubba-sahani" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  अमर शहीद जुब्बा सहनी
+                </a>
+                <a href="/history" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  हमारा इतिहास
+                </a>
+                <a href="/ideology" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  पार्टी की विचारधारा
+                </a>
+                <a href="/constitution" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  संविधान और नियम
+                </a>
+                <a href="/prerna" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  प्रेरणा पुंज
+                </a>
+                <a href="/office" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  वीआईपी कार्यालय
+                </a>
+                <a href="/leaders" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  पार्टी के प्रमुख नेता
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- हमारा संगठन Dropdown -->
+        <div class="relative group">
+          <a href="/organization" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center">
+            हमारा संगठन <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
+          </a>
+          <div class="absolute top-full left-0 pt-3 w-60 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]">
+            <div class="bg-white rounded-xl shadow-xl border border-gray-100 transform origin-top-left scale-95 group-hover:scale-100 transition-all duration-300 overflow-hidden">
+              <div class="py-2">
+                <a href="/organization" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  संगठनात्मक संरचना
+                </a>
+                <a href="/officials" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  वीआईपी के पदाधिकारी
+                </a>
+                <a href="/president" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  प्रदेश एवं जिला अध्यक्ष
+                </a>
+                <a href="/pravakta" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  आधिकारिक प्रवक्ता
+                </a>
+                <a href="/youth" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  युवा वीआईपी मोर्चा
+                </a>
+                <a href="/women-wing" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  महिला मोर्चा
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- सदन में Dropdown -->
+        <div class="relative group">
+          <a href="/vidhansabha" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center">
+            सदन में <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
+          </a>
+          <div class="absolute top-full left-0 pt-3 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]">
+            <div class="bg-white rounded-xl shadow-xl border border-gray-100 transform origin-top-left scale-95 group-hover:scale-100 transition-all duration-300 overflow-hidden">
+              <div class="py-2">
+                <a href="/vidhansabha" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  बिहार विधानसभा में वीआईपी
+                </a>
+                <a href="/vidhan-parishad" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  विधान परिषद में वीआईपी
+                </a>
+                <a href="/loksabha" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
+                  संसद में जन-आवाज़
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- उम्मीदवार एवं योजनाएं Dropdown -->
+        <div class="relative group">
+          <button type="button" aria-haspopup="true" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center">
+            उम्मीदवार व योजनाएं <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
+          </button>
+          <div class="absolute top-full left-0 pt-3 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]">
+            <div class="bg-white rounded-xl shadow-xl border border-gray-100 transform origin-top-left scale-95 group-hover:scale-100 transition-all duration-300 overflow-hidden">
+              <div class="py-2">
+                <a href="/candidate-declaration" class="flex items-center gap-2 border-b border-gray-100 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-blue-50">
+                  <i class="fa-solid fa-file-shield text-primary"></i> उम्मीदवार घोषणापत्र
+                </a>
+                <a href="/scholarship" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
+                  <i class="fa-solid fa-graduation-cap text-red-500 mr-1.5"></i> जुब्बा सहनी मेधा छात्रवृत्ति
+                </a>
+                <a href="/vidhansabha-ticket" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
+                  <i class="fa-solid fa-ticket text-green-600 mr-1.5"></i> विधानसभा टिकट आवेदन फॉर्म
+                </a>
+                <a href="/active-member" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
+                  <i class="fa-solid fa-id-card text-amber-500 mr-1.5"></i> सक्रिय सदस्य आवेदन फॉर्म
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="/it-cell" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition">
+          आईटी सेल
+        </a>
+        <a href="/active-member" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition">
+          हमसे जुड़ें
+        </a>
+        <a href="/contact" class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition">
+          संपर्क करें
+        </a>
+      </div>
+
+      <!-- Desktop Action Buttons -->
+      <div class="hidden xl:flex flex-shrink-0 items-center space-x-2.5">
+        <!-- Search Button -->
+        <button type="button" id="searchOpenBtn" aria-label="खोजें" class="text-gray-500 hover:text-primary hover:scale-110 transition-transform p-1.5">
+          <i class="fa-solid fa-magnifying-glass text-base"></i>
+        </button>
+
+        <!-- सहयोग करें (दान करें) -->
+        <a href="/donate" class="border border-primary text-primary hover:bg-primary hover:text-white px-3 py-2 rounded-md text-[12px] font-bold transition-all duration-300 flex items-center shadow-sm hover:shadow-md whitespace-nowrap bg-white">
+          <i class="fa-regular fa-heart mr-1.5 text-red-500"></i> दान करें
+        </a>
+
+        <!-- सदस्य बनें -->
+        <a href="/active-member" class="bg-primary hover:bg-primary-700 text-white px-3 py-2 rounded-md text-[12px] font-bold transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap">
+          <i class="fa-solid fa-user-plus mr-1.5"></i> सदस्य बनें
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <div class="xl:hidden flex items-center">
+        <button id="mobile-menu-btn" type="button" aria-label="मुख्य मेनू खोलें" aria-controls="mobile-menu" aria-expanded="false" class="flex h-12 w-12 items-center justify-center text-gray-700 hover:text-primary focus:outline-none transition-transform hover:scale-110">
+          <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Menu Dropdown -->
+  <div id="mobile-menu" class="hidden xl:hidden bg-white border-t border-gray-100 animate-slide-up origin-top max-h-[calc(100vh-80px)] overflow-y-auto">
+    <div class="px-4 pt-2 pb-6 space-y-1">
+      
+      <a href="/" class="block px-3 py-2.5 font-bold rounded-md transition-colors text-primary bg-blue-50">
+        <i class="fa-solid fa-house mr-2 text-primary"></i> होम
+      </a>
+
+      <!-- Mobile: हमारे बारे में -->
+      <div class="space-y-1">
+        <button type="button" onclick="document.getElementById('mobile-about-menu').classList.toggle('hidden'); document.getElementById('mobile-about-icon').classList.toggle('rotate-180')" class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+          <span><i class="fa-solid fa-flag mr-2 text-gray-400"></i> हमारे बारे में</span>
+          <i id="mobile-about-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+        </button>
+        <div id="mobile-about-menu" class="hidden pl-4 space-y-1 mt-1 border-l-2 border-blue-200 ml-4">
+          <a href="/about" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">पार्टी के बारे में</a>
+          <a href="/journey-of-mukesh-sahani" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50 font-semibold">श्री मुकेश सहनी (सन ऑफ मल्लाह)</a>
+          <a href="/jubba-sahani" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">अमर शहीद जुब्बा सहनी</a>
+          <a href="/history" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">हमारा इतिहास</a>
+          <a href="/ideology" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">पार्टी की विचारधारा</a>
+          <a href="/constitution" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">संविधान और नियम</a>
+          <a href="/prerna" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">प्रेरणा पुंज</a>
+          <a href="/office" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">वीआईपी कार्यालय</a>
+          <a href="/leaders" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">वीआईपी नेता</a>
+        </div>
+      </div>
+
+      <!-- Mobile: हमारा संगठन -->
+      <div class="space-y-1">
+        <button type="button" onclick="document.getElementById('mobile-org-menu').classList.toggle('hidden'); document.getElementById('mobile-org-icon').classList.toggle('rotate-180')" class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+          <span><i class="fa-solid fa-sitemap mr-2 text-gray-400"></i> हमारा संगठन</span>
+          <i id="mobile-org-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+        </button>
+        <div id="mobile-org-menu" class="hidden pl-4 space-y-1 mt-1 border-l-2 border-blue-200 ml-4">
+          <a href="/organization" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">संगठनात्मक संरचना</a>
+          <a href="/officials" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">वीआईपी के पदाधिकारी</a>
+          <a href="/president" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">प्रदेश एवं जिला अध्यक्ष</a>
+          <a href="/pravakta" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">आधिकारिक प्रवक्ता</a>
+          <a href="/youth" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">युवा वीआईपी मोर्चा</a>
+          <a href="/women-wing" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">महिला मोर्चा</a>
+        </div>
+      </div>
+
+      <!-- Mobile: सदन में -->
+      <div class="space-y-1">
+        <button type="button" onclick="document.getElementById('mobile-parl-menu').classList.toggle('hidden'); document.getElementById('mobile-parl-icon').classList.toggle('rotate-180')" class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+          <span><i class="fa-solid fa-landmark mr-2 text-gray-400"></i> सदन में</span>
+          <i id="mobile-parl-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+        </button>
+        <div id="mobile-parl-menu" class="hidden pl-4 space-y-1 mt-1 border-l-2 border-blue-200 ml-4">
+          <a href="/vidhansabha" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">विधानसभा में वीआईपी</a>
+          <a href="/vidhan-parishad" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">विधान परिषद</a>
+          <a href="/loksabha" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">संसद में जन-आवाज</a>
+        </div>
+      </div>
+
+      <!-- Mobile: उम्मीदवार व योजनाएं -->
+      <div class="space-y-1">
+        <button type="button" onclick="document.getElementById('mobile-candidate-menu').classList.toggle('hidden'); document.getElementById('mobile-candidate-icon').classList.toggle('rotate-180')" class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+          <span><i class="fa-solid fa-vote-yea mr-2 text-gray-400"></i> उम्मीदवार व योजनाएं</span>
+          <i id="mobile-candidate-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+        </button>
+        <div id="mobile-candidate-menu" class="hidden pl-4 space-y-1 mt-1 border-l-2 border-blue-200 ml-4">
+          <a href="/candidate-declaration" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-blue-50">
+            <i class="fa-solid fa-file-shield text-primary"></i> उम्मीदवार घोषणापत्र
+          </a>
+          <a href="/scholarship" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+            🎓 जुब्बा सहनी मेधा छात्रवृत्ति
+          </a>
+          <a href="/vidhansabha-ticket" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+            🗳️ विधानसभा टिकट आवेदन फॉर्म
+          </a>
+          <a href="/active-member" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+            👥 सक्रिय सदस्य आवेदन फॉर्म
+          </a>
+        </div>
+      </div>
+
+      <a href="/it-cell" class="block px-3 py-2.5 font-bold rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+        <i class="fa-solid fa-laptop-code mr-2 text-gray-400"></i> आईटी सेल
+      </a>
+      <a href="/active-member" class="block px-3 py-2.5 font-bold rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+        <i class="fa-solid fa-users mr-2 text-gray-400"></i> हमसे जुड़ें
+      </a>
+      <a href="/contact" class="block px-3 py-2.5 font-bold rounded-md transition-colors text-gray-700 hover:bg-gray-50">
+        <i class="fa-solid fa-phone mr-2 text-gray-400"></i> संपर्क करें
+      </a>
+
+      <!-- Mobile CTA Buttons -->
+      <div class="mt-4 pt-4 border-t border-gray-100 flex flex-col space-y-3">
+        <a href="/active-member" class="w-full bg-primary hover:bg-primary-700 text-white px-5 py-3 rounded-md font-bold flex items-center justify-center transition-colors shadow-md">
+          <i class="fa-solid fa-user-plus mr-2"></i> सदस्य बनें
+        </a>
+        <a href="/donate" class="w-full border-2 border-primary text-primary hover:bg-primary hover:text-white px-5 py-3 rounded-md font-bold flex items-center justify-center transition-colors">
+          <i class="fa-regular fa-heart mr-2 text-red-500"></i> दान करें
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Search Modal (Clean interactive overlay) -->
+<div id="searchModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-gray-100 transform transition-all animate-fade-in-up">
+    <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+      <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <i class="fa-solid fa-magnifying-glass text-primary"></i> वीआईपी पोर्टल पर खोजें
+      </h3>
+      <button id="searchCloseBtn" class="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
+    </div>
+    <div class="mt-4">
+      <div class="relative">
+        <input type="text" id="searchInput" placeholder="योजना, समाचार, नेता या कार्यक्रम खोजें..." class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-gray-800 text-sm">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
+      </div>
+    </div>
+    <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
+      <span class="text-gray-400 self-center">लोकप्रिय खोजें:</span>
+      <a href="/scholarship" class="bg-blue-50 text-primary px-3 py-1 rounded-full hover:bg-blue-100">छात्रवृत्ति</a>
+      <a href="/journey-of-mukesh-sahani" class="bg-blue-50 text-primary px-3 py-1 rounded-full hover:bg-blue-100">मुकेश सहनी</a>
+      <a href="/active-member" class="bg-blue-50 text-primary px-3 py-1 rounded-full hover:bg-blue-100">सदस्यता</a>
+      <a href="/vidhansabha-ticket" class="bg-blue-50 text-primary px-3 py-1 rounded-full hover:bg-blue-100">टिकट आवेदन</a>
+    </div>
+  </div>
+</div>

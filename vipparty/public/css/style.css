@@ -1,0 +1,241 @@
+/* ==========================================================================
+   VIP PARTY (विकासशील इंसान पार्टी) - MASTER STYLESHEET
+   Curated Modern Design with VIP Royal Blue, Saffron/Amber & Gold Palette
+   ========================================================================== */
+
+:root {
+  /* VIP Core Brand Colors */
+  --primary: #0066b2;
+  --primary-dark: #004b87;
+  --primary-deep: #002544;
+  --primary-navy: #00182e;
+  --primary-light: #0d82d8;
+  --primary-subtle: #eef6fc;
+
+  /* Accent Tones */
+  --accent-amber: #f59e0b;
+  --accent-orange: #f37021;
+  --accent-red: #d90429;
+  --accent-green: #00873e;
+
+  /* Neutrals */
+  --bg-body: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-light: #f1f5f9;
+  --border-card: #e2e8f0;
+
+  /* Transitions */
+  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Base & Typography
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-dark);
+  background-color: var(--bg-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Announcement Ticker & Marquee
+   ========================================================================== */
+@keyframes marquee-horizontal {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-custom {
+  display: inline-flex;
+  animation: marquee-horizontal 32s linear infinite;
+  width: max-content;
+}
+
+.animate-marquee-custom:hover {
+  animation-play-state: paused;
+}
+
+.sticky-ticker {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.sticky-nav-offset {
+  top: 40px !important;
+}
+
+/* ==========================================================================
+   Animations & Keyframes
+   ========================================================================== */
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -45px) scale(1.12);
+  }
+  66% {
+    transform: translate(-25px, 25px) scale(0.92);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s infinite ease-in-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==========================================================================
+   Inspiration Slider Dots
+   ========================================================================== */
+.insp-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: #cbd5e1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.insp-dot:hover {
+  background-color: #94a3b8;
+}
+
+.insp-dot.active {
+  width: 24px;
+  background-color: var(--primary);
+  border-radius: 9999px;
+}
+
+/* ==========================================================================
+   Custom Scrollbar
+   ========================================================================== */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #0066b2;
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #004b87;
+}
+
+/* ==========================================================================
+   Hero Visual Mask Blend for Leader
+   ========================================================================== */
+@media (min-width: 1400px) {
+  .hero-banner-container {
+    max-width: 1400px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  .hero-leader-blend {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, 1) 92%, transparent 100%) !important;
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, 1) 92%, transparent 100%) !important;
+  }
+}
+
+/* ==========================================================================
+   Navbar & Navigation Utility
+   ========================================================================== */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 0;
+  height: 2.5px;
+  background-color: var(--primary);
+  transition: all 0.25s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 70%;
+}
+
+/* Sticky shadow toggle */
+nav.scrolled {
+  box-shadow: 0 10px 30px rgba(0, 30, 60, 0.1);
+}
+
+/* Modal utility */
+#searchModal.open {
+  display: flex !important;
+}
+
+/* Scroll to top visible */
+#scrollToTopBtn.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
