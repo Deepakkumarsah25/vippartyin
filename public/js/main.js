@@ -67,6 +67,111 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ------------------------------------------------------------------------
+  // 2.5 Hero Banner Carousel (Synced with vip-a Admin Panel & Mobile App)
+  // ------------------------------------------------------------------------
+  const heroCarousel = document.getElementById('heroCarousel');
+  if (heroCarousel) {
+    const slides = heroCarousel.querySelectorAll('.hero-slide');
+    const dots = heroCarousel.querySelectorAll('.hero-dot');
+    const prevBtn = document.getElementById('heroPrevBtn');
+    const nextBtn = document.getElementById('heroNextBtn');
+    let currentSlide = 0;
+    let autoPlayTimer = null;
+    const totalSlides = slides.length;
+
+    function goToSlide(index) {
+      if (totalSlides <= 1) return;
+      currentSlide = (index + totalSlides) % totalSlides;
+
+      slides.forEach((slide, idx) => {
+        if (idx === currentSlide) {
+          slide.classList.remove('opacity-0', 'pointer-events-none', 'z-0');
+          slide.classList.add('opacity-100', 'z-10');
+        } else {
+          slide.classList.remove('opacity-100', 'z-10');
+          slide.classList.add('opacity-0', 'pointer-events-none', 'z-0');
+        }
+      });
+
+      dots.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.className = 'hero-dot h-2 sm:h-2.5 transition-all duration-300 rounded-full shadow-md w-8 sm:w-10 bg-primary border border-white/60';
+        } else {
+          dot.className = 'hero-dot h-2 sm:h-2.5 transition-all duration-300 rounded-full shadow-md w-2.5 sm:w-3 bg-white/70 hover:bg-white';
+        }
+      });
+    }
+
+    function startAutoPlay() {
+      if (totalSlides > 1 && !autoPlayTimer) {
+        autoPlayTimer = setInterval(() => {
+          goToSlide(currentSlide + 1);
+        }, 5000);
+      }
+    }
+
+    function stopAutoPlay() {
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        stopAutoPlay();
+        goToSlide(currentSlide + 1);
+        startAutoPlay();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        stopAutoPlay();
+        goToSlide(currentSlide - 1);
+        startAutoPlay();
+      });
+    }
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', (e) => {
+        e.preventDefault();
+        stopAutoPlay();
+        goToSlide(idx);
+        startAutoPlay();
+      });
+    });
+
+    heroCarousel.addEventListener('mouseenter', stopAutoPlay);
+    heroCarousel.addEventListener('mouseleave', startAutoPlay);
+
+    // Mobile touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    heroCarousel.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      stopAutoPlay();
+    }, { passive: true });
+
+    heroCarousel.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          goToSlide(currentSlide + 1);
+        } else {
+          goToSlide(currentSlide - 1);
+        }
+      }
+      startAutoPlay();
+    }, { passive: true });
+
+    startAutoPlay();
+  }
+
+  // ------------------------------------------------------------------------
   // 3. Inspiration Carousel Slider (Identical to RJD Mechanics)
   // ------------------------------------------------------------------------
   const slider = document.getElementById('inspiration-slider');
@@ -248,6 +353,131 @@ document.addEventListener('DOMContentLoaded', () => {
         top: 0,
         behavior: 'smooth'
       });
+    });
+  }
+
+  // ------------------------------------------------------------------------
+  // 6. Login / SignUp Auth Modal (Menu 2)
+  // ------------------------------------------------------------------------
+  const authModal = document.getElementById('authModal');
+  const openAuthModalBtn = document.getElementById('openAuthModalBtn');
+  const mobileAuthBtn = document.getElementById('mobileAuthBtn');
+  const closeAuthModalBtn = document.getElementById('closeAuthModalBtn');
+  const authTabLogin = document.getElementById('authTabLogin');
+  const authTabSignup = document.getElementById('authTabSignup');
+  const signupNameField = document.getElementById('signupNameField');
+  const authSubmitText = document.getElementById('authSubmitText');
+
+  function openAuthModal(mode = 'login') {
+    if (!authModal) return;
+    authModal.classList.remove('hidden');
+    authModal.classList.add('flex');
+    setAuthMode(mode);
+  }
+
+  function closeAuthModal() {
+    if (!authModal) return;
+    authModal.classList.add('hidden');
+    authModal.classList.remove('flex');
+  }
+
+  function setAuthMode(mode) {
+    if (mode === 'signup') {
+      authTabSignup?.classList.add('bg-white', 'text-primary', 'shadow-sm');
+      authTabSignup?.classList.remove('text-gray-600');
+      authTabLogin?.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+      authTabLogin?.classList.add('text-gray-600');
+      signupNameField?.classList.remove('hidden');
+      if (authSubmitText) authSubmitText.textContent = 'साइन अप करें (Register)';
+    } else {
+      authTabLogin?.classList.add('bg-white', 'text-primary', 'shadow-sm');
+      authTabLogin?.classList.remove('text-gray-600');
+      authTabSignup?.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+      authTabSignup?.classList.add('text-gray-600');
+      signupNameField?.classList.add('hidden');
+      if (authSubmitText) authSubmitText.textContent = 'ओटीपी प्राप्त करें (Send OTP)';
+    }
+  }
+
+  if (openAuthModalBtn) openAuthModalBtn.addEventListener('click', () => openAuthModal('login'));
+  if (mobileAuthBtn) mobileAuthBtn.addEventListener('click', () => openAuthModal('login'));
+  if (closeAuthModalBtn) closeAuthModalBtn.addEventListener('click', closeAuthModal);
+  if (authTabLogin) authTabLogin.addEventListener('click', () => setAuthMode('login'));
+  if (authTabSignup) authTabSignup.addEventListener('click', () => setAuthMode('signup'));
+  if (authModal) {
+    authModal.addEventListener('click', (e) => {
+      if (e.target === authModal) closeAuthModal();
+    });
+  }
+
+  // ------------------------------------------------------------------------
+  // 7. Contact Form AJAX Submission (Inspired by rjd.co.in/contact)
+  // ------------------------------------------------------------------------
+  const contactForm = document.getElementById('contactForm');
+  const contactSuccessAlert = document.getElementById('contactSuccessAlert');
+  const contactErrorAlert = document.getElementById('contactErrorAlert');
+  const contactErrorMsg = document.getElementById('contactErrorMsg');
+  const contactSubmitBtn = document.getElementById('contactSubmitBtn');
+  const contactBtnText = document.getElementById('contactBtnText');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (contactErrorAlert) contactErrorAlert.classList.add('hidden');
+      if (contactSuccessAlert) contactSuccessAlert.classList.add('hidden');
+
+      const name = document.getElementById('contactName')?.value.trim();
+      const phone = document.getElementById('contactPhone')?.value.trim();
+      const email = document.getElementById('contactEmail')?.value.trim();
+      const subject = document.getElementById('contactSubject')?.value.trim();
+      const message = document.getElementById('contactMessage')?.value.trim();
+
+      if (!name || !phone || !message) {
+        if (contactErrorAlert) {
+          if (contactErrorMsg) contactErrorMsg.textContent = 'कृपया पूरा नाम, मोबाइल नंबर और संदेश अनिवार्य रूप से भरें।';
+          contactErrorAlert.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (contactSubmitBtn) {
+        contactSubmitBtn.disabled = true;
+        if (contactBtnText) contactBtnText.textContent = 'संदेश भेजा जा रहा है...';
+      }
+
+      try {
+        const response = await fetch('/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ name, phone, email, subject, message })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          contactForm.reset();
+          if (contactSuccessAlert) contactSuccessAlert.classList.remove('hidden');
+          contactSuccessAlert?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          if (contactErrorAlert) {
+            if (contactErrorMsg) contactErrorMsg.textContent = data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।';
+            contactErrorAlert.classList.remove('hidden');
+          }
+        }
+      } catch (err) {
+        if (contactErrorAlert) {
+          if (contactErrorMsg) contactErrorMsg.textContent = 'सर्वर से कनेक्ट करने में त्रुटि हुई। कृपया इंटरनेट कनेक्शन जांचें।';
+          contactErrorAlert.classList.remove('hidden');
+        }
+      } finally {
+        if (contactSubmitBtn) {
+          contactSubmitBtn.disabled = false;
+          if (contactBtnText) contactBtnText.textContent = 'संदेश भेजें';
+        }
+      }
     });
   }
 });

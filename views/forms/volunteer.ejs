@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="hi-IN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वालंटियर के रूप में जुड़ें | Join as a Volunteer | विकासशील इंसान पार्टी (VIP)</title>
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-gray-50/70 min-h-screen flex flex-col font-sans text-gray-800">
+  <!-- Shared Navbar -->
+  <%- include('../common/navbar') %>
+
+  <!-- Hero Header -->
+  <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-12 sm:py-16 text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10">
+      <span class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+        जन-आंदोलन का हिस्सा बनें
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight">
+        वालंटियर के रूप में जुड़ें
+      </h1>
+      <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        'सन ऑफ मल्लाह' श्री मुकेश सहनी के नेतृत्व में बिहार के समग्र विकास, सामाजिक न्याय और युवाओं के भविष्य के निर्माण के लिए अपना सक्रिय सहयोग दें।
+      </p>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
+    
+    <!-- Success Banner (Hidden Initially) -->
+    <div id="volunteerSuccess" class="hidden mb-8 p-6 sm:p-8 bg-emerald-50 border-2 border-emerald-400 rounded-3xl shadow-xl text-center animate-slide-up">
+      <div class="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3 class="text-2xl font-black text-emerald-950 mb-2">हार्दिक बधाई! आपका वालंटियर आवेदन दर्ज हो गया है।</h3>
+      <p class="text-emerald-800 text-sm max-w-xl mx-auto mb-4">
+        आपकी वालंटियर आईडी: <span id="resVolId" class="font-black text-lg bg-white px-3 py-1 rounded-lg border border-emerald-300">VIP-VOL-XXXX</span>
+      </p>
+      <p class="text-xs text-emerald-700">पार्टी की संगठन एवं अभियान टीम शीघ्र ही आपसे संपर्क करेगी।</p>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-10">
+      <div class="border-b border-gray-100 pb-5 mb-8 flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">वालंटियर पंजीकरण फॉर्म</h2>
+          <p class="text-xs sm:text-sm text-gray-500 mt-0.5">कृपया नीचे दी गई सभी जानकारियों को ध्यानपूर्वक भरें</p>
+        </div>
+        <span class="text-xs font-bold text-primary bg-blue-50 px-3 py-1.5 rounded-full">
+          * अनिवार्य फ़ील्ड्स
+        </span>
+      </div>
+
+      <form id="volunteerForm" class="space-y-8">
+        
+        <!-- Section 1: Personal Info -->
+        <div>
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">1</span>
+            व्यक्तिगत विवरण (Personal Details)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">पूरा नाम (Full Name) <span class="text-red-500">*</span></label>
+              <input type="text" id="volName" name="fullName" required placeholder="अपना नाम दर्ज करें" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">मोबाइल नंबर (Mobile Number) <span class="text-red-500">*</span></label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-3.5 text-gray-400 font-bold text-sm">+91</span>
+                <input type="tel" id="volMobile" name="mobile" required maxlength="10" placeholder="10 अंकों का मोबाइल नंबर" class="w-full pl-14 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-semibold tracking-wider">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">ईमेल (Email) <span class="text-gray-400 font-normal">(वैकल्पिक)</span></label>
+              <input type="email" id="volEmail" name="email" placeholder="email@example.com" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">लिंग (Gender) <span class="text-red-500">*</span></label>
+              <select id="volGender" name="gender" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+                <option value="Male">पुरुष (Male)</option>
+                <option value="Female">महिला (Female)</option>
+                <option value="Other">अन्य (Other)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Location -->
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">2</span>
+            स्थान एवं क्षेत्र (Location & Constituency)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">राज्य (State) <span class="text-red-500">*</span></label>
+              <select id="volState" name="state" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+                <option value="Bihar">बिहार (Bihar)</option>
+                <option value="Uttar Pradesh">उत्तर प्रदेश (Uttar Pradesh)</option>
+                <option value="Jharkhand">झारखण्ड (Jharkhand)</option>
+                <option value="Other">अन्य राज्य (Other State)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">जिला (District) <span class="text-red-500">*</span></label>
+              <input type="text" id="volDistrict" name="district" required placeholder="गृह जिला का नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">विधानसभा क्षेत्र (Assembly Constituency)</label>
+              <input type="text" id="volAssembly" name="assemblyConstituency" placeholder="उदा. हाजीपुर, मुजफ्फरपुर" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">गाँव / वार्ड / मोहल्ला (Village / Ward)</label>
+              <input type="text" id="volVillage" name="village" placeholder="गाँव या मोहल्ले का नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Volunteering Preferences -->
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">3</span>
+            आप किस क्षेत्र में योगदान देना चाहते हैं? (Role Preference)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <label class="flex items-center p-3.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-primary transition-all">
+              <input type="checkbox" name="volunteerTypes" value="Ground Campaign" class="w-4 h-4 text-primary rounded focus:ring-primary mr-2.5">
+              <span class="text-xs sm:text-sm font-medium">जमीनी अभियान (Ground Campaign)</span>
+            </label>
+            <label class="flex items-center p-3.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-primary transition-all">
+              <input type="checkbox" name="volunteerTypes" value="Social Media" class="w-4 h-4 text-primary rounded focus:ring-primary mr-2.5">
+              <span class="text-xs sm:text-sm font-medium">सोशल मीडिया एवं आईटी (IT / Digital)</span>
+            </label>
+            <label class="flex items-center p-3.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-primary transition-all">
+              <input type="checkbox" name="volunteerTypes" value="Event Management" class="w-4 h-4 text-primary rounded focus:ring-primary mr-2.5">
+              <span class="text-xs sm:text-sm font-medium">रैली व कार्यक्रम प्रबंधन (Events)</span>
+            </label>
+            <label class="flex items-center p-3.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-primary transition-all">
+              <input type="checkbox" name="volunteerTypes" value="Youth Activities" class="w-4 h-4 text-primary rounded focus:ring-primary mr-2.5">
+              <span class="text-xs sm:text-sm font-medium">युवा मोर्चा गतिविधियां (Youth)</span>
+            </label>
+            <label class="flex items-center p-3.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-primary transition-all">
+              <input type="checkbox" name="volunteerTypes" value="Booth Coordination" class="w-4 h-4 text-primary rounded focus:ring-primary mr-2.5">
+              <span class="text-xs sm:text-sm font-medium">बूथ एवं क्षेत्र समन्वय (Booth/Area)</span>
+            </label>
+            <label class="flex items-center p-3.5 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-primary transition-all">
+              <input type="checkbox" name="volunteerTypes" value="Public Outreach" class="w-4 h-4 text-primary rounded focus:ring-primary mr-2.5">
+              <span class="text-xs sm:text-sm font-medium">जनसम्पर्क एवं जनजागरण (Outreach)</span>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">समय उपलब्धता (Availability)</label>
+              <select id="volAvailability" name="availability" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+                <option value="Full Time">पूर्णकालिक (Full Time)</option>
+                <option value="Weekends Only">केवल सप्ताहांत (Weekends Only)</option>
+                <option value="Part Time">अंशकालिक (Part Time - 2-3 hours/day)</option>
+                <option value="Event Based">केवल विशेष आयोजनों में (Events Only)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">विशेष कौशल / अनुभव (Skills / Experience)</label>
+              <input type="text" id="volSkills" name="skills" placeholder="उदा. ग्राफिक डिजाइन, पब्लिक स्पीकिंग, संगठन" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Declaration -->
+        <div class="pt-4 border-t border-gray-100">
+          <label class="flex items-start cursor-pointer">
+            <input type="checkbox" required class="w-4 h-4 text-primary rounded focus:ring-primary mt-1 mr-3">
+            <span class="text-xs text-gray-600 leading-relaxed">
+              मैं घोषणा करता/करती हूँ कि मैं विकासशील इंसान पार्टी (VIP) के सिद्धांतों, संविधान और अनुशासन में विश्वास रखता/रखती हूँ तथा समाज सेवा के भाव से निष्काम रूप से वालंटियर बनने का संकल्प लेता/लेती हूँ।
+            </span>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          id="volSubmitBtn"
+          class="w-full bg-primary hover:bg-primary-700 text-white font-black py-4 px-6 rounded-2xl transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 text-base"
+        >
+          <i class="fa-solid fa-handshake-angle text-lg"></i>
+          <span id="volBtnText">वालंटियर के रूप में पंजीकरण करें</span>
+        </button>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Shared Footer -->
+  <%- include('../common/footer') %>
+
+  <!-- Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    const volunteerForm = document.getElementById('volunteerForm');
+    const volunteerSuccess = document.getElementById('volunteerSuccess');
+    const resVolId = document.getElementById('resVolId');
+    const volSubmitBtn = document.getElementById('volSubmitBtn');
+    const volBtnText = document.getElementById('volBtnText');
+
+    volunteerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const fullName = document.getElementById('volName').value.trim();
+      const mobile = document.getElementById('volMobile').value.trim();
+      const email = document.getElementById('volEmail').value.trim();
+      const gender = document.getElementById('volGender').value;
+      const state = document.getElementById('volState').value;
+      const district = document.getElementById('volDistrict').value.trim();
+      const assemblyConstituency = document.getElementById('volAssembly').value.trim();
+      const village = document.getElementById('volVillage').value.trim();
+      const availability = document.getElementById('volAvailability').value;
+      const skills = document.getElementById('volSkills').value.trim();
+
+      const checkedBoxes = document.querySelectorAll('input[name="volunteerTypes"]:checked');
+      const volunteerTypes = Array.from(checkedBoxes).map(cb => cb.value);
+
+      if (!fullName || !mobile || !district) {
+        alert('कृपया नाम, मोबाइल नंबर और जिला अनिवार्य रूप से भरें।');
+        return;
+      }
+
+      volSubmitBtn.disabled = true;
+      volBtnText.textContent = 'आवेदन दर्ज हो रहा है...';
+
+      try {
+        const res = await fetch('/api/forms/volunteer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName, mobile, email, gender, state, district,
+            assemblyConstituency, village, volunteerTypes, availability, skills
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          volunteerForm.reset();
+          resVolId.textContent = data.volunteerId || 'VIP-VOL-SUCCESS';
+          volunteerSuccess.classList.remove('hidden');
+          volunteerSuccess.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');
+        }
+      } catch (err) {
+        alert('सर्वर से संपर्क नहीं हो पाया।');
+      } finally {
+        volSubmitBtn.disabled = false;
+        volBtnText.textContent = 'वालंटियर के रूप में पंजीकरण करें';
+      }
+    });
+  </script>
+</body>
+
+</html>

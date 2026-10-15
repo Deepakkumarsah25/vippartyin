@@ -239,3 +239,42 @@ nav.scrolled {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
+/* ==========================================================================
+   Google Translate Seamless Clean Styles (Hides banner/tooltips)
+   ========================================================================== */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget-icon,
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#google_translate_element {
+  display: none !important;
+}
+
+.skiptranslate iframe {
+  display: none !important;
+}
+
+/* Language switch active styling */
+.lang-btn {
+  cursor: pointer;
+  user-select: none;
+}

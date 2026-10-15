@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="hi-IN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>यूपी 2027 उम्मीदवारी आवेदन | UP 2027 Candidature | विकासशील इंसान पार्टी (VIP)</title>
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-gray-50/70 min-h-screen flex flex-col font-sans text-gray-800">
+  <!-- Shared Navbar -->
+  <%- include('../common/navbar') %>
+
+  <!-- Hero Header -->
+  <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-12 sm:py-16 text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10">
+      <span class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+        मिशन 2027 • उत्तर प्रदेश
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight">
+        उत्तर प्रदेश विधानसभा चुनाव 2027 उम्मीदवारी आवेदन
+      </h1>
+      <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        विकासशील इंसान पार्टी (VIP) के चुनाव चिन्ह पर उत्तर प्रदेश की 403 विधानसभाओं में जनसेवा और सामाजिक न्याय के संघर्ष हेतु सशक्त उम्मीदवारों से आवेदन आमंत्रित हैं।
+      </p>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
+    
+    <!-- Success Banner (Hidden Initially) -->
+    <div id="candidatureSuccess" class="hidden mb-8 p-6 sm:p-8 bg-emerald-50 border-2 border-emerald-400 rounded-3xl shadow-xl text-center animate-slide-up">
+      <div class="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
+        <i class="fa-solid fa-vote-yea"></i>
+      </div>
+      <h3 class="text-2xl font-black text-emerald-950 mb-2">उम्मीदवारी आवेदन सफलतापूर्वक दर्ज हो गया है!</h3>
+      <p class="text-emerald-800 text-sm max-w-xl mx-auto mb-4">
+        आपका उम्मीदवारी आवेदन क्रमांक: <span id="resCandId" class="font-black text-lg bg-white px-3 py-1 rounded-lg border border-emerald-300">VIP-UP27-XXXX</span>
+      </p>
+      <p class="text-xs text-emerald-700">केन्द्रीय संसदीय बोर्ड एवं उत्तर प्रदेश प्रदेश चुनाव समिति द्वारा समीक्षा उपरांत आपको संपर्क किया जाएगा।</p>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-10">
+      <div class="border-b border-gray-100 pb-5 mb-8 flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">प्रत्याशी आवेदन प्रपत्र (UP 2027)</h2>
+          <p class="text-xs sm:text-sm text-gray-500 mt-0.5">कृपया सभी विवरण सत्यता और प्रामाणिकता के साथ भरें</p>
+        </div>
+        <span class="text-xs font-bold text-primary bg-blue-50 px-3 py-1.5 rounded-full">
+          * अनिवार्य फ़ील्ड्स
+        </span>
+      </div>
+
+      <form id="candidatureForm" class="space-y-8">
+        
+        <!-- Section 1: Candidate Personal Info -->
+        <div>
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">1</span>
+            प्रत्याशी का व्यक्तिगत विवरण (Candidate Profile)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">आवेदक का पूरा नाम <span class="text-red-500">*</span></label>
+              <input type="text" id="candName" required placeholder="प्रत्याशी का पूरा नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">पिता / पति का नाम <span class="text-red-500">*</span></label>
+              <input type="text" id="candFather" required placeholder="पिता या पति का नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">मोबाइल नंबर <span class="text-red-500">*</span></label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-3.5 text-gray-400 font-bold text-sm">+91</span>
+                <input type="tel" id="candMobile" required maxlength="10" placeholder="10 अंकों का प्राथमिक नंबर" class="w-full pl-14 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-semibold tracking-wider">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">व्हाट्सएप नंबर (WhatsApp)</label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-3.5 text-green-500 font-bold text-sm"><i class="fa-brands fa-whatsapp"></i></span>
+                <input type="tel" id="candWhatsapp" maxlength="10" placeholder="व्हाट्सएप नंबर" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-semibold">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">आयु (Age) <span class="text-red-500">*</span></label>
+              <input type="number" id="candAge" min="25" max="99" required placeholder="उदा. 35 (न्यूनतम 25 वर्ष)" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">लिंग (Gender) <span class="text-red-500">*</span></label>
+              <select id="candGender" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+                <option value="Male">पुरुष (Male)</option>
+                <option value="Female">महिला (Female)</option>
+                <option value="Other">अन्य (Other)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Constituency Details in UP -->
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">2</span>
+            उत्तर प्रदेश विधानसभा क्षेत्र विवरण (UP Constituency Details)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">उत्तर प्रदेश का जिला (UP District) <span class="text-red-500">*</span></label>
+              <input type="text" id="candDistrict" required placeholder="उदा. वाराणसी, गोरखपुर, प्रयागराज, मिर्जापुर, गाजीपुर" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">विधानसभा संख्या एवं नाम (Constituency Name & No.) <span class="text-red-500">*</span></label>
+              <input type="text" id="candAssembly" required placeholder="उदा. 388 - वाराणसी उत्तर / 322 - गोरखपुर ग्रामीण" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">जाति / समुदाय (Caste / Community)</label>
+              <input type="text" id="candCaste" placeholder="उदा. निषाद, मल्लाह, कश्यप, बिंद, मौर्य, आदि" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">शैक्षणिक योग्यता (Education)</label>
+              <input type="text" id="candEducation" placeholder="उदा. स्नातक, स्नातकोत्तर, LLB, आदि" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Political Background & Experience -->
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">3</span>
+            राजनीतिक पृष्ठभूमि एवं अनुभव (Political & Social Background)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">वर्तमान व्यवसाय / पेशा (Profession)</label>
+              <input type="text" id="candProfession" placeholder="उदा. व्यापार, वकालत, कृषि, समाजसेवा" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">वीआईपी / निषाद विकास संघ से कब से सक्रिय हैं?</label>
+              <input type="text" id="candActiveSince" placeholder="उदा. 2018 से, 2021 से" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">पूर्व राजनीतिक / सामाजिक अनुभव (Past Experience)</label>
+              <textarea id="candExperience" rows="2" placeholder="पूर्व में लड़े गए चुनाव, पार्टी पद या सामाजिक कार्यों का विवरण" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium resize-none"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">क्या कोई आपराधिक मुकदमा दर्ज है? (Criminal Cases Details)</label>
+              <input type="text" id="candCases" value="नहीं (None)" placeholder="यदि कोई मामला हो तो धारा एवं विवरण लिखें अन्यथा 'नहीं' लिखें" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          id="candSubmitBtn"
+          class="w-full bg-primary hover:bg-primary-700 text-white font-black py-4 px-6 rounded-2xl transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 text-base"
+        >
+          <i class="fa-solid fa-file-signature text-lg"></i>
+          <span id="candBtnText">उम्मीदवारी आवेदन प्रपत्र जमा करें</span>
+        </button>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Shared Footer -->
+  <%- include('../common/footer') %>
+
+  <!-- Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    const candidatureForm = document.getElementById('candidatureForm');
+    const candidatureSuccess = document.getElementById('candidatureSuccess');
+    const resCandId = document.getElementById('resCandId');
+    const candSubmitBtn = document.getElementById('candSubmitBtn');
+    const candBtnText = document.getElementById('candBtnText');
+
+    candidatureForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const applicantName = document.getElementById('candName').value.trim();
+      const fatherOrHusbandName = document.getElementById('candFather').value.trim();
+      const mobile = document.getElementById('candMobile').value.trim();
+      const whatsapp = document.getElementById('candWhatsapp').value.trim();
+      const age = document.getElementById('candAge').value;
+      const gender = document.getElementById('candGender').value;
+      const district = document.getElementById('candDistrict').value.trim();
+      const assemblyConstituency = document.getElementById('candAssembly').value.trim();
+      const casteCommunity = document.getElementById('candCaste').value.trim();
+      const education = document.getElementById('candEducation').value.trim();
+      const profession = document.getElementById('candProfession').value.trim();
+      const activeInVipSince = document.getElementById('candActiveSince').value.trim();
+      const politicalExperience = document.getElementById('candExperience').value.trim();
+      const criminalCases = document.getElementById('candCases').value.trim();
+
+      if (!applicantName || !fatherOrHusbandName || !mobile || !district || !assemblyConstituency) {
+        alert('कृपया सभी आवश्यक फ़ील्ड भरें।');
+        return;
+      }
+
+      candSubmitBtn.disabled = true;
+      candBtnText.textContent = 'आवेदन जमा हो रहा है...';
+
+      try {
+        const res = await fetch('/api/forms/candidature-up-2027', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicantName, fatherOrHusbandName, mobile, whatsapp, age, gender,
+            district, assemblyConstituency, casteCommunity, education, profession,
+            activeInVipSince, politicalExperience, criminalCases
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          candidatureForm.reset();
+          resCandId.textContent = data.candidatureId || 'VIP-UP27-SUCCESS';
+          candidatureSuccess.classList.remove('hidden');
+          candidatureSuccess.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');
+        }
+      } catch (err) {
+        alert('सर्वर से संपर्क नहीं हो पाया।');
+      } finally {
+        candSubmitBtn.disabled = false;
+        candBtnText.textContent = 'उम्मीदवारी आवेदन प्रपत्र जमा करें';
+      }
+    });
+  </script>
+</body>
+
+</html>

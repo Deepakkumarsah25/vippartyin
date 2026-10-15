@@ -1,6 +1,7 @@
 <!-- ==============================================
      VIP PARTY (विकासशील इंसान पार्टी) FOOTER
      Structured like RJD with VIP Party Colors & Identity
+     Bilingual support with data-i18n attributes
      ============================================== -->
 
 <!-- Upper Pre-Footer Callout Strip (हमसे जुड़ें, बदलाव लाएं) -->
@@ -10,12 +11,12 @@
       
       <!-- Callout Message -->
       <div class="flex items-center gap-6">
-        <div class="bg-white/10 p-4 rounded-full border border-white/20 shadow-inner">
+        <div class="bg-white/10 p-4 rounded-full border border-white/20 shadow-inner flex-shrink-0">
           <i class="fa-solid fa-user-plus text-3xl text-amber-300"></i>
         </div>
         <div>
-          <h3 class="text-2xl font-black mb-1 tracking-tight text-white">हमसे जुड़ें, बदलाव लाएं</h3>
-          <p class="text-blue-100 text-sm max-w-lg leading-relaxed">
+          <h3 class="text-2xl font-black mb-1 tracking-tight text-white" data-i18n="callout.title">हमसे जुड़ें, बदलाव लाएं</h3>
+          <p class="text-blue-100 text-sm max-w-lg leading-relaxed" data-i18n="callout.desc">
             विकासशील इंसान पार्टी (VIP) के साथ जुड़ें और स्वाभिमानी, शिक्षित और समृद्ध बिहार के निर्माण में भागीदार बनें।
           </p>
         </div>
@@ -23,15 +24,15 @@
 
       <!-- Action Button -->
       <div class="relative group animate-slide-up w-full sm:w-auto">
-        <a href="/active-member" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-gray-950 font-black px-8 py-3.5 rounded-lg text-base shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl inline-flex items-center justify-center gap-2 whitespace-nowrap">
-          <span>Join VIP (सदस्य बनें)</span>
+        <a href="/member" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-gray-950 font-black px-8 py-3.5 rounded-xl text-base shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl inline-flex items-center justify-center gap-2 whitespace-nowrap">
+          <span data-i18n="callout.btn">सदस्य बनें (Join VIP)</span>
           <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
         </a>
       </div>
 
       <!-- Follow Us Social Links -->
       <div class="flex items-center gap-4">
-        <span class="font-bold text-sm text-blue-200">हमें फॉलो करें:</span>
+        <span class="font-bold text-sm text-blue-200" data-i18n="callout.follow">हमें फॉलो करें:</span>
         <div class="flex gap-2">
           <a href="https://whatsapp.com" aria-label="VIP WhatsApp channel" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-green-600 flex items-center justify-center text-white transition-all hover:scale-110">
             <i class="fa-brands fa-whatsapp text-base"></i>
@@ -68,121 +69,130 @@
         <div class="flex items-center space-x-3 mb-6 group cursor-pointer">
           <img src="/images/vip-logo.svg" alt="VIP Logo" width="1024" height="1024" loading="lazy" decoding="async" class="h-14 w-14 bg-white rounded-xl p-1 transition-transform group-hover:scale-110 shadow-lg">
           <div>
-            <h2 class="text-2xl font-black text-white leading-tight">VIP</h2>
-            <p class="text-xs font-bold text-blue-300">विकासशील इंसान पार्टी</p>
+            <h2 class="text-2xl font-black text-white leading-tight" data-i18n="footer.about_heading">VIP</h2>
+            <p class="text-xs font-bold text-blue-300" data-i18n="footer.about_sub">विकासशील इंसान पार्टी</p>
           </div>
         </div>
-        <p class="text-blue-100/80 text-sm leading-relaxed mb-6">
+        <p class="text-blue-100/80 text-sm leading-relaxed mb-6" data-i18n="footer.about_desc">
           सामाजिक न्याय, समान अधिकार और समृद्ध बिहार के लिए हमारा संघर्ष जारी है। विकासशील इंसान पार्टी (VIP) का मुख्य उद्देश्य शोषित, वंचित, अति-पिछड़े और निषाद समाज का संवैधानिक अधिकार और सशक्तीकरण है। "सन ऑफ मल्लाह" श्री मुकेश सहनी के नेतृत्व में शिक्षित, विकसित, रोजगारयुक्त और समृद्ध बिहार बनाने के हमारे विजन, नेतृत्व, समाचार और कार्यक्रमों के बारे में जानें।
         </p>
         <div class="text-xs font-bold text-amber-400 bg-white/5 border border-white/10 rounded-lg p-3">
           <i class="fa-solid fa-quote-left mr-1.5 text-amber-400"></i>
-          "जिसकी जितनी संख्या भारी, उसकी उतनी हिस्सेदारी।"
+          <span data-i18n="footer.quote">"जिसकी जितनी संख्या भारी, उसकी उतनी हिस्सेदारी।"</span>
         </div>
       </div>
 
-      <!-- Col 2: त्वरित लिंक (Quick Links) -->
+      <!-- Col 2: त्वरित लिंक (Quick Links - Menu 1) -->
       <div>
-        <h3 class="text-lg font-bold mb-6 text-white border-b-2 border-primary-500 pb-2 inline-block">
+        <h3 class="text-lg font-bold mb-6 text-white border-b-2 border-primary-500 pb-2 inline-block" data-i18n="footer.quick_links">
           त्वरित लिंक
         </h3>
         <ul class="space-y-3">
           <li>
             <a href="/" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i> मुख्य पृष्ठ (Home)
+              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.home">मुख्य पृष्ठ (Home)</span>
             </a>
           </li>
           <li>
             <a href="/about" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i> हमारे बारे में
+              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.about">हमारे बारे में</span>
             </a>
           </li>
           <li>
             <a href="/journey-of-mukesh-sahani" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center font-medium">
-              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i> श्री मुकेश सहनी का संघर्ष
-            </a>
-          </li>
-          <li>
-            <a href="/jubba-sahani" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i> अमर शहीद जुब्बा सहनी
+              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.journey_mukesh">श्री मुकेश सहनी का संघर्ष</span>
             </a>
           </li>
           <li>
             <a href="/ideology" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i> विचारधारा एवं संकल्प
+              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.ideology">विचारधारा एवं संकल्प</span>
             </a>
           </li>
           <li>
-            <a href="/prerna" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i> हमारी प्रेरणा
+            <a href="/gallery/photo" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
+              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.photo">फोटो गैलरी</span>
             </a>
           </li>
           <li>
-            <a href="/events" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i> कार्यक्रम व रैलियां
+            <a href="/gallery/video" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
+              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.video">वीडियो गैलरी</span>
+            </a>
+          </li>
+          <li>
+            <a href="/news" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
+              <i class="fa-solid fa-angle-right mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.news">ताजा समाचार</span>
             </a>
           </li>
         </ul>
       </div>
 
-      <!-- Col 3: महत्वपूर्ण लिंक (Key Schemes & Applications) -->
+      <!-- Col 3: महत्वपूर्ण लिंक (Forms & Schemes) -->
       <div>
-        <h3 class="text-lg font-bold mb-6 text-white border-b-2 border-primary-500 pb-2 inline-block">
+        <h3 class="text-lg font-bold mb-6 text-white border-b-2 border-primary-500 pb-2 inline-block" data-i18n="footer.key_links">
           महत्वपूर्ण लिंक
         </h3>
         <ul class="space-y-3">
           <li>
             <a href="/scholarship" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center font-semibold text-amber-300">
-              <i class="fa-solid fa-graduation-cap mr-2 text-xs text-amber-400"></i> जुब्बा सहनी मेधा छात्रवृत्ति
+              <i class="fa-solid fa-graduation-cap mr-2 text-xs text-amber-400"></i>
+              <span data-i18n="nav.scholarship">जुब्बा सहनी मेधा छात्रवृत्ति</span>
             </a>
           </li>
           <li>
-            <a href="/vidhansabha-ticket" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center font-medium">
-              <i class="fa-solid fa-ticket mr-2 text-xs text-primary-400"></i> विधानसभा टिकट आवेदन फॉर्म
+            <a href="/member" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center font-medium">
+              <i class="fa-solid fa-user-plus mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.join_party">वीआईपी पार्टी से जुड़ें</span>
             </a>
           </li>
           <li>
-            <a href="/active-member" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center font-medium">
-              <i class="fa-solid fa-id-card mr-2 text-xs text-primary-400"></i> सक्रिय सदस्य आवेदन फॉर्म
+            <a href="/volunteer" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center font-medium">
+              <i class="fa-solid fa-handshake-angle mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.join_volunteer">वालंटियर आवेदन फॉर्म</span>
             </a>
           </li>
           <li>
-            <a href="/candidate-declaration" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-file-shield mr-2 text-xs text-primary-400"></i> उम्मीदवार घोषणापत्र
+            <a href="/candidature-up-2027" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center font-medium">
+              <i class="fa-solid fa-vote-yea mr-2 text-xs text-red-400"></i>
+              <span data-i18n="nav.candidature_up">यूपी 2027 उम्मीदवारी आवेदन</span>
             </a>
           </li>
           <li>
-            <a href="/media" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-video mr-2 text-xs text-primary-400"></i> मीडिया व प्रेस कॉन्फ्रेंस
-            </a>
-          </li>
-          <li>
-            <a href="/president" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-users mr-2 text-xs text-primary-400"></i> प्रदेश एवं जिला अध्यक्ष
+            <a href="/download" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
+              <i class="fa-solid fa-cloud-arrow-down mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.download">डाउनलोड सेन्टर</span>
             </a>
           </li>
           <li>
             <a href="/donate" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-heart mr-2 text-xs text-red-400"></i> दान करें (सहयोग)
+              <i class="fa-solid fa-heart mr-2 text-xs text-amber-400"></i>
+              <span data-i18n="nav.support_us">दान करें (सहयोग)</span>
             </a>
           </li>
           <li>
             <a href="/contact" class="text-blue-200 hover:text-white hover:translate-x-1 inline-block transition text-sm flex items-center">
-              <i class="fa-solid fa-envelope mr-2 text-xs text-primary-400"></i> संपर्क करें
+              <i class="fa-solid fa-envelope mr-2 text-xs text-primary-400"></i>
+              <span data-i18n="nav.contact">संपर्क करें</span>
             </a>
           </li>
         </ul>
       </div>
 
-      <!-- Col 4: संपर्क करें & WhatsApp QR -->
+      <!-- Col 4: संपर्क सूत्र & WhatsApp QR -->
       <div>
-        <h3 class="text-lg font-bold mb-6 text-white border-b-2 border-primary-500 pb-2 inline-block">
+        <h3 class="text-lg font-bold mb-6 text-white border-b-2 border-primary-500 pb-2 inline-block" data-i18n="footer.contact_info">
           संपर्क सूत्र
         </h3>
         <ul class="space-y-4">
           <li class="flex items-start text-sm text-blue-200 group">
             <i class="fa-solid fa-location-dot mt-1 mr-3 text-amber-400 group-hover:scale-110 transition-transform"></i>
-            <span>वीरचंद पटेल पथ, पटना<br>बिहार - 800001 (केन्द्रीय कार्यालय)</span>
+            <span data-i18n="contact.hq_val">वीरचंद पटेल पथ, पटना, बिहार - 800001 (केन्द्रीय कार्यालय)</span>
           </li>
           <li class="flex items-center text-sm text-blue-200 group">
             <i class="fa-solid fa-phone mr-3 text-amber-400 group-hover:scale-110 transition-transform"></i>
@@ -215,13 +225,13 @@
 
     <!-- Bottom Copyright & Legal Links -->
     <div class="border-t border-primary-800/80 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-blue-300">
-      <p>&copy; <%= new Date().getFullYear() %> विकासशील इंसान पार्टी (VIP). सर्वाधिकार सुरक्षित।</p>
+      <p>&copy; <%= new Date().getFullYear() %> विकासशील इंसान पार्टी (VIP). <span data-i18n="footer.rights">सर्वाधिकार सुरक्षित।</span></p>
       <div class="flex space-x-4 mt-4 md:mt-0 font-medium">
-        <a href="#privacy" class="hover:text-white transition">गोपनीयता नीति</a>
+        <a href="#privacy" class="hover:text-white transition" data-i18n="footer.privacy">गोपनीयता नीति</a>
         <span class="text-primary-700">|</span>
-        <a href="#terms" class="hover:text-white transition">नियम एवं शर्तें</a>
+        <a href="#terms" class="hover:text-white transition" data-i18n="footer.terms">नियम एवं शर्तें</a>
         <span class="text-primary-700">|</span>
-        <a href="/sitemap.xml" class="hover:text-white transition">साइटमैप</a>
+        <a href="/sitemap.xml" class="hover:text-white transition" data-i18n="footer.sitemap">साइटमैप</a>
       </div>
     </div>
   </div>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="hi-IN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>जुब्बा सहनी मेधा छात्रवृत्ति योजना | Jubba Sahani Scholarship | विकासशील इंसान पार्टी (VIP)</title>
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-gray-50/70 min-h-screen flex flex-col font-sans text-gray-800">
+  <!-- Shared Navbar -->
+  <%- include('../common/navbar') %>
+
+  <!-- Hero Header -->
+  <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-12 sm:py-16 text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10">
+      <span class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+        शिक्षा से सशक्तिकरण
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight">
+        अमर शहीद जुब्बा सहनी मेधा छात्रवृत्ति योजना
+      </h1>
+      <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        आर्थिक रूप से कमजोर, मेधावी और संघर्षशील छात्र-छात्राओं की उच्च शिक्षा हेतु विकासशील इंसान पार्टी द्वारा समर्पित छात्रवृत्ति योजना।
+      </p>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
+    
+    <!-- Success Banner (Hidden Initially) -->
+    <div id="scholarshipSuccess" class="hidden mb-8 p-6 sm:p-8 bg-emerald-50 border-2 border-emerald-400 rounded-3xl shadow-xl text-center animate-slide-up">
+      <div class="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <h3 class="text-2xl font-black text-emerald-950 mb-2">छात्रवृत्ति आवेदन सफलतापूर्वक दर्ज कर लिया गया है!</h3>
+      <p class="text-emerald-800 text-sm max-w-xl mx-auto mb-4">
+        आपका आवेदन क्रमांक (Application ID): <span id="resSchId" class="font-black text-lg bg-white px-3 py-1 rounded-lg border border-emerald-300">VIP-SCH-XXXX</span>
+      </p>
+      <p class="text-xs text-emerald-700">मेरिट एवं दस्तावेजों के सत्यापन के उपरांत चयनित विद्यार्थियों को सूचना दी जाएगी।</p>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-10">
+      <div class="border-b border-gray-100 pb-5 mb-8 flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">छात्रवृत्ति ऑनलाइन आवेदन पत्र</h2>
+          <p class="text-xs sm:text-sm text-gray-500 mt-0.5">सत्र 2026-2027 के लिए मेधा छात्रवृत्ति आवेदन</p>
+        </div>
+        <span class="text-xs font-bold text-primary bg-blue-50 px-3 py-1.5 rounded-full">
+          * अनिवार्य फ़ील्ड्स
+        </span>
+      </div>
+
+      <form id="scholarshipForm" class="space-y-8">
+        
+        <!-- Section 1: Student Information -->
+        <div>
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">1</span>
+            विद्यार्थी का विवरण (Student Information)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">छात्र/छात्रा का पूरा नाम <span class="text-red-500">*</span></label>
+              <input type="text" id="schName" required placeholder="विद्यार्थी का नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">पिता / अभिभावक का नाम <span class="text-red-500">*</span></label>
+              <input type="text" id="schFather" required placeholder="पिता का नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">मोबाइल नंबर <span class="text-red-500">*</span></label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-3.5 text-gray-400 font-bold text-sm">+91</span>
+                <input type="tel" id="schMobile" required maxlength="10" placeholder="10 अंकों का मोबाइल नंबर" class="w-full pl-14 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-semibold tracking-wider">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">ईमेल आईडी</label>
+              <input type="email" id="schEmail" placeholder="student@example.com" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">लिंग (Gender) <span class="text-red-500">*</span></label>
+              <select id="schGender" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+                <option value="Male">पुरुष (Male)</option>
+                <option value="Female">महिला (Female)</option>
+                <option value="Other">अन्य (Other)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">वर्ग / समुदाय (Category)</label>
+              <select id="schCategory" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+                <option value="Nishad / Mallah">निषाद / मल्लाह / सहनी</option>
+                <option value="Bind / Beldar">बिंद / बेलदार / केवट</option>
+                <option value="EBC / OBC">अति पिछड़ा / पिछड़ा वर्ग (EBC/OBC)</option>
+                <option value="SC / ST">अनुसूचित जाति / जनजाति (SC/ST)</option>
+                <option value="General / Other">सामान्य / अन्य (General/Other)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Educational Details -->
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">2</span>
+            शैक्षणिक विवरण (Educational Qualifications)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">वर्तमान पाठ्यक्रम / कक्षा <span class="text-red-500">*</span></label>
+              <input type="text" id="schCourse" required placeholder="उदा. 10वीं, 12वीं, स्नातक, B.Tech, ITI" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">स्कूल / कॉलेज / संस्थान का नाम <span class="text-red-500">*</span></label>
+              <input type="text" id="schInstitute" required placeholder="संस्थान का पूरा नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">अंतिम उत्तीर्ण परीक्षा में प्राप्तांक (%)</label>
+              <input type="text" id="schMarks" placeholder="उदा. 82%" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">परिवार की वार्षिक आय (वार्षिक ₹)</label>
+              <input type="text" id="schIncome" placeholder="उदा. ₹1,20,000" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Location Details -->
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span class="w-7 h-7 bg-primary text-white rounded-lg flex items-center justify-center text-xs font-bold">3</span>
+            पता एवं गृह क्षेत्र (Address & District)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">गृह जिला (District) <span class="text-red-500">*</span></label>
+              <input type="text" id="schDistrict" required placeholder="जिले का नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">विधानसभा क्षेत्र (Assembly Constituency)</label>
+              <input type="text" id="schAssembly" placeholder="विधानसभा का नाम" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">स्थायी पता (Permanent Address)</label>
+              <textarea id="schAddress" rows="2" placeholder="गाँव/मोहल्ला, पोस्ट, थाना, पिन कोड" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          id="schSubmitBtn"
+          class="w-full bg-primary hover:bg-primary-700 text-white font-black py-4 px-6 rounded-2xl transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 text-base"
+        >
+          <i class="fa-solid fa-graduation-cap text-lg"></i>
+          <span id="schBtnText">छात्रवृत्ति आवेदन जमा करें</span>
+        </button>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Shared Footer -->
+  <%- include('../common/footer') %>
+
+  <!-- Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    const scholarshipForm = document.getElementById('scholarshipForm');
+    const scholarshipSuccess = document.getElementById('scholarshipSuccess');
+    const resSchId = document.getElementById('resSchId');
+    const schSubmitBtn = document.getElementById('schSubmitBtn');
+    const schBtnText = document.getElementById('schBtnText');
+
+    scholarshipForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const studentName = document.getElementById('schName').value.trim();
+      const fatherName = document.getElementById('schFather').value.trim();
+      const mobile = document.getElementById('schMobile').value.trim();
+      const email = document.getElementById('schEmail').value.trim();
+      const gender = document.getElementById('schGender').value;
+      const category = document.getElementById('schCategory').value;
+      const currentCourse = document.getElementById('schCourse').value.trim();
+      const institute = document.getElementById('schInstitute').value.trim();
+      const percentageMarks = document.getElementById('schMarks').value.trim();
+      const familyAnnualIncome = document.getElementById('schIncome').value.trim();
+      const district = document.getElementById('schDistrict').value.trim();
+      const assembly = document.getElementById('schAssembly').value.trim();
+      const address = document.getElementById('schAddress').value.trim();
+
+      if (!studentName || !fatherName || !mobile || !currentCourse || !institute || !district) {
+        alert('कृपया सभी आवश्यक फ़ील्ड भरें।');
+        return;
+      }
+
+      schSubmitBtn.disabled = true;
+      schBtnText.textContent = 'आवेदन जमा हो रहा है...';
+
+      try {
+        const res = await fetch('/api/forms/scholarship', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            studentName, fatherName, mobile, email, gender, category,
+            currentCourse, institute, percentageMarks, familyAnnualIncome,
+            district, assembly, address
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          scholarshipForm.reset();
+          resSchId.textContent = data.applicationId || 'VIP-SCH-SUCCESS';
+          scholarshipSuccess.classList.remove('hidden');
+          scholarshipSuccess.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');
+        }
+      } catch (err) {
+        alert('सर्वर से संपर्क नहीं हो पाया।');
+      } finally {
+        schSubmitBtn.disabled = false;
+        schBtnText.textContent = 'छात्रवृत्ति आवेदन जमा करें';
+      }
+    });
+  </script>
+</body>
+
+</html>

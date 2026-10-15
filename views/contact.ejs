@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title data-i18n="contact.page_title">संपर्क सूत्र (Contact Us) | विकासशील इंसान पार्टी (VIP)</title>
+  <meta name="title" content="संपर्क सूत्र (Contact Us) | विकासशील इंसान पार्टी (VIP)">
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) केन्द्रीय मुख्यालय से संपर्क करें। पता, फ़ोन नंबर, हेल्पलाइन, आधिकारिक ईमेल और संदेश प्रेषण फॉर्म।">
+  <meta name="keywords" content="Contact VIP Party, VIP Party Phone Number, VIP Party Office Patna, Mukesh Sahani Contact, विकासशील इंसान पार्टी संपर्क सूत्र">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vipparty.in/contact">
+  <meta property="og:title" content="संपर्क सूत्र (Contact Us) | विकासशील इंसान पार्टी (VIP)">
+  <meta property="og:description" content="विकासशील इंसान पार्टी केन्द्रीय मुख्यालय से संपर्क करें। फ़ोन, ईमेल या संदेश प्रेषण फॉर्म।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component with Menu 1, Menu 2 & Language Switcher) -->
+  <%- include('common/navbar') %>
+
+  <!-- ========================================================
+       HERO BANNER: EXACT RJD STYLE (CONTACT PAGE HERO)
+       ======================================================== -->
+  <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-14 sm:py-20 relative overflow-hidden text-white shadow-inner">
+    <!-- Decorative Pattern Overlay -->
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
+    <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-primary-500/20 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="mb-4 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-blue-200 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-md border border-white/15">
+        <a href="/" class="hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-solid fa-house text-xs"></i>
+          <span data-i18n="nav.home">होम</span>
+        </a>
+        <span class="text-blue-300">›</span>
+        <span class="text-amber-300" data-i18n="contact.heading">संपर्क करें</span>
+      </nav>
+
+      <!-- Main Title -->
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-md" data-i18n="contact.heading">
+        संपर्क करें
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-blue-100 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed" data-i18n="contact.subheading">
+        आपके सुझाव और विचार हमारे लिए महत्वपूर्ण हैं। फ़ोन, ईमेल या नीचे दिए गए फॉर्म के माध्यम से हमसे संपर्क करें।
+      </p>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MAIN SECTION: 2-COLUMN GRID (IDENTICAL TO rjd.co.in/contact)
+       Left: Office Details & Map
+       Right: Send Message Interactive Card
+       ======================================================== -->
+  <section class="py-14 sm:py-20 bg-gray-50/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+
+        <!-- ==============================================
+             LEFT COLUMN: कार्यालय से संपर्क करें (OFFICE INFO)
+             ============================================== -->
+        <div class="space-y-8">
+          
+          <div>
+            <span class="text-primary font-bold tracking-widest text-xs uppercase mb-1 block">विकासशील इंसान पार्टी</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight" data-i18n="contact.office_heading">
+              कार्यालय से संपर्क करें
+            </h2>
+            <p class="text-gray-500 text-sm sm:text-base mt-2">
+              केन्द्रीय मुख्यालय अथवा राज्य कार्यालय से सीधे संपर्क के लिए नीचे दिए गए पते और दूरभाष पर संपर्क साधें।
+            </p>
+          </div>
+
+          <!-- Contact Details Cards -->
+          <div class="space-y-5">
+            
+            <!-- 1. मुख्यालय का पता (HQ Address) -->
+            <div class="flex items-start bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+              <div class="w-13 h-13 sm:w-14 sm:h-14 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl mr-4 sm:mr-5 flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all shadow-inner">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-gray-900 mb-1" data-i18n="contact.hq_label">
+                  मुख्यालय का पता
+                </h4>
+                <p class="text-gray-600 text-sm leading-relaxed" data-i18n="contact.hq_val">
+                  वीआईपी केन्द्रीय कार्यालय, 2, वीरचंद पटेल पथ, पटना, बिहार - 800001
+                </p>
+              </div>
+            </div>
+
+            <!-- 2. फ़ोन नंबर (Phone Numbers) -->
+            <div class="flex items-start bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+              <div class="w-13 h-13 sm:w-14 sm:h-14 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl mr-4 sm:mr-5 flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all shadow-inner">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-gray-900 mb-1" data-i18n="contact.phone_label">
+                  फ़ोन नंबर
+                </h4>
+                <div class="text-gray-600 text-sm space-y-1">
+                  <p><a href="tel:06122506830" class="hover:text-primary font-semibold transition">0612-2506830</a> (कार्यालय)</p>
+                  <p><a href="tel:18001234567" class="hover:text-primary font-semibold transition">1800-VIP-2026</a> (टोल-फ्री हेल्पलाइन)</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. ईमेल आईडी (Email) -->
+            <div class="flex items-start bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+              <div class="w-13 h-13 sm:w-14 sm:h-14 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl mr-4 sm:mr-5 flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all shadow-inner">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-gray-900 mb-1" data-i18n="contact.email_label">
+                  ईमेल आईडी
+                </h4>
+                <div class="text-gray-600 text-sm space-y-1">
+                  <p><a href="mailto:contact@vipparty.in" class="hover:text-primary transition font-medium">contact@vipparty.in</a></p>
+                  <p><a href="mailto:info@vipparty.in" class="hover:text-primary transition font-medium">info@vipparty.in</a></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. कार्यालय समय (Working Hours) -->
+            <div class="flex items-start bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+              <div class="w-13 h-13 sm:w-14 sm:h-14 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl mr-4 sm:mr-5 flex-shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all shadow-inner">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-gray-900 mb-1" data-i18n="contact.hours_label">
+                  कार्यालय समय
+                </h4>
+                <p class="text-gray-600 text-sm leading-relaxed" data-i18n="contact.hours_val">
+                  सोमवार - शनिवार: 10:00 AM - 06:00 PM
+                </p>
+                <p class="text-xs text-gray-400 mt-0.5">(रविवार एवं राजपत्रित अवकाश बंद)</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Social Links Strip -->
+          <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <span class="font-bold text-sm text-gray-800" data-i18n="contact.social_label">सोशल मीडिया पर जुड़ें:</span>
+            <div class="flex items-center gap-2.5">
+              <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-600 hover:text-white transition-all hover:scale-110 shadow-sm">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all hover:scale-110 shadow-sm">
+                <i class="fa-brands fa-facebook-f text-lg"></i>
+              </a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X Twitter" class="w-10 h-10 rounded-xl bg-gray-100 text-gray-900 flex items-center justify-center hover:bg-black hover:text-white transition-all hover:scale-110 shadow-sm">
+                <i class="fa-brands fa-x-twitter text-lg"></i>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all hover:scale-110 shadow-sm">
+                <i class="fa-brands fa-instagram text-lg"></i>
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all hover:scale-110 shadow-sm">
+                <i class="fa-brands fa-youtube text-lg"></i>
+              </a>
+              <a href="https://t.me" target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="w-10 h-10 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all hover:scale-110 shadow-sm">
+                <i class="fa-brands fa-telegram text-lg"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive Google Map Embed -->
+          <div class="rounded-2xl overflow-hidden shadow-lg border border-gray-200 h-64 sm:h-72 w-full relative">
+            <iframe
+              title="VIP Party Headquarters Patna Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14392.215286411516!2d85.1228498871582!3d25.603099900000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed585d95b8b9f5%3A0xd97ec22c7104f46a!2sBeer%20Chand%20Patel%20Path%2C%20Patna%2C%20Bihar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              class="w-full h-full"
+            ></iframe>
+          </div>
+
+        </div>
+
+        <!-- ==============================================
+             RIGHT COLUMN: हमें संदेश भेजें (CONTACT FORM CARD)
+             Exact RJD Form Structure with Modern Styling & AJAX
+             ============================================== -->
+        <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-gray-100 relative">
+          
+          <div class="mb-8">
+            <span class="inline-block bg-blue-50 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+              सीधा संवाद
+            </span>
+            <h3 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight" data-i18n="contact.form_title">
+              हमें संदेश भेजें
+            </h3>
+            <p class="text-gray-500 text-sm mt-1" data-i18n="contact.form_subtitle">
+              अपना विवरण और संदेश दर्ज करें, हमारी टीम जल्द ही आपसे संपर्क करेगी।
+            </p>
+          </div>
+
+          <!-- Success Alert Message (Hidden initially) -->
+          <div id="contactSuccessAlert" class="hidden mb-6 p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 animate-slide-up">
+            <div class="flex items-start gap-3">
+              <i class="fa-solid fa-circle-check text-2xl text-emerald-600 mt-0.5"></i>
+              <div>
+                <h4 class="font-bold text-base text-emerald-900" data-i18n="contact.success_title">बधाई हो!</h4>
+                <p class="text-sm mt-0.5 text-emerald-700" data-i18n="contact.success_msg">
+                  आपका संदेश सफलतापूर्वक दर्ज कर लिया गया है। हमारी टीम शीघ्र आपसे संपर्क करेगी।
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error Alert Message -->
+          <div id="contactErrorAlert" class="hidden mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-red-500 text-base"></i>
+            <span id="contactErrorMsg">कृपया सभी आवश्यक फ़ील्ड भरें।</span>
+          </div>
+
+          <!-- The Contact Form -->
+          <form action="/contact" method="POST" id="contactForm" class="space-y-5">
+            
+            <!-- Row 1: Name & Phone -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5" data-i18n="contact.name">
+                  पूरा नाम <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+                  <input
+                    type="text"
+                    name="name"
+                    id="contactName"
+                    required
+                    placeholder="आपका नाम दर्ज करें"
+                    data-i18n-ph="contact.name_ph"
+                    class="w-full pl-10 pr-4 py-3 bg-gray-50/70 border border-gray-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white text-sm font-medium transition-all"
+                  >
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5" data-i18n="contact.phone">
+                  फ़ोन नंबर <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <span class="absolute left-3.5 top-3.5 text-gray-500 text-sm font-bold">+91</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="contactPhone"
+                    required
+                    maxlength="10"
+                    placeholder="10 अंकों का मोबाइल नंबर"
+                    data-i18n-ph="contact.phone_ph"
+                    class="w-full pl-14 pr-4 py-3 bg-gray-50/70 border border-gray-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white text-sm font-semibold tracking-wider transition-all"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Email & Category/Subject -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5" data-i18n="contact.email">
+                  ईमेल आईडी (वैकल्पिक)
+                </label>
+                <div class="relative">
+                  <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+                  <input
+                    type="email"
+                    name="email"
+                    id="contactEmail"
+                    placeholder="email@example.com"
+                    data-i18n-ph="contact.email_ph"
+                    class="w-full pl-10 pr-4 py-3 bg-gray-50/70 border border-gray-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white text-sm font-medium transition-all"
+                  >
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5" data-i18n="contact.subject">
+                  विषय / श्रेणी
+                </label>
+                <div class="relative">
+                  <select
+                    name="subject"
+                    id="contactSubject"
+                    class="w-full px-4 py-3 bg-gray-50/70 border border-gray-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white text-sm font-medium transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="सामान्य पूछताछ" data-i18n="contact.subject_default">सामान्य पूछताछ (General Inquiry)</option>
+                    <option value="पार्टी सदस्यता सम्बन्धी" data-i18n="contact.subject_membership">पार्टी सदस्यता सम्बन्धी (Membership)</option>
+                    <option value="शिकायत व समस्या निवारण" data-i18n="contact.subject_grievance">शिकायत व समस्या निवारण (Grievance)</option>
+                    <option value="सुझाव एवं विचार" data-i18n="contact.subject_suggestion">सुझाव एवं विचार (Suggestions)</option>
+                    <option value="मीडिया व प्रेस संबंधित" data-i18n="contact.subject_media">मीडिया व प्रेस संबंधित (Media / Press)</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down absolute right-3.5 top-4 text-gray-400 text-xs pointer-events-none"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: Message -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5" data-i18n="contact.message">
+                संदेश <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                name="message"
+                id="contactMessage"
+                required
+                rows="5"
+                placeholder="अपना संदेश यहाँ विस्तार से लिखें..."
+                data-i18n-ph="contact.message_ph"
+                class="w-full px-4 py-3 bg-gray-50/70 border border-gray-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white text-sm font-medium transition-all resize-none"
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              id="contactSubmitBtn"
+              class="w-full bg-primary hover:bg-primary-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 text-base"
+            >
+              <i class="fa-regular fa-paper-plane text-sm"></i>
+              <span id="contactBtnText" data-i18n="contact.send_btn">संदेश भेजें</span>
+            </button>
+
+            <p class="text-center text-xs text-gray-400 mt-2">
+              🔒 आपकी व्यक्तिगत जानकारी विकासशील इंसान पार्टी के पास पूर्णतः सुरक्षित है।
+            </p>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       PRE-FOOTER CALLOUT: EXACT RJD STRIP (हमसे जुड़ें, बदलाव लाएं)
+       ======================================================== -->
+  <section class="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-950 text-white py-12 border-t-4 border-amber-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        
+        <!-- Callout Message -->
+        <div class="flex items-center gap-6">
+          <div class="bg-white/10 p-4 rounded-full border border-white/20 shadow-inner flex-shrink-0">
+            <i class="fa-solid fa-user-plus text-3xl text-amber-300"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-black mb-1 tracking-tight text-white" data-i18n="callout.title">हमसे जुड़ें, बदलाव लाएं</h3>
+            <p class="text-blue-100 text-sm max-w-lg leading-relaxed" data-i18n="callout.desc">
+              विकासशील इंसान पार्टी (VIP) के साथ जुड़ें और स्वाभिमानी, शिक्षित और समृद्ध बिहार के निर्माण में भागीदार बनें।
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="relative group animate-slide-up w-full sm:w-auto">
+          <a href="/member" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-gray-950 font-black px-8 py-3.5 rounded-xl text-base shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl inline-flex items-center justify-center gap-2 whitespace-nowrap">
+            <span data-i18n="callout.btn">सदस्य बनें (Join VIP)</span>
+            <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+          </a>
+        </div>
+
+        <!-- Follow Us Social Links -->
+        <div class="flex items-center gap-4">
+          <span class="font-bold text-sm text-blue-200" data-i18n="callout.follow">हमें फॉलो करें:</span>
+          <div class="flex gap-2">
+            <a href="https://whatsapp.com" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-green-600 flex items-center justify-center text-white transition-all hover:scale-110">
+              <i class="fa-brands fa-whatsapp text-base"></i>
+            </a>
+            <a href="https://t.me" aria-label="Telegram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-sky-500 flex items-center justify-center text-white transition-all hover:scale-110">
+              <i class="fa-brands fa-telegram text-base"></i>
+            </a>
+            <a href="https://facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-blue-600 flex items-center justify-center text-white transition-all hover:scale-110">
+              <i class="fa-brands fa-facebook-f text-base"></i>
+            </a>
+            <a href="https://x.com" aria-label="Twitter X" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-black flex items-center justify-center text-white transition-all hover:scale-110">
+              <i class="fa-brands fa-x-twitter text-base"></i>
+            </a>
+            <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-pink-600 flex items-center justify-center text-white transition-all hover:scale-110">
+              <i class="fa-brands fa-instagram text-base"></i>
+            </a>
+            <a href="https://youtube.com" aria-label="YouTube" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-red-600 flex items-center justify-center text-white transition-all hover:scale-110">
+              <i class="fa-brands fa-youtube text-base"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'सदस्य बनें | VIP Online Membership | विकासशील इंसान पार्टी' %></title>
+  <meta name="title" content="सदस्य बनें | VIP Online Membership | विकासशील इंसान पार्टी">
+  <meta name="description" content="सामाजिक न्याय, निषाद आरक्षण और बिहार के नव-निर्माण के आंदोलन में शामिल हों। विकासशील इंसान पार्टी (VIP) के आधिकारिक सदस्य के रूप में ऑनलाइन पंजीकरण करें और तुरंत अपना डिजिटल सदस्यता कार्ड प्राप्त करें।">
+  <meta name="keywords" content="VIP Member, VIP Party Membership, Join VIP, Mukesh Sahani, Vikassheel Insaan Party, Bihar Politics, Nishad Aarakshan">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vipparty.in/member">
+  <meta property="og:title" content="सदस्य बनें | VIP Online Membership | विकासशील इंसान पार्टी">
+  <meta property="og:description" content="सामाजिक न्याय और अधिकार की लड़ाई में भागीदार बनें। VIP पार्टी के सदस्य बनें।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <style>
+    /* Custom Styling for Membership & ID Card */
+    .vip-card-font {
+      font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+    }
+    .animate-spin-fast {
+      animation: spin 0.8s linear infinite;
+    }
+  </style>
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- Breadcrumb Navigation -->
+  <div class="bg-gray-100 border-b border-gray-200 py-2.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs md:text-sm font-semibold text-gray-600 flex items-center space-x-2">
+      <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+        <i class="fa-solid fa-house text-xs"></i>
+        <span>होम</span>
+      </a>
+      <span class="text-gray-400">›</span>
+      <span class="text-primary font-bold">हमसे जुड़ें (Join VIP)</span>
+    </div>
+  </div>
+
+  <!-- 2. Hero Header Banner (Styled like RJD with VIP Party Royal Blue & Rally Overlay) -->
+  <div class="bg-gradient-to-r from-primary-950 via-primary-800 to-primary-900 py-12 md:py-16 relative overflow-hidden shadow-inner border-b-4 border-amber-400">
+    <!-- Rally Background Blend Overlay -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-15 mix-blend-overlay" style="background-image: url('/images/event_rally.jpg');"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <div class="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-400/40 text-amber-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 backdrop-blur-sm">
+        <i class="fa-solid fa-anchor"></i> विकासशील इंसान पार्टी सदस्यता अभियान
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black text-white mb-3 tracking-tight">सदस्य बनें</h1>
+      <p class="text-blue-100 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-medium">
+        विकासशील इंसान पार्टी परिवार से जुड़ें और स्वाभिमान, हक व अधिकार के महा-आंदोलन का हिस्सा बनें।
+      </p>
+    </div>
+  </div>
+
+  <!-- 3. Main Form Section -->
+  <section class="py-12 bg-slate-50 min-h-screen relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="bg-white p-6 sm:p-10 md:p-12 rounded-3xl shadow-2xl border border-gray-100 transition-all duration-300">
+
+        <!-- Form Container -->
+        <div id="form-container">
+          <div class="text-center mb-8">
+            <div class="relative inline-block mb-3">
+              <img src="/images/vip-logo.svg" alt="VIP Logo" width="1024" height="1024" class="h-20 w-20 mx-auto drop-shadow-md transition-transform hover:scale-105 duration-300">
+              <div class="absolute -bottom-1 -right-1 bg-amber-400 text-gray-950 text-[10px] font-black px-2 py-0.5 rounded-full shadow">
+                VIP
+              </div>
+            </div>
+            <h2 class="text-3xl font-black text-gray-900 tracking-tight">सदस्यता फॉर्म</h2>
+            <p class="text-gray-500 mt-1.5 text-sm sm:text-base font-medium">कृपया नीचे दिए गए फॉर्म में अपनी सही जानकारी दर्ज करें।</p>
+          </div>
+
+          <!-- Eligibility & Privacy Policy Alert Box (Like RJD) -->
+          <div class="bg-blue-50/80 border-l-4 border-primary p-4 sm:p-5 mb-8 rounded-r-2xl text-left shadow-sm">
+            <h3 class="text-base sm:text-lg font-bold text-primary-900 mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-primary"></i>
+              योग्यता एवं निजता नीति (Eligibility & Privacy)
+            </h3>
+            <ul class="list-disc list-inside text-xs sm:text-sm text-blue-900 space-y-1.5 leading-relaxed font-medium">
+              <li>आवेदक भारत का नागरिक होना चाहिए और उसकी आयु 18 वर्ष या उससे अधिक होनी चाहिए।</li>
+              <li>आपकी व्यक्तिगत जानकारी (जैसे फोन नंबर और पता) पूरी तरह से सुरक्षित है और इसका उपयोग केवल पार्टी संचार के लिए किया जाएगा।</li>
+              <li>सदस्यता पूर्णतः स्वैच्छिक है और विकासशील इंसान पार्टी (VIP) के संविधान व नियमों के अधीन है।</li>
+            </ul>
+          </div>
+
+          <!-- Registration Form -->
+          <form id="membership-form" enctype="multipart/form-data" class="space-y-6">
+            
+            <!-- Row 1: Full Name & Phone Number -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  पूरा नाम <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input type="text" name="name" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="अपना पूरा नाम दर्ज करें">
+                  <i class="fa-regular fa-user absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  फ़ोन नंबर <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input type="tel" name="phone" required pattern="[0-9]{10}" maxlength="10" class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="10 अंकों का मोबाइल नंबर">
+                  <i class="fa-solid fa-phone absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Email ID -->
+            <div class="group">
+              <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                ईमेल आईडी <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input type="email" name="email" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="example@email.com">
+                <i class="fa-regular fa-envelope absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+              </div>
+            </div>
+
+            <!-- Row 3: Age & Gender -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  आयु (Age) <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input type="number" name="age" required min="18" max="120" class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="अपनी आयु दर्ज करें (न्यूनतम 18 वर्ष)">
+                  <i class="fa-regular fa-calendar absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  लिंग (Gender) <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <select name="gender" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm bg-white text-sm text-gray-800 font-medium">
+                    <option value="" disabled selected>अपना लिंग चुनें</option>
+                    <option value="Male">पुरुष (Male)</option>
+                    <option value="Female">महिला (Female)</option>
+                    <option value="Other">अन्य (Other)</option>
+                  </select>
+                  <i class="fa-solid fa-venus-mars absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 4: Education -->
+            <div class="group">
+              <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                शिक्षा (Education) <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <select name="education" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm bg-white text-sm text-gray-800 font-medium">
+                  <option value="" disabled selected>अपनी शिक्षा चुनें</option>
+                  <option value="Below 10th">10वीं से कम (Below 10th)</option>
+                  <option value="10th">10वीं पास (10th Pass)</option>
+                  <option value="12th">12वीं (12th)</option>
+                  <option value="Graduation">स्नातक (Graduation)</option>
+                  <option value="Above Graduation">स्नातक से ऊपर (Post Graduation / Above)</option>
+                </select>
+                <i class="fa-solid fa-graduation-cap absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+              </div>
+            </div>
+
+            <!-- Row 5: State & District -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  राज्य (State) <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <select name="state" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm bg-gray-100 text-gray-700 cursor-not-allowed text-sm font-semibold">
+                    <option value="Bihar" selected>बिहार (Bihar)</option>
+                  </select>
+                  <i class="fa-solid fa-map-location-dot absolute left-4 top-3.5 text-gray-500"></i>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  जिला (District) <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <select name="district" id="district" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm bg-white text-sm text-gray-800 font-medium">
+                    <option value="" disabled selected>अपना जिला चुनें</option>
+                  </select>
+                  <i class="fa-solid fa-city absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 6: Lok Sabha & Vidhan Sabha (Assembly) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  लोकसभा (Loksabha) <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <select name="loksabha" id="loksabha" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm bg-white text-sm text-gray-800 font-medium">
+                    <option value="" disabled selected>अपना लोकसभा चुनें</option>
+                  </select>
+                  <i class="fa-solid fa-landmark absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  विधानसभा (Vidhansabha) <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <select name="vidhansabha" id="vidhansabha" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm bg-white text-sm text-gray-800 font-medium">
+                    <option value="" disabled selected>पहले जिला चुनें</option>
+                  </select>
+                  <i class="fa-solid fa-check-to-slot absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 7: Block & Panchayat -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  प्रखंड (Block) <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <select name="block" id="block" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm bg-white text-sm text-gray-800 font-medium">
+                    <option value="" disabled selected>पहले जिला चुनें</option>
+                  </select>
+                  <i class="fa-solid fa-sitemap absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  पंचायत (Panchayat) <span class="text-xs text-gray-400 font-normal ml-1">(वैकल्पिक)</span>
+                </label>
+                <div class="relative">
+                  <input type="text" name="panchayat" id="panchayat" class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="अपनी ग्राम पंचायत का नाम दर्ज करें">
+                  <i class="fa-solid fa-tree absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 8: Ward No & Referral ID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  वार्ड नंबर (Ward No) <span class="text-xs text-gray-400 font-normal ml-1">(वैकल्पिक)</span>
+                </label>
+                <div class="relative">
+                  <input type="text" name="ward" class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="अपना वार्ड नंबर दर्ज करें">
+                  <i class="fa-solid fa-hashtag absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+                </div>
+              </div>
+
+              <div class="group">
+                <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                  संदर्भ संख्या (Referral ID) <span class="text-xs text-gray-400 font-normal ml-1">(वैकल्पिक)</span>
+                </label>
+                <div class="flex">
+                  <span class="inline-flex items-center px-4 py-3 rounded-l-xl border border-r-0 border-gray-300 bg-gray-50 text-primary font-black text-sm">
+                    VIP-
+                  </span>
+                  <input type="text" name="referred_by" class="flex-1 w-full px-4 py-3 border border-gray-300 rounded-r-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="2026-XXXXX">
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 9: Full Address -->
+            <div class="group">
+              <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                पूरा पता (Full Address) <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <textarea name="address" rows="3" required class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all hover:border-primary/50 shadow-sm text-sm text-gray-800 font-medium" placeholder="मकान संख्या, मोहल्ला/गांव, पोस्ट ऑफिस, पिन कोड सहित पूरा पता लिखें..."></textarea>
+                <i class="fa-regular fa-address-book absolute left-4 top-3.5 text-gray-400 group-hover:text-primary transition-colors"></i>
+              </div>
+            </div>
+
+            <!-- Row 10: Photo Upload & Preview -->
+            <div class="group">
+              <label class="block text-sm font-bold text-gray-700 mb-2 group-hover:text-primary transition-colors">
+                अपनी तस्वीर अपलोड करें (JPG/PNG) <span class="text-red-500">*</span>
+              </label>
+              <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-2xl hover:border-primary transition-colors bg-gray-50/80 group-hover:bg-blue-50/30">
+                <div class="space-y-1 text-center">
+                  <i class="fa-regular fa-image text-4xl text-gray-400 group-hover:text-primary transition-colors mb-3"></i>
+                  <div class="flex text-sm text-gray-600 justify-center">
+                    <label for="photo" class="relative cursor-pointer bg-white rounded-lg font-bold text-primary hover:text-primary-700 px-4 py-2 shadow-sm border border-gray-200 transition-all hover:shadow hover:scale-105">
+                      <span><i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> फ़ाइल चुनें</span>
+                      <input id="photo" name="photo" type="file" accept="image/jpeg, image/png, image/webp" required class="sr-only" onchange="previewImage(event)">
+                    </label>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-2 font-medium">पासपोर्ट साइज फोटो (अधिकतम आकार: 1.5MB)</p>
+                </div>
+              </div>
+
+              <!-- Live Photo Preview -->
+              <div id="image-preview-container" class="hidden mt-4 text-center animate-fade-in">
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">फोटो पूर्वावलोकन (Preview)</p>
+                <div class="inline-block relative">
+                  <img id="image-preview" alt="सदस्य फोटो पूर्वावलोकन" width="128" height="128" class="h-32 w-32 object-cover rounded-full mx-auto border-4 border-primary shadow-xl ring-4 ring-amber-400/40">
+                  <div class="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow border border-gray-200">
+                    <img src="/images/vip-logo.svg" alt="VIP" class="h-5 w-5 object-contain">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-primary to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-black py-4 px-6 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 active:translate-y-0 flex justify-center items-center text-lg gap-2 tracking-wide cursor-pointer">
+              <i class="fa-solid fa-user-check text-xl text-amber-400"></i>
+              <span>सदस्यता दर्ज करें</span>
+            </button>
+
+            <!-- Error Message Box -->
+            <div id="error-message" class="text-red-600 text-center font-bold text-sm hidden bg-red-50 p-3 rounded-xl border border-red-200"></div>
+          </form>
+        </div>
+
+        <!-- Loading State (Matches RJD Spinner) -->
+        <div id="loading-state" class="hidden text-center py-20 animate-fade-in">
+          <i class="fa-solid fa-circle-notch fa-spin text-5xl text-primary mb-4"></i>
+          <h3 class="text-2xl font-black text-gray-900">कृपया प्रतीक्षा करें...</h3>
+          <p class="text-gray-500 mt-1 font-medium">आपकी जानकारी सुरक्षित की जा रही है एवं सदस्यता कार्ड तैयार हो रहा है।</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       4. SUCCESS MODAL & DIGITAL MEMBERSHIP ID CARD (RJD STYLE)
+       Branded with VIP Party Royal Navy Blue, Gold Trims & Boat Symbol
+       ======================================================== -->
+  <div id="success-modal" class="fixed inset-0 z-[200] hidden flex justify-center items-center p-3 sm:p-4" style="background: rgba(0, 8, 20, 0.85); backdrop-filter: blur(10px);">
+
+    <div id="modal-content" class="relative flex flex-col max-h-[96vh] w-full max-w-lg transform transition-all duration-500 scale-90 opacity-0" style="border-radius: 28px; overflow: hidden; background: linear-gradient(145deg, #021226, #06284d, #001e38); box-shadow: 0 30px 90px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.12);">
+
+      <!-- Ambient Glow Behind Modal -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none" style="border-radius: 28px;">
+        <div class="absolute w-72 h-72 rounded-full" style="background: radial-gradient(circle, rgba(0, 102, 178, 0.25) 0%, transparent 70%); top: -80px; right: -80px;"></div>
+        <div class="absolute w-56 h-56 rounded-full" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%); bottom: -60px; left: -60px;"></div>
+      </div>
+
+      <!-- Close Button -->
+      <button onclick="closeModal()" class="absolute top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-full transition-all duration-200" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7);" onmouseover="this.style.background='rgba(255,255,255,0.25)'; this.style.color='white';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.color='rgba(255,255,255,0.7)';">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header (Congratulations) -->
+      <div class="shrink-0 pt-7 pb-3 px-6 text-center relative z-10">
+        <div class="mx-auto mb-3 flex items-center justify-center" style="width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(16, 185, 129, 0.4);">
+          <i class="fa-solid fa-check text-white text-3xl"></i>
+        </div>
+        <h3 class="text-2xl font-black text-white mb-1 tracking-tight">🎉 बधाई हो!</h3>
+        <p class="text-xs sm:text-sm text-blue-100/80">
+          आप सफलतापूर्वक <span class="text-amber-400 font-bold">विकासशील इंसान पार्टी (VIP)</span> के आधिकारिक सदस्य बन गए हैं।
+        </p>
+      </div>
+
+      <!-- Modal Scrollable Content Container -->
+      <div class="overflow-y-auto flex-grow px-4 sm:px-6 pb-6 relative z-10 custom-scroll">
+        
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex-1 h-px bg-white/10"></div>
+          <span class="text-xs font-bold uppercase tracking-widest text-white/50">आपका डिजिटल सदस्यता कार्ड</span>
+          <div class="flex-1 h-px bg-white/10"></div>
+        </div>
+
+        <!-- Digital ID Card Container (Exact 360x640 Canvas for html2canvas) -->
+        <div id="id-card-wrapper" class="flex justify-center w-full">
+          <div id="id-card" style="width: 360px; min-width: 360px; height: 640px; position: relative; border-radius: 24px; overflow: hidden; font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif; background: #001f3f; box-shadow: 0 30px 80px rgba(0,0,0,0.7); box-sizing: border-box;">
+
+            <!-- Multi-layered Background with VIP Royal Navy Gradients -->
+            <div style="position: absolute; inset: 0; background: linear-gradient(165deg, #001529 0%, #003666 45%, #001f3f 100%);"></div>
+            
+            <!-- Subtle Watermark Boat / Emblem -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; width: 280px; height: 280px; pointer-events: none;">
+              <img src="/images/vip-logo.svg" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+
+            <!-- Card Content Wrapper -->
+            <div style="position: relative; z-index: 10; padding: 24px 22px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+
+              <!-- 1. Card Header -->
+              <div style="display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+                <div style="background: white; border-radius: 14px; padding: 6px 10px; margin-bottom: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 8px;">
+                  <img src="/images/vip-logo.svg" alt="VIP" width="1024" height="1024" style="height: 40px; width: 40px; object-fit: contain; display: block;">
+                  <span style="color: #0066b2; font-weight: 900; font-size: 20px; letter-spacing: 0.5px; line-height: 1;">VIP</span>
+                </div>
+                <p style="font-size: 20px; font-weight: 900; color: white; margin: 0; line-height: 1.2; text-align: center;">विकासशील इंसान पार्टी</p>
+                <p style="font-size: 9.5px; color: #f59e0b; letter-spacing: 3px; text-transform: uppercase; margin: 4px 0 0 0; font-weight: 800;">VIKASSHEEL INSAAN PARTY</p>
+              </div>
+
+              <!-- 2. Card Member Profile Inner Box -->
+              <div style="width: 100%; background: rgba(0, 24, 48, 0.7); border-radius: 20px; padding: 18px 16px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
+
+                <!-- Profile Photo with Gold Ring & VIP Badge -->
+                <div style="position: relative; margin-bottom: 12px;">
+                  <div style="position: absolute; inset: -6px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b);"></div>
+                  <div style="position: absolute; inset: -2px; border-radius: 50%; background: white;"></div>
+                  <div style="width: 104px; height: 104px; border-radius: 50%; overflow: hidden; position: relative; background: #001a33;">
+                    <img id="card-photo" src="" alt="सदस्य फोटो" width="104" height="104" style="width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block;">
+                  </div>
+                  <!-- Small Boat Badge on bottom right of photo -->
+                  <div style="position: absolute; bottom: 0px; right: 0px; width: 28px; height: 28px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.5); border: 2px solid #f59e0b;">
+                    <img src="/images/vip-logo.svg" alt="" width="18" height="18" style="width: 18px; height: 18px; object-fit: contain;">
+                  </div>
+                </div>
+
+                <!-- Member Full Name -->
+                <h2 id="card-name" style="font-size: 20px; font-weight: 800; color: white; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px 0; line-height: 1.25;">
+                  नाम
+                </h2>
+
+                <!-- Official Member Badge -->
+                <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 30px; padding: 4px 16px; margin-bottom: 14px;">
+                  <span style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;">✦ आधिकारिक सदस्य ✦</span>
+                </div>
+
+                <!-- Two Column District & Lok Sabha Info -->
+                <div style="width: 100%; display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-bottom: 12px;">
+                  <div style="text-align: left;">
+                    <p style="font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px 0; font-weight: 700;">जिला (DISTRICT)</p>
+                    <p id="card-district" style="font-size: 14px; font-weight: 800; color: white; margin: 0;">-</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <p style="font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px 0; font-weight: 700;">लोकसभा (LOKSABHA)</p>
+                    <p id="card-loksabha" style="font-size: 14px; font-weight: 800; color: white; margin: 0;">-</p>
+                  </div>
+                </div>
+
+                <!-- Member ID Row -->
+                <div style="width: 100%; text-align: center;">
+                  <p style="font-size: 8.5px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 6px 0; font-weight: 700;">सदस्यता संख्या (MEMBER ID)</p>
+                  <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+                    <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.25);"></div>
+                    <span id="card-id" style="font-size: 16px; font-weight: 800; color: #ffffff; letter-spacing: 2px; font-family: 'Courier New', Courier, monospace; white-space: nowrap; line-height: 1;">VIP-2026-XXXX</span>
+                    <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.25);"></div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 3. Card Footer (Issue Date & Motto) -->
+              <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="text-align: left;">
+                  <p style="font-size: 8px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px 0; font-weight: 700;">जारी होने की तिथि</p>
+                  <p id="card-date" style="font-size: 12px; font-weight: 800; color: white; margin: 0;">-</p>
+                </div>
+                <div style="text-align: right;">
+                  <p style="font-size: 9px; color: #f59e0b; font-weight: 800; margin: 0; letter-spacing: 1px;">स्वाभिमान • हक • अधिकार</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Gold Border Accent Line -->
+            <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 6px; background: linear-gradient(to bottom, #f59e0b, #d97706, #f59e0b);"></div>
+
+          </div>
+        </div>
+
+        <!-- Action Buttons Below Card -->
+        <div class="mt-5 flex flex-col gap-2.5">
+          <button onclick="downloadIDCard()" id="download-btn" class="w-full flex justify-center items-center gap-2 font-bold py-3.5 px-4 rounded-xl transition-all duration-300" style="background: linear-gradient(135deg, #0066b2, #004b87); color: white; box-shadow: 0 8px 24px rgba(0, 102, 178, 0.4); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-size: 15px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(0, 102, 178, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(0, 102, 178, 0.4)';">
+            <i class="fa-solid fa-download"></i>
+            <span>आईडी कार्ड डाउनलोड करें</span>
+          </button>
+          
+          <button onclick="closeModal()" class="w-full flex justify-center items-center gap-2 font-semibold py-2.5 px-4 rounded-xl transition-all duration-200" style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); cursor: pointer; font-size: 14px;" onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.color='white';" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.color='rgba(255,255,255,0.7)';">
+            बंद करें
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Scripts: html2canvas for ID card export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb5hBv2949LRuPtUVtS++z023hZM9hd014RdDFgTJAartguGV9dNO8q1ovnxTUAV0GVJWEcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Bihar District, Loksabha & Vidhansabha Cascading Logic -->
+  <script>
+    // Comprehensive Bihar Location Dataset
+    const biharDistricts = [
+      "अररिया (Araria)", "अरवल (Arwal)", "औरंगाबाद (Aurangabad)", "बांका (Banka)", "बेगूसराय (Begusarai)",
+      "भागलपुर (Bhagalpur)", "भोजपुर (Bhojpur)", "बक्सर (Buxar)", "दरभंगा (Darbhanga)", "पूर्वी चम्पारण (East Champaran)",
+      "गया (Gaya)", "गोपालगंज (Gopalganj)", "जमुई (Jamui)", "जहानाबाद (Jehanabad)", "कैमूर (Kaimur)",
+      "कटिहार (Katihar)", "खगड़िया (Khagaria)", "किशनगंज (Kishanganj)", "लखीसराय (Lakhisarai)", "मधेपुरा (Madhepura)",
+      "मधुबनी (Madhubani)", "मुंगेर (Munger)", "मुजफ्फरपुर (Muzaffarpur)", "नालंदा (Nalanda)", "नवादा (Nawada)",
+      "पटना (Patna)", "पूर्णिया (Purnia)", "रोहतास (Rohtas)", "सहरसा (Saharsa)", "समस्तीपुर (Samastipur)",
+      "सारण (Saran)", "शेखपुरा (Sheikhpura)", "शिवहर (Sheohar)", "सीतामढ़ी (Sitamarhi)", "सीवान (Siwan)",
+      "सुपौल (Supaul)", "वैशाली (Vaishali)", "पश्चिम चम्पारण (West Champaran)"
+    ];
+
+    const biharLoksabha = [
+      "वाल्मीकि नगर (Valmiki Nagar)", "पश्चिम चम्पारण (Paschim Champaran)", "पूर्वी चम्पारण (Purvi Champaran)",
+      "शिवहर (Sheohar)", "सीतामढ़ी (Sitamarhi)", "मधुबनी (Madhubani)", "झंझारपुर (Jhanjharpur)",
+      "सुपौल (Supaul)", "अररिया (Araria)", "किशनगंज (Kishanganj)", "कटिहार (Katihar)", "पूर्णिया (Purnia)",
+      "मधेपुरा (Madhepura)", "दरभंगा (Darbhanga)", "मुजफ्फरपुर (Muzaffarpur)", "वैशाली (Vaishali)",
+      "गोपालगंज (Gopalganj)", "सीवान (Siwan)", "महाराजगंज (Maharajganj)", "सारण (Saran)", "हाजीपुर (Hajipur)",
+      "उजियारपुर (Ujiarpur)", "समस्तीपुर (Samastipur)", "बेगूसराय (Begusarai)", "खगड़िया (Khagaria)",
+      "भागलपुर (Bhagalpur)", "बांका (Banka)", "मुंगेर (Munger)", "नालंदा (Nalanda)", "पटना साहिब (Patna Sahib)",
+      "पाटलिपुत्र (Pataliputra)", "आरा (Arrah)", "बक्सर (Buxar)", "सासाराम (Sasaram)", "काराकाट (Karakat)",
+      "जहानाबाद (Jahanabad)", "औरंगाबाद (Aurangabad)", "गया (Gaya)", "नवादा (Nawada)", "जमुई (Jamui)"
+    ];
+
+    const districtAssemblyMap = {
+      "पटना (Patna)": ["मोकामा", "बाढ़", "बख्तियारपुर", "दीघा", "बांकीपुर", "कुम्हरार", "पटना साहिब", "फतुहा", "दानापुर", "मनेर", "फुलवारी", "मसौढ़ी", "पालीगंज", "बिक्रम"],
+      "मुजफ्फरपुर (Muzaffarpur)": ["गायघाट", "औराई", "मीनापुर", "बोचहां", "सकरा", "कुढ़नी", "मुजफ्फरपुर", "कांटी", "बरूराज", "पारू", "साहेबगंज"],
+      "दरभंगा (Darbhanga)": ["कुशेश्वरस्थान", "गौड़ाबौराम", "बेनीपुर", "अलीनगर", "दरभंगा ग्रामीण", "दरभंगा", "हायाघाट", "बहादुरपुर", "केवटी", "जाले"],
+      "वैशाली (Vaishali)": ["हाजीपुर", "लालगंज", "वैशाली", "महुआ", "राजापाकर", "राघोपुर", "पातेपुर", "महनार"],
+      "गया (Gaya)": ["गया टाउन", "बेलागंज", "अतरी", "वजीरगंज", "बोधगया", "टिकारी", "शेरघाटी", "बाराचट्टी", "इमामगंज", "गुरुआ"],
+      "भागलपुर (Bhagalpur)": ["भागलपुर", "बिहपुर", "गोपालपुर", "पीरपैंती", "कहलगांव", "सुल्तानगंज", "नाथनगर"],
+      "सारण (Saran)": ["छपरा", "मढ़ौरा", "गरखा", "अमनौर", "परसा", "मांझी", "बनियापुर", "एकमा", "तरैया"],
+      "सीवान (Siwan)": ["सीवान", "जीरादेई", "दरौली", "रघुनाथपुर", "दरौंदा", "बड़हरिया", "गोरियाकोठी", "महाराजगंज"],
+      "गोपालगंज (Gopalganj)": ["बैकुंठपुर", "बरौली", "गोपालगंज", "कुचायकोट", "भोरे", "हथुआ"],
+      "पूर्वी चम्पारण (East Champaran)": ["रक्सौल", "सुगौली", "नरकटिया", "हरसिद्धि", "गोविंदगंज", "केसरिया", "कल्याणपुर", "पिपरा", "मधुबन", "मोतिहारी", "चिरैया", "ढाका"],
+      "पश्चिम चम्पारण (West Champaran)": ["वाल्मीकि नगर", "रामनगर", "नरकटियागंज", "बगहा", "लौरिया", "नौतन", "चनपटिया", "बेतिया", "सिकटा"],
+      "समस्तीपुर (Samastipur)": ["कल्याणपुर", "वारिसनगर", "समस्तीपुर", "उजियारपुर", "मोरवा", "सरायरंजन", "मोहिउद्दीननगर", "विभूतिपुर", "रोसड़ा", "हसनपुर"],
+      "मधुबनी (Madhubani)": ["हरलाखी", "बेनीपट्टी", "खजौली", "बाबूबरही", "बिस्फी", "मधुबनी", "राजनगर", "झंझारपुर", "फुलपरास", "लौकहा"],
+      "बेगूसराय (Begusarai)": ["चेरिया बरियारपुर", "बछवाड़ा", "तेघड़ा", "मटिहानी", "साहेबपुर कमाल", "बेगूसराय", "बखरी"],
+      "नालंदा (Nalanda)": ["अस्थावां", "बिहारशरीफ", "राजगीर", "इस्लामपुर", "हिलसा", "नालंदा", "हरनौत"],
+      "भोजपुर (Bhojpur)": ["संदेश", "बड़हरा", "आरा", "अगिआंव", "तरारी", "जगदीशपुर", "शाहपुर"],
+      "बक्सर (Buxar)": ["ब्रह्मपुर", "बक्सर", "डुमरांव", "राजपुर"],
+      "रोहतास (Rohtas)": ["चेनारी", "सासाराम", "करगहर", "दिनारा", "नोखा", "डेहरी", "काराकाट"],
+      "औरंगाबाद (Aurangabad)": ["गोह", "ओबरा", "नवीनगर", "कुटुम्बा", "औरंगाबाद", "रफीगंज"],
+      "नवादा (Nawada)": ["रजौली", "हिसुआ", "नवादा", "गोविंदपुर", "वारिसलीगंज"],
+      "जहानाबाद (Jehanabad)": ["जहानाबाद", "घोसी", "मखदुमपुर"],
+      "अरवल (Arwal)": ["अरवल", "कुर्था"],
+      "सहरसा (Saharsa)": ["सोनबरसा", "सहरसा", "सिमरी बख्तियारपुर", "महिषी"],
+      "सुपौल (Supaul)": ["निर्मली", "पिपरा", "सुपौल", "त्रिवेणीगंज", "छातापुर"],
+      "मधेपुरा (Madhepura)": ["आलमनगर", "बिहारीगंज", "सिंघेश्वर", "मधेपुरा"],
+      "पूर्णिया (Purnia)": ["अमौर", "बायसी", "कसबा", "बनमनखी", "रुपौली", "धमदाहा", "पूर्णिया"],
+      "कटिहार (Katihar)": ["कटिहार", "कदवा", "बलरामपुर", "प्राणपुर", "मनिहारी", "बरारी", "कोढ़ा"],
+      "किशनगंज (Kishanganj)": ["बहादुरगंज", "ठाकुरगंज", "किशनगंज", "कोचाधामन"],
+      "अररिया (Araria)": ["नरपतगंज", "रानीगंज", "फारबिसगंज", "अररिया", "जोकीहाट", "सिकटी"],
+      "खगड़िया (Khagaria)": ["अलौली", "खगड़िया", "बेलदौर", "परबत्ता"],
+      "मुंगेर (Munger)": ["तारापुर", "मुंगेर", "जमालपुर"],
+      "लखीसराय (Lakhisarai)": ["सूर्यगढ़ा", "लखीसराय"],
+      "शेखपुरा (Sheikhpura)": ["शेखपुरा", "बरबीघा"],
+      "जमुई (Jamui)": ["तारापुर", "झाझा", "चकाई", "सिकंदरा", "जमुई"],
+      "बांका (Banka)": ["धोरैया", "बांका", "अमरपुर", "कटोरिया", "बेलहर"],
+      "कैमूर (Kaimur)": ["रामगढ़", "मोहनिया", "भभुआ", "चैनपुर"],
+      "शिवहर (Sheohar)": ["शिवहर"],
+      "सीतामढ़ी (Sitamarhi)": ["रीगा", "बथनाहा", "परिहार", "सुरसंड", "बाजपट्टी", "सीतामढ़ी", "रुन्नीसैदपुर", "बेलसंड"]
+    };
+
+    const districtBlockMap = {
+      "पटना (Patna)": ["पटना सदर", "दानापुर", "फुलवारीशरीफ", "बिहटा", "मनेर", "बिक्रम", "पालीगंज", "मसौढ़ी", "पुनपुन", "धनरूआ", "फतुहा", "दनियावां", "खुसरूपुर", "बख्तियारपुर", "अथमलगोला", "मोकामा", "बेलछी", "घोसवरी", "बाढ़"],
+      "मुजफ्फरपुर (Muzaffarpur)": ["मुशहरी (सदर)", "कांटी", "मोतीपुर", "बरूराज", "पारू", "साहेबगंज", "मड़वन", "सरैया", "कुढ़नी", "सकरा", "मुरौल", "बोचहां", "गायघाट", "बंदरा", "औराई", "कटरा", "मीनापुर"],
+      "दरभंगा (Darbhanga)": ["दरभंगा सदर", "बहादुरपुर", "हायाघाट", "हनुमाननगर", "बहेड़ी", "बेनीपुर", "अलीनगर", "बिरौल", "घनश्यामपुर", "कीरतपुर", "गौड़ाबौराम", "कुशेश्वरस्थान", "कुशेश्वरस्थान पूर्वी", "केवटी", "जाले", "सिंहवाड़ा", "मनिगाछी", "तारडीह"],
+      "वैशाली (Vaishali)": ["हाजीपुर", "बिदुपुर", "देसरी", "सहदेई बुजुर्ग", "महनार", "जंदाहा", "राजापाकर", "महुआ", "चेहराकलां", "पातेपुर", "भगवानपुर", "लालगंज", "वैशाली", "गोरौल", "राघोपुर"],
+      "गया (Gaya)": ["गया सदर", "बोधगया", "बेलागंज", "अतरी", "मोहरा", "वजीरगंज", "मानपुर", "नगर", "नीमचक बथानी", "खिजरसराय", "टिकारी", "कोंच", "गुरारू", "परैया", "शेरघाटी", "आमश", "डोभी", "गुरुआ", "बाराचट्टी", "मोहनपुर", "फतेहपुर", "इमामगंज", "डुमरिया", "बांके बाजार"]
+    };
+
+    // Default blocks for other districts
+    const genericBlocks = ["सदर (Sadar)", "प्रखंड 1 (Block 1)", "प्रखंड 2 (Block 2)", "प्रखंड 3 (Block 3)", "प्रखंड 4 (Block 4)"];
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // 1. Populate Districts
+      const distSelect = document.getElementById('district');
+      biharDistricts.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        distSelect.appendChild(opt);
+      });
+
+      // 2. Populate Loksabha
+      const lokSelect = document.getElementById('loksabha');
+      biharLoksabha.forEach(l => {
+        const opt = document.createElement('option');
+        opt.value = l;
+        opt.textContent = l;
+        lokSelect.appendChild(opt);
+      });
+
+      // 3. District Change Handler -> Updates Vidhansabha & Block
+      distSelect.addEventListener('change', function () {
+        const selectedDist = this.value;
+        const vidhanSelect = document.getElementById('vidhansabha');
+        const blockSelect = document.getElementById('block');
+
+        // Reset
+        vidhanSelect.innerHTML = '<option value="" disabled selected>विधानसभा चुनें</option>';
+        blockSelect.innerHTML = '<option value="" disabled selected>प्रखंड चुनें</option>';
+
+        // Populate Vidhansabha
+        const vidhanList = districtAssemblyMap[selectedDist] || ["सदर विधानसभा", "विधानसभा क्षेत्र 1", "विधानसभा क्षेत्र 2"];
+        vidhanList.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v;
+          opt.textContent = v;
+          vidhanSelect.appendChild(opt);
+        });
+
+        // Populate Blocks
+        const blockList = districtBlockMap[selectedDist] || genericBlocks;
+        blockList.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b;
+          opt.textContent = b;
+          blockSelect.appendChild(opt);
+        });
+      });
+    });
+
+    // Image Preview & Validation Function
+    function previewImage(event) {
+      const file = event.target.files[0];
+      const errorMsg = document.getElementById('error-message');
+      const previewContainer = document.getElementById('image-preview-container');
+
+      if (!file) return;
+
+      errorMsg.classList.add('hidden');
+      errorMsg.textContent = '';
+
+      const maxSize = 1.5 * 1024 * 1024; // 1.5MB max size
+      if (file.size > maxSize) {
+        errorMsg.textContent = 'फ़ाइल का आकार 1.5MB से कम होना चाहिए। (File size must be less than 1.5MB.)';
+        errorMsg.classList.remove('hidden');
+        event.target.value = '';
+        previewContainer.classList.add('hidden');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const output = document.getElementById('image-preview');
+        output.src = reader.result;
+        previewContainer.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Form Submission & Card Generation
+    document.getElementById('membership-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      submitMemberForm();
+    });
+
+    function submitMemberForm() {
+      const form = document.getElementById('membership-form');
+      const errorMsg = document.getElementById('error-message');
+      const loadingState = document.getElementById('loading-state');
+      const formContainer = document.getElementById('form-container');
+
+      const formData = new FormData(form);
+      const memberPhotoPreview = document.getElementById('image-preview').getAttribute('src') || '';
+
+      formContainer.classList.add('hidden');
+      loadingState.classList.remove('hidden');
+      errorMsg.classList.add('hidden');
+
+      fetch('/actions/process_member', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Fill Digital ID Card
+          document.getElementById('card-name').textContent = data.data.name;
+          document.getElementById('card-id').textContent = data.data.unique_id;
+
+          const distVal = formData.get('district') || '';
+          document.getElementById('card-district').textContent = distVal.split(' ')[0] || distVal;
+          
+          const lokVal = formData.get('loksabha') || '';
+          document.getElementById('card-loksabha').textContent = lokVal.split(' ')[0] || lokVal || '-';
+
+          const today = new Date();
+          document.getElementById('card-date').textContent =
+            String(today.getDate()).padStart(2, '0') + '/' +
+            String(today.getMonth() + 1).padStart(2, '0') + '/' +
+            today.getFullYear();
+
+          document.getElementById('card-photo').src = memberPhotoPreview || '/images/vip-logo.svg';
+
+          // Hide Loading & Show Modal
+          loadingState.classList.add('hidden');
+          formContainer.classList.remove('hidden');
+          form.reset();
+          document.getElementById('image-preview-container').classList.add('hidden');
+
+          const modal = document.getElementById('success-modal');
+          const modalContent = document.getElementById('modal-content');
+          modal.classList.remove('hidden');
+
+          setTimeout(() => {
+            modalContent.classList.remove('scale-90', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+          }, 100);
+
+        } else {
+          throw new Error(data.message || 'पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।');
+        }
+      })
+      .catch(error => {
+        loadingState.classList.add('hidden');
+        formContainer.classList.remove('hidden');
+        errorMsg.textContent = error.message;
+        errorMsg.classList.remove('hidden');
+      });
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('success-modal');
+      const modalContent = document.getElementById('modal-content');
+
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-90', 'opacity-0');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    // High Quality ID Card Download using html2canvas
+    function downloadIDCard() {
+      const btn = document.getElementById('download-btn');
+      const cardElement = document.getElementById('id-card');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>आईडी कार्ड तैयार हो रहा है...</span>';
+
+      html2canvas(cardElement, {
+        scale: 3, // Ultra-sharp 3x retina quality
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        width: 360,
+        height: 640,
+        windowWidth: 360,
+        windowHeight: 640,
+        scrollX: 0,
+        scrollY: 0,
+        logging: false
+      }).then(canvas => {
+        const image = canvas.toDataURL('image/png', 1.0);
+        const link = document.createElement('a');
+        const memberId = document.getElementById('card-id').textContent.trim();
+        link.download = 'VIP_Member_Card_' + memberId + '.png';
+        link.href = image;
+        link.click();
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i><span>डाउनलोड सफल!</span>';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-solid fa-download"></i><span>आईडी कार्ड डाउनलोड करें</span>';
+        }, 2500);
+      }).catch(err => {
+        console.error('Download error:', err);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-download"></i><span>आईडी कार्ड डाउनलोड करें</span>';
+      });
+    }
+  </script>
+
+  <!-- Bilingual Translation & VIP Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
