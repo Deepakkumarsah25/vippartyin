@@ -223,6 +223,67 @@ const candidatureSchema = new mongoose.Schema(
 );
 const Candidature = mongoose.models.Candidature || mongoose.model('Candidature', candidatureSchema);
 
+// Support Settings Schema (Synchronized with vip-a Admin)
+const supportSettingsSchema = new mongoose.Schema(
+  {
+    pageTitle: { type: String, default: "दान करें / Donate" },
+    pageSubtitle: { type: String, default: "पार्टी को मजबूत बनाने में अपना बहुमूल्य योगदान दें" },
+    partyNameHindi: { type: String, default: "विकासशील इंसान पार्टी" },
+    partyNameEnglish: { type: String, default: "Vikassheel Insaan Party" },
+    inspirationalMessage: {
+      type: String,
+      default:
+        "सामाजिक न्याय और बिहार के विकास की इस लड़ाई में अपना बहुमूल्य योगदान दें। आपका हर एक रुपया समाज में सकारात्मक बदलाव ला सकता है।",
+    },
+    noticeText: {
+      type: String,
+      default: "कृपया ध्यान दें: केवल इसी आधिकारिक बैंक खाते में दान करें। किसी अन्य व्यक्ति को नकद देने से बचें।",
+    },
+    accountName: { type: String, default: "Vikassheel Insaan Party" },
+    accountNameHindi: { type: String, default: "विकासशील इंसान पार्टी" },
+    bankName: { type: String, default: "State Bank of India" },
+    bankNameHindi: { type: String, default: "भारतीय स्टेट बैंक" },
+    branchName: { type: String, default: "06, Boring Road, Patna, Bihar - 800001" },
+    accountNumber: { type: String, default: "41982736450" },
+    ifscCode: { type: String, default: "SBIN0001513" },
+    upiId: { type: String, default: "vipparty@sbi" },
+    qrCodeUrl: { type: String, default: "" },
+    taxExemptionNotice: {
+      type: String,
+      default:
+        "आयकर अधिनियम की धारा 80GGC के तहत राजनीतिक दल को दिया गया दान 100% कर मुक्त है। (All donations to VIP are 100% tax exempt under Section 80GGC of the Income Tax Act.)",
+    },
+    isVerified: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+const SupportSettings = mongoose.models.SupportSettings || mongoose.model('SupportSettings', supportSettingsSchema);
+
+// Donation Record Schema (Pledges and Receipt Submissions)
+const donationRecordSchema = new mongoose.Schema(
+  {
+    receiptNumber: { type: String, unique: true },
+    donorName: { type: String, required: true, trim: true },
+    donorPhone: { type: String, required: true, trim: true },
+    donorEmail: { type: String, default: '', trim: true },
+    panNumber: { type: String, default: '', trim: true },
+    amount: { type: Number, required: true },
+    utrNumber: { type: String, default: '', trim: true },
+    paymentMode: { type: String, default: 'UPI' },
+    state: { type: String, default: 'Bihar' },
+    district: { type: String, default: '' },
+    address: { type: String, default: '' },
+    message: { type: String, default: '' },
+    status: {
+      type: String,
+      enum: ['Pending Verification', 'Verified', 'Receipt Issued', 'Rejected'],
+      default: 'Pending Verification',
+    },
+  },
+  { timestamps: true }
+);
+const DonationRecord = mongoose.models.DonationRecord || mongoose.model('DonationRecord', donationRecordSchema);
+
 // Helper function to fetch active hero banners from DB with API fallback
 async function getHeroBanners() {
   try {
@@ -479,8 +540,86 @@ app.post('/api/join', upload.single('photo'), handleMemberRegistration);
 
 // Other Nav & Footer Links
 app.get('/it-cell', renderRoute('आईटी सेल एवं डिजिटल विंग | VIP Party', 'it-cell'));
-app.get('/donate', renderRoute('सहयोग करें (दान करें) | VIP Party', 'donate'));
+// Dedicated Support Us / Donate Page (Synchronized with admin settings)
+app.get('/donate', async (req, res) => {
+  try {
+    let settings = null;
+    if (mongoose.connection.readyState === 1) {
+      settings = await SupportSettings.findOne().lean();
+    }
+    if (!settings) {
+      settings = {
+        pageTitle: "दान करें / Donate",
+        pageSubtitle: "पार्टी को मजबूत बनाने में अपना बहुमूल्य योगदान दें",
+        partyNameHindi: "विकासशील इंसान पार्टी",
+        partyNameEnglish: "Vikassheel Insaan Party",
+        inspirationalMessage: "सामाजिक न्याय और बिहार के विकास की इस लड़ाई में अपना बहुमूल्य योगदान दें। आपका हर एक रुपया समाज में सकारात्मक बदलाव ला सकता है।",
+        noticeText: "कृपया ध्यान दें: केवल इसी आधिकारिक बैंक खाते में दान करें। किसी अन्य व्यक्ति को नकद देने से बचें।",
+        accountName: "Vikassheel Insaan Party",
+        accountNameHindi: "विकासशील इंसान पार्टी",
+        bankName: "State Bank of India",
+        bankNameHindi: "भारतीय स्टेट बैंक",
+        branchName: "06, Boring Road, Patna, Bihar - 800001",
+        accountNumber: "41982736450",
+        ifscCode: "SBIN0001513",
+        upiId: "vipparty@sbi",
+        qrCodeUrl: "",
+        taxExemptionNotice: "आयकर अधिनियम की धारा 80GGC के तहत राजनीतिक दल को दिया गया दान 100% कर मुक्त है। (All donations to VIP are 100% tax exempt under Section 80GGC of the Income Tax Act.)",
+        isVerified: true
+      };
+    }
+    res.render('donate', {
+      pageTitle: 'सहयोग करें - दान दें | Support Vikassheel Insaan Party',
+      activeNav: 'donate',
+      settings
+    });
+  } catch (err) {
+    console.error('Error rendering donate page:', err);
+    res.status(500).send('Error loading donate page');
+  }
+});
 app.get('/support', (req, res) => res.redirect('/donate'));
+app.get('/support-us', (req, res) => res.redirect('/donate'));
+
+// API to submit donation acknowledgment / pledge
+app.post('/api/donate/submit', async (req, res) => {
+  try {
+    const { donorName, donorPhone, donorEmail, panNumber, amount, utrNumber, paymentMode, state, district, message } = req.body;
+    if (!donorName || !donorPhone || !amount) {
+      return res.status(400).json({ success: false, message: 'कृपया नाम, मोबाइल नंबर और सहयोग राशि अनिवार्य रूप से भरें।' });
+    }
+
+    const receiptNumber = 'VIP-DON-' + new Date().getFullYear() + '-' + Math.floor(10000 + Math.random() * 90000);
+    if (mongoose.connection.readyState === 1) {
+      await DonationRecord.create({
+        receiptNumber,
+        donorName: donorName.trim(),
+        donorPhone: donorPhone.trim(),
+        donorEmail: (donorEmail || '').trim(),
+        panNumber: (panNumber || '').trim().toUpperCase(),
+        amount: Number(amount),
+        utrNumber: (utrNumber || '').trim(),
+        paymentMode: paymentMode || 'UPI',
+        state: state || 'Bihar',
+        district: (district || '').trim(),
+        message: (message || '').trim(),
+        status: 'Pending Verification'
+      });
+      console.log(`🙏 New Donation pledge/receipt recorded: ${donorName} - ₹${amount} (${receiptNumber})`);
+    }
+
+    return res.json({
+      success: true,
+      message: 'धन्यवाद! आपके बहुमूल्य सहयोग की सूचना सफलतापूर्वक दर्ज कर ली गई है।',
+      receiptNumber,
+      amount,
+      donorName
+    });
+  } catch (err) {
+    console.error('Donation pledge error:', err);
+    return res.status(500).json({ success: false, message: 'सर्वर पर दान की जानकारी दर्ज करने में त्रुटि हुई।' });
+  }
+});
 app.get('/news', renderRoute('ताजा वीआईपी समाचार | VIP Party', 'news'));
 app.get('/events', renderRoute('आगामी कार्यक्रम व रैलियां | VIP Party', 'events'));
 app.get('/media', renderRoute('मीडिया एवं प्रेस कॉन्फ्रेंस | VIP Party', 'media'));

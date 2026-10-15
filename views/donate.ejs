@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="hi-IN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'सहयोग करें - दान दें | Support Vikassheel Insaan Party' %></title>
+    <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+
+    <!-- Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                DEFAULT: '#0066b2',
+                50: '#eff6ff',
+                100: '#dbeafe',
+                200: '#bfdbfe',
+                300: '#93c5fd',
+                400: '#60a5fa',
+                500: '#0066b2',
+                600: '#004b87',
+                700: '#003a6c',
+                800: '#002e54',
+                900: '#001e38',
+              }
+            },
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+      .copy-btn {
+        transition: all 0.2s ease;
+      }
+      .copy-btn:active {
+        transform: scale(0.95);
+      }
+      .toast-notification {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #0f172a;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        z-index: 10000;
+        display: none;
+        animation: toastIn 0.25s ease-out;
+      }
+      @keyframes toastIn {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-slate-50 antialiased flex flex-col min-h-screen">
+
+    <!-- 1. Shared Navigation -->
+    <%- include('common/navbar') %>
+
+    <!-- 2. Breadcrumb Navigation -->
+    <div class="bg-gray-100 border-b border-gray-200 py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs md:text-sm font-semibold text-gray-600 flex items-center space-x-2">
+            <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+                <i class="fa-solid fa-house text-xs"></i>
+                <span data-i18n="nav.home">होम</span>
+            </a>
+            <span class="text-gray-400">›</span>
+            <span class="text-primary font-bold" data-i18n="nav.support_us">सहयोग करें - दान दें</span>
+        </div>
+    </div>
+
+    <!-- 3. Top Hero Header (Matching RJD layout in VIP colors) -->
+    <div class="bg-gradient-to-r from-primary-800 via-primary to-primary-900 py-12 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-5xl font-black mb-3 tracking-tight">
+                <%= settings.pageTitle || 'दान करें / Donate' %>
+            </h1>
+            <p class="text-blue-100 text-base md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+                <%= settings.pageSubtitle || 'पार्टी को मजबूत बनाने में अपना बहुमूल्य योगदान दें' %>
+            </p>
+        </div>
+    </div>
+
+    <!-- 4. Main Donation Section -->
+    <section class="py-12 md:py-16 flex-grow">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Party Branding Header -->
+            <div class="text-center mb-12 animate-fade-in-up">
+                <div class="w-24 h-24 bg-white rounded-full p-2 mb-6 shadow-xl mx-auto border-2 border-primary-100 transform hover:scale-105 transition-transform">
+                    <img src="/images/vip-logo.svg" alt="VIP Logo" class="w-full h-full object-contain">
+                </div>
+
+                <h2 class="text-3xl md:text-4xl font-black text-gray-950 tracking-tight">
+                    <%= settings.partyNameHindi || 'विकासशील इंसान पार्टी' %>
+                </h2>
+                <h3 class="text-lg md:text-xl font-bold text-primary mb-5 mt-1 tracking-wide">
+                    <%= settings.partyNameEnglish || 'Vikassheel Insaan Party' %>
+                </h3>
+
+                <div class="w-20 h-1.5 bg-gradient-to-r from-primary to-amber-500 mb-6 mx-auto rounded-full"></div>
+
+                <p class="text-gray-600 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-8 font-medium">
+                    <%= settings.inspirationalMessage || 'सामाजिक न्याय और बिहार के विकास की इस लड़ाई में अपना बहुमूल्य योगदान दें। आपका हर एक रुपया समाज में सकारात्मक बदलाव ला सकता है।' %>
+                </p>
+
+                <!-- Official Notice Banner -->
+                <div class="inline-flex items-center gap-3 bg-blue-50 border border-blue-200 text-blue-900 rounded-2xl px-6 py-4 shadow-sm mx-auto text-left max-w-2xl">
+                    <i class="fa-solid fa-circle-info text-2xl text-primary flex-shrink-0"></i>
+                    <p class="text-sm font-semibold leading-relaxed">
+                        <%= settings.noticeText || 'कृपया ध्यान दें: केवल इसी आधिकारिक बैंक खाते में दान करें। किसी अन्य व्यक्ति को नकद देने से बचें।' %>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Verified Bank Account Details Card -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden mb-12">
+                <div class="p-6 md:p-10">
+                    
+                    <!-- Card Top Header -->
+                    <div class="flex items-center justify-between mb-8 pb-5 border-b border-gray-100 flex-wrap gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-primary text-xl">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-gray-900">बैंक खाता विवरण</h3>
+                        </div>
+                        <% if (settings.isVerified) { %>
+                            <span class="bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider flex items-center gap-1.5 border border-emerald-200 shadow-sm">
+                                <i class="fa-solid fa-circle-check text-emerald-600"></i> Verified
+                            </span>
+                        <% } %>
+                    </div>
+
+                    <div class="space-y-6">
+
+                        <!-- Account Name -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-xs text-gray-500 font-bold uppercase tracking-wider flex items-center">
+                                    <i class="fa-solid fa-user-tie text-gray-400 mr-2"></i> Account Name / खाता नाम
+                                </p>
+                                <button type="button" onclick="copyText('<%= settings.accountName %>', 'खाता नाम')" class="copy-btn text-xs font-bold text-primary hover:text-primary-800 flex items-center gap-1 bg-blue-50 px-2.5 py-1 rounded-lg">
+                                    <i class="fa-regular fa-copy"></i> कॉपी करें
+                                </button>
+                            </div>
+                            <div class="bg-slate-50 px-6 py-4 rounded-2xl border border-gray-200">
+                                <p class="text-xl font-bold text-gray-900"><%= settings.accountName || 'Vikassheel Insaan Party' %></p>
+                                <p class="text-sm text-gray-500 font-medium mt-0.5"><%= settings.accountNameHindi || 'विकासशील इंसान पार्टी' %></p>
+                            </div>
+                        </div>
+
+                        <!-- Bank & Branch Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <p class="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider flex items-center">
+                                    <i class="fa-solid fa-building text-gray-400 mr-2"></i> Bank / बैंक
+                                </p>
+                                <div class="bg-slate-50 px-6 py-4 rounded-2xl border border-gray-200 h-full flex flex-col justify-center">
+                                    <p class="text-lg font-bold text-gray-900"><%= settings.bankName || 'State Bank of India' %></p>
+                                    <p class="text-xs text-gray-500 font-medium mt-0.5"><%= settings.bankNameHindi || 'भारतीय स्टेट बैंक' %></p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider flex items-center">
+                                    <i class="fa-solid fa-location-dot text-gray-400 mr-2"></i> Branch / शाखा
+                                </p>
+                                <div class="bg-slate-50 px-6 py-4 rounded-2xl border border-gray-200 h-full flex items-center">
+                                    <p class="text-sm sm:text-base font-bold text-gray-900"><%= settings.branchName || '06, Boring Road, Patna, Bihar' %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Number (Prominent Highlight Box) -->
+                        <div class="pt-2">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-xs text-primary-700 font-bold uppercase tracking-wider flex items-center">
+                                    <i class="fa-solid fa-hashtag text-primary mr-2"></i> Account Number / खाता संख्या
+                                </p>
+                                <button type="button" onclick="copyText('<%= settings.accountNumber %>', 'खाता संख्या')" class="copy-btn text-xs font-black text-primary-700 hover:text-primary-900 flex items-center gap-1 bg-blue-100/80 px-3 py-1 rounded-lg">
+                                    <i class="fa-regular fa-copy"></i> कॉपी करें
+                                </button>
+                            </div>
+                            <div class="bg-blue-50/70 px-6 py-5 rounded-2xl border-2 border-primary-500 shadow-sm flex items-center justify-between flex-wrap gap-4">
+                                <p class="text-2xl sm:text-3xl font-mono font-black text-primary-900 tracking-wider">
+                                    <%= settings.accountNumber || '41982736450' %>
+                                </p>
+                                <button type="button" onclick="copyText('<%= settings.accountNumber %>', 'खाता संख्या')" class="copy-btn bg-primary hover:bg-primary-700 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow">
+                                    <i class="fa-regular fa-copy"></i> Copy Number
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- IFSC Code -->
+                        <div class="pt-2">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-xs text-gray-500 font-bold uppercase tracking-wider flex items-center">
+                                    <i class="fa-solid fa-code text-gray-400 mr-2"></i> IFSC Code / आई.एफ.सी. कोड
+                                </p>
+                                <button type="button" onclick="copyText('<%= settings.ifscCode %>', 'IFSC कोड')" class="copy-btn text-xs font-bold text-primary hover:text-primary-800 flex items-center gap-1 bg-blue-50 px-2.5 py-1 rounded-lg">
+                                    <i class="fa-regular fa-copy"></i> कॉपी करें
+                                </button>
+                            </div>
+                            <div class="bg-slate-50 px-6 py-4 rounded-2xl border border-gray-300 shadow-sm flex items-center justify-between flex-wrap gap-4">
+                                <p class="text-xl sm:text-2xl font-mono font-black text-gray-800 tracking-wider">
+                                    <%= settings.ifscCode || 'SBIN0001513' %>
+                                </p>
+                                <button type="button" onclick="copyText('<%= settings.ifscCode %>', 'IFSC कोड')" class="copy-btn bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                                    <i class="fa-regular fa-copy"></i> Copy IFSC
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- UPI ID & Instant Payment Box -->
+                        <% if (settings.upiId) { %>
+                            <div class="pt-2">
+                                <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-6">
+                                    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center text-amber-600 text-2xl border border-amber-200">
+                                                <i class="fa-solid fa-qrcode"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-black text-gray-900 text-lg">UPI द्वारा तुरंत दान करें</h4>
+                                                <p class="text-xs text-gray-600">Google Pay, PhonePe, Paytm, BHIM UPI आदि द्वारा</p>
+                                                <div class="mt-2 font-mono font-extrabold text-amber-800 text-base flex items-center gap-2">
+                                                    <span><%= settings.upiId %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button type="button" onclick="copyText('<%= settings.upiId %>', 'UPI ID')" class="copy-btn bg-amber-500 hover:bg-amber-600 text-gray-950 font-black px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-md">
+                                                <i class="fa-regular fa-copy"></i> Copy UPI ID
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tax Exemption Notice Card (Section 80GGC) -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-6 md:p-8 mb-12 shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl flex-shrink-0 shadow">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg md:text-xl font-black text-emerald-950 mb-1">
+                            100% आयकर छूट (Tax Exemption under 80GGC)
+                        </h4>
+                        <p class="text-sm md:text-base text-emerald-900/90 leading-relaxed font-medium">
+                            <%= settings.taxExemptionNotice || 'आयकर अधिनियम की धारा 80GGC के तहत राजनीतिक दल को दिया गया दान 100% कर मुक्त है। दान के बाद रसीद प्राप्त करने हेतु नीचे दिए गए फॉर्म में विवरण दर्ज करें।' %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donation Receipt / Pledge Acknowledgment Form -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 md:p-10 mb-12" id="pledgeFormContainer">
+                <div class="text-center mb-8">
+                    <span class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-block mb-2">
+                        Donation Receipt / Confirmation
+                    </span>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-900">
+                        दान की सूचना दर्ज करें व रसीद प्राप्त करें
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1 max-w-xl mx-auto">
+                        बैंक या UPI द्वारा भुगतान करने के बाद यहाँ अपना विवरण दर्ज करें ताकि हम आपको आधिकारिक पावती व आयकर रसीद जारी कर सकें।
+                    </p>
+                </div>
+
+                <!-- Alert Messages -->
+                <div id="donateAlert" class="hidden mb-6 p-4 rounded-2xl text-sm font-semibold"></div>
+
+                <form id="donationSubmitForm" class="space-y-6">
+                    
+                    <!-- Quick Amount Chips -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                            सहयोग राशि चुनें (Select Amount in ₹) *
+                        </label>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
+                            <button type="button" onclick="setAmount(500)" class="amt-chip border-2 border-gray-200 hover:border-primary py-2.5 rounded-xl font-black text-sm text-gray-700 hover:text-primary transition-all">₹500</button>
+                            <button type="button" onclick="setAmount(1100)" class="amt-chip border-2 border-gray-200 hover:border-primary py-2.5 rounded-xl font-black text-sm text-gray-700 hover:text-primary transition-all">₹1,100</button>
+                            <button type="button" onclick="setAmount(2100)" class="amt-chip border-2 border-primary bg-blue-50 py-2.5 rounded-xl font-black text-sm text-primary transition-all">₹2,100</button>
+                            <button type="button" onclick="setAmount(5100)" class="amt-chip border-2 border-gray-200 hover:border-primary py-2.5 rounded-xl font-black text-sm text-gray-700 hover:text-primary transition-all">₹5,100</button>
+                            <button type="button" onclick="setAmount(11000)" class="amt-chip border-2 border-gray-200 hover:border-primary py-2.5 rounded-xl font-black text-sm text-gray-700 hover:text-primary transition-all">₹11,000</button>
+                            <button type="button" onclick="setAmount('')" class="amt-chip border-2 border-gray-200 hover:border-primary py-2.5 rounded-xl font-black text-sm text-gray-700 hover:text-primary transition-all">अन्य</button>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 font-black text-gray-500 text-lg">₹</span>
+                            <input type="number" id="donAmount" name="amount" value="2100" min="1" required class="w-full pl-9 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-bold text-lg text-gray-900" placeholder="राशि दर्ज करें...">
+                        </div>
+                    </div>
+
+                    <!-- Personal Information Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                                दानदाता का नाम (Full Name) *
+                            </label>
+                            <input type="text" id="donName" name="donorName" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-semibold text-sm" placeholder="उदा. राहुल कुमार">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                                मोबाइल नंबर (Mobile No.) *
+                            </label>
+                            <input type="tel" id="donPhone" name="donorPhone" required pattern="[0-9]{10}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-semibold text-sm" placeholder="10 अंकों का मोबाइल नंबर">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                                ईमेल पता (Email Address)
+                            </label>
+                            <input type="email" id="donEmail" name="donorEmail" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-semibold text-sm" placeholder="yourname@gmail.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                                पैन नंबर (PAN Number - आयकर छूट हेतु)
+                            </label>
+                            <input type="text" id="donPan" name="panNumber" maxlength="10" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-mono uppercase font-bold text-sm" placeholder="ABCDE1234F">
+                        </div>
+                    </div>
+
+                    <!-- Transaction Reference / Mode -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                                UTR / Transaction No. (ट्रांजेक्शन आईडी)
+                            </label>
+                            <input type="text" id="donUtr" name="utrNumber" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-mono font-bold text-sm" placeholder="उदा. 428741982736">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                                भुगतान का माध्यम (Payment Mode)
+                            </label>
+                            <select id="donMode" name="paymentMode" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-semibold text-sm bg-white">
+                                <option value="UPI">UPI (Google Pay / PhonePe / Paytm / BHIM)</option>
+                                <option value="NetBanking">Net Banking (IMPS / NEFT / RTGS)</option>
+                                <option value="Bank Deposit">Bank Counter Deposit</option>
+                                <option value="Cheque/DD">Cheque / Demand Draft</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">राज्य (State)</label>
+                            <input type="text" id="donState" name="state" value="Bihar" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-semibold text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">जिला (District)</label>
+                            <input type="text" id="donDistrict" name="district" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-semibold text-sm" placeholder="उदा. पटना, दरभंगा, मुजफ्फरपुर">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">संदेश / सुझाव (Optional Message)</label>
+                        <textarea id="donMsg" name="message" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-medium text-sm" placeholder="पार्टी व मुकेश सहनी जी के लिए कोई शुभकामना या संदेश..."></textarea>
+                    </div>
+
+                    <button type="submit" id="donSubmitBtn" class="w-full bg-primary hover:bg-primary-700 text-white font-black py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-base flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-heart text-amber-300"></i>
+                        <span id="donBtnText">दान की सूचना सबमिट करें (Submit Donation Acknowledgment)</span>
+                    </button>
+                </form>
+
+                <!-- Receipt Modal / Digital Card Container (Populated on Submit) -->
+                <div id="receiptBox" class="hidden mt-8 pt-8 border-t border-gray-200">
+                    <div class="bg-gradient-to-br from-blue-900 via-primary-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border-2 border-amber-400">
+                        <div class="flex items-center justify-between mb-4 border-b border-white/20 pb-4">
+                            <div class="flex items-center gap-3">
+                                <img src="/images/vip-logo.svg" alt="VIP Logo" class="h-10 w-10 bg-white rounded-lg p-1">
+                                <div>
+                                    <h4 class="font-black text-lg text-white">विकासशील इंसान पार्टी</h4>
+                                    <p class="text-xs text-amber-300 font-bold">आधिकारिक सहयोग पावती (Donation Receipt)</p>
+                                </div>
+                            </div>
+                            <span class="bg-emerald-500 text-white font-bold text-xs px-3 py-1 rounded-full">
+                                ✓ Submitted
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm my-4">
+                            <div>
+                                <span class="text-xs text-blue-200 uppercase font-bold">Receipt No:</span>
+                                <p class="font-mono font-bold text-base text-amber-300" id="recNo"></p>
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-200 uppercase font-bold">सहयोग राशि:</span>
+                                <p class="font-black text-2xl text-emerald-400" id="recAmt"></p>
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-200 uppercase font-bold">दाता का नाम:</span>
+                                <p class="font-bold text-white" id="recName"></p>
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-200 uppercase font-bold">दिनांक:</span>
+                                <p class="font-semibold text-white" id="recDate"></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-blue-100/80 italic mt-3 border-t border-white/10 pt-3">
+                            आपके अमूल्य योगदान के लिए विकासशील इंसान पार्टी परिवार आपका हार्दिक आभार व्यक्त करता है।
+                        </p>
+                        <div class="mt-4 flex gap-3">
+                            <button type="button" onclick="window.print()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-print"></i> प्रिंट करें
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 5. Bottom Pre-Footer Join Strip (Exact RJD Pattern) -->
+    <section class="bg-[#002e54] text-white py-12 border-t-4 border-amber-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                
+                <div class="flex items-center gap-6">
+                    <div class="bg-white/10 p-4 rounded-full border border-white/20 shadow-inner flex-shrink-0">
+                        <i class="fa-solid fa-user-plus text-3xl text-amber-300"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black mb-1 tracking-tight text-white" data-i18n="callout.title">
+                            हमसे जुड़ें, बदलाव लाएं
+                        </h3>
+                        <p class="text-blue-100 text-sm max-w-lg leading-relaxed" data-i18n="callout.desc">
+                            विकासशील इंसान पार्टी (VIP) के साथ जुड़ें और स्वाभिमानी, शिक्षित और समृद्ध बिहार के निर्माण में भागीदार बनें।
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative group animate-slide-up w-full sm:w-auto">
+                    <a href="/member" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-gray-950 font-black px-8 py-3.5 rounded-xl text-base shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                        <span data-i18n="callout.btn">सदस्य बनें (Join VIP)</span>
+                        <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+
+                <!-- Follow Us -->
+                <div class="flex items-center gap-4">
+                    <span class="font-bold text-sm text-blue-200" data-i18n="callout.follow">हमें फॉलो करें:</span>
+                    <div class="flex gap-2">
+                        <a href="https://whatsapp.com" aria-label="VIP WhatsApp" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-green-600 flex items-center justify-center text-white transition-all hover:scale-110">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                        </a>
+                        <a href="https://t.me" aria-label="VIP Telegram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-sky-500 flex items-center justify-center text-white transition-all hover:scale-110">
+                            <i class="fa-brands fa-telegram text-base"></i>
+                        </a>
+                        <a href="https://facebook.com" aria-label="VIP Facebook" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-blue-600 flex items-center justify-center text-white transition-all hover:scale-110">
+                            <i class="fa-brands fa-facebook-f text-base"></i>
+                        </a>
+                        <a href="https://x.com" aria-label="VIP X" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-black flex items-center justify-center text-white transition-all hover:scale-110">
+                            <i class="fa-brands fa-x-twitter text-base"></i>
+                        </a>
+                        <a href="https://instagram.com" aria-label="VIP Instagram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-pink-600 flex items-center justify-center text-white transition-all hover:scale-110">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                        </a>
+                        <a href="https://youtube.com" aria-label="VIP YouTube" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-red-600 flex items-center justify-center text-white transition-all hover:scale-110">
+                            <i class="fa-brands fa-youtube text-base"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Shared Footer -->
+    <%- include('common/footer') %>
+
+    <!-- Toast Notification -->
+    <div id="copyToast" class="toast-notification">
+        <i class="fa-solid fa-circle-check text-emerald-400 mr-2"></i>
+        <span id="toastMsg">कॉपी हो गया!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/i18n.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        // Copy to clipboard helper
+        function copyText(val, label) {
+            if (!val) return;
+            navigator.clipboard.writeText(val).then(() => {
+                const toast = document.getElementById('copyToast');
+                const msg = document.getElementById('toastMsg');
+                msg.textContent = `${label} सफलतापूर्वक कॉपी किया गया!`;
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 2500);
+            });
+        }
+
+        // Quick amount selection
+        function setAmount(amt) {
+            const input = document.getElementById('donAmount');
+            input.value = amt;
+            document.querySelectorAll('.amt-chip').forEach(c => {
+                c.classList.remove('border-primary', 'bg-blue-50', 'text-primary');
+                c.classList.add('border-gray-200', 'text-gray-700');
+            });
+            if (event && event.target) {
+                event.target.classList.remove('border-gray-200', 'text-gray-700');
+                event.target.classList.add('border-primary', 'bg-blue-50', 'text-primary');
+            }
+        }
+
+        // Form Submission
+        const form = document.getElementById('donationSubmitForm');
+        const alertBox = document.getElementById('donateAlert');
+        const submitBtn = document.getElementById('donSubmitBtn');
+        const btnText = document.getElementById('donBtnText');
+        const receiptBox = document.getElementById('receiptBox');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alertBox.classList.add('hidden');
+
+            const donorName = document.getElementById('donName').value.trim();
+            const donorPhone = document.getElementById('donPhone').value.trim();
+            const donorEmail = document.getElementById('donEmail').value.trim();
+            const panNumber = document.getElementById('donPan').value.trim();
+            const amount = document.getElementById('donAmount').value;
+            const utrNumber = document.getElementById('donUtr').value.trim();
+            const paymentMode = document.getElementById('donMode').value;
+            const state = document.getElementById('donState').value.trim();
+            const district = document.getElementById('donDistrict').value.trim();
+            const message = document.getElementById('donMsg').value.trim();
+
+            if (!donorName || !donorPhone || !amount) {
+                alertBox.textContent = 'कृपया नाम, मोबाइल नंबर और सहयोग राशि अनिवार्य रूप से भरें।';
+                alertBox.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
+                alertBox.classList.remove('hidden');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            btnText.textContent = 'सूचना दर्ज हो रही है...';
+
+            try {
+                const res = await fetch('/api/donate/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        donorName, donorPhone, donorEmail, panNumber, amount,
+                        utrNumber, paymentMode, state, district, message
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alertBox.textContent = data.message;
+                    alertBox.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200';
+                    alertBox.classList.remove('hidden');
+
+                    document.getElementById('recNo').textContent = data.receiptNumber;
+                    document.getElementById('recAmt').textContent = '₹' + Number(data.amount).toLocaleString('en-IN');
+                    document.getElementById('recName').textContent = data.donorName;
+                    document.getElementById('recDate').textContent = new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                    receiptBox.classList.remove('hidden');
+                    receiptBox.scrollIntoView({ behavior: 'smooth' });
+
+                    form.reset();
+                } else {
+                    alertBox.textContent = data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।';
+                    alertBox.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
+                    alertBox.classList.remove('hidden');
+                }
+            } catch (err) {
+                alertBox.textContent = 'सर्वर से संपर्क नहीं हो पाया। कृपया नेटवर्क जांचें।';
+                alertBox.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
+                alertBox.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'दान की सूचना सबमिट करें (Submit Donation Acknowledgment)';
+            }
+        });
+    </script>
+</body>
+</html>
