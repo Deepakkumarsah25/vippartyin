@@ -291,6 +291,50 @@ const donationRecordSchema = new mongoose.Schema(
 );
 const DonationRecord = mongoose.models.DonationRecord || mongoose.model('DonationRecord', donationRecordSchema);
 
+// CMS Page Schema (Synchronized with vip-a Admin Panel CMS)
+const cmsSectionSchema = new mongoose.Schema({
+  heading: { type: String, default: '' },
+  description: { type: String, default: '' },
+  image: { type: String, default: '' },
+  order: { type: Number, default: 0 },
+});
+
+const cmsPageSchema = new mongoose.Schema(
+  {
+    pageKey: { type: String, required: true, unique: true },
+    title: { type: String, default: '' },
+    bannerImage: { type: String, default: '' },
+    introText: { type: String, default: '' },
+    sections: [cmsSectionSchema],
+  },
+  { timestamps: true }
+);
+const CmsPage = mongoose.models.CmsPage || mongoose.model('CmsPage', cmsPageSchema, 'cmspages');
+
+// Prefer the admin CMS source so edits appear immediately; use the local DB only as fallback.
+async function getCmsPage(pageKey) {
+  try {
+    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+    const response = await fetch(`${adminUrl}/cms/api/${encodeURIComponent(pageKey)}?t=${Date.now()}`, {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(3000)
+    });
+    if (response.status === 404) return null;
+    if (response.ok) {
+      const json = await response.json();
+      if (json && json.success && json.data) return json.data;
+    }
+  } catch (error) {
+    console.warn(`CMS admin API unavailable for [${pageKey}]:`, error.message);
+  }
+  try {
+    if (mongoose.connection.readyState === 1) return await CmsPage.findOne({ pageKey }).lean();
+  } catch (error) {
+    console.warn(`CMS local database fallback failed for [${pageKey}]:`, error.message);
+  }
+  return null;
+}
+
 // Helper function to fetch active hero banners from DB with API fallback
 async function getHeroBanners() {
   try {
@@ -457,11 +501,170 @@ app.get('/announcements/:slug', async (req, res) => {
 });
 
 // About VIP Group
-app.get('/about', renderRoute('पार्टी के बारे में | विकासशील इंसान पार्टी', 'about'));
-app.get('/journey-of-mukesh-sahani', renderRoute('श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party', 'journey'));
+// About VIP Group (Synced with vip-a Admin Panel CMS: 'history-vip' / 'about')
+app.get('/about', async (req, res) => {
+  try {
+    // CMS Admin stores 'About VIP Party' under key 'history-vip' (fallback to 'about')
+    let pageData = await getCmsPage('history-vip');
+    if (!pageData || (!pageData.introText && (!pageData.sections || pageData.sections.length === 0))) {
+      const fallback = await getCmsPage('about');
+      if (fallback) pageData = fallback;
+    }
+
+    res.render('about', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | विकासशील इंसान पार्टी` : 'वीआईपी के बारे में | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'विकासशील इंसान पार्टी (VIP)',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /about page:', err);
+    res.render('about', {
+      pageTitle: 'वीआईपी के बारे में | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: {
+        title: 'विकासशील इंसान पार्टी (VIP)',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+// Journey of Mukesh Sahani (Synced with vip-a Admin Panel CMS: 'journey-mukesh-sahani')
+app.get('/journey-of-mukesh-sahani', async (req, res) => {
+  try {
+    let pageData = await getCmsPage('journey-mukesh-sahani');
+    if (!pageData || (!pageData.sections || pageData.sections.length === 0)) {
+      const fallback = await getCmsPage('journey-mukesh');
+      if (fallback && fallback.sections && fallback.sections.length > 0) pageData = fallback;
+    }
+
+    res.render('journey', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | VIP Party` : 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'मुकेश सहनी जी का जीवन परिचय एवं राजनीतिक सफर',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /journey-of-mukesh-sahani page:', err);
+    res.render('journey', {
+      pageTitle: 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
+      activeNav: 'about',
+      page: {
+        title: 'मुकेश सहनी जी का जीवन परिचय एवं राजनीतिक सफर',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+
+// Mission & Vision (Synced with vip-a Admin Panel CMS: 'mission-vision')
+app.get('/mission-vision', async (req, res) => {
+  try {
+    let pageData = await getCmsPage('mission-vision');
+
+    res.render('mission-vision', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | मिशन एवं विज़न | VIP Party` : 'मिशन एवं विज़न | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'हमारा मिशन एवं विज़न',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /mission-vision page:', err);
+    res.render('mission-vision', {
+      pageTitle: 'मिशन एवं विज़न | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'about',
+      page: {
+        title: 'हमारा मिशन एवं विज़न',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
 app.get('/jubba-sahani', renderRoute('अमर शहीद जुब्बा सहनी | जीवन एवं बलिदान | VIP Party', 'jubba'));
 app.get('/history', renderRoute('हमारा इतिहास | विकासशील इंसान पार्टी', 'history'));
-app.get('/ideology', renderRoute('पार्टी की विचारधारा एवं विज़न | VIP Party', 'ideology'));
+// Our Ideology (Synced with vip-a Admin Panel CMS: 'our-philosophy' / 'ideology')
+app.get('/ideology', async (req, res) => {
+  try {
+    let pageData = await getCmsPage('our-philosophy');
+    if (!pageData || (!pageData.sections || pageData.sections.length === 0)) {
+      const fallback = await getCmsPage('ideology');
+      if (fallback) pageData = fallback;
+    }
+
+    res.render('ideology', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | हमारी विचारधारा | VIP Party` : 'हमारी विचारधारा एवं सिद्धांत | VIP Party',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'हमारी विचारधारा एवं सिद्धांत',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /ideology page:', err);
+    res.render('ideology', {
+      pageTitle: 'हमारी विचारधारा | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'about',
+      page: {
+        title: 'हमारी विचारधारा एवं सिद्धांत',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+
+// Nishad Vikas Sangh (NVS) (Synced with vip-a Admin Panel CMS: 'nishad-vikas-sangh')
+app.get(['/nvs', '/nishad-vikas-sangh'], async (req, res) => {
+  try {
+    let pageData = await getCmsPage('nishad-vikas-sangh');
+    if (!pageData || (!pageData.sections || pageData.sections.length === 0)) {
+      const fallback = await getCmsPage('nishad-vikas');
+      if (fallback && fallback.sections && fallback.sections.length > 0) pageData = fallback;
+    }
+
+    res.render('nvs', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} (NVS) | VIP Party` : 'निषाद विकास संघ (NVS) | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'निषाद विकास संघ (NVS)',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /nvs page:', err);
+    res.render('nvs', {
+      pageTitle: 'निषाद विकास संघ (NVS) | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: {
+        title: 'निषाद विकास संघ (NVS)',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+
+// Major Issues (प्रमुख मुद्दे)
+app.get(['/major-issues', '/issues'], (req, res) => {
+  res.render('major-issues', {
+    pageTitle: 'प्रमुख मुद्दे (Major Issues) | विकासशील इंसान पार्टी',
+    activeNav: 'about'
+  });
+});
 app.get('/constitution', renderRoute('संविधान और नियम | विकासशील इंसान पार्टी', 'constitution'));
 app.get('/prerna', renderRoute('हमारी प्रेरणा पुंज | VIP Party', 'prerna'));
 app.get('/office', renderRoute('केन्द्रीय व प्रदेश कार्यालय | VIP Party', 'office'));
@@ -688,11 +891,6 @@ app.post('/api/donate/submit', async (req, res) => {
 app.get('/news', renderRoute('ताजा वीआईपी समाचार | VIP Party', 'news'));
 app.get('/events', renderRoute('आगामी कार्यक्रम व रैलियां | VIP Party', 'events'));
 app.get('/media', renderRoute('मीडिया एवं प्रेस कॉन्फ्रेंस | VIP Party', 'media'));
-
-// Menu 1: About Sub-Items
-app.get('/mission-vision', renderRoute('मिशन एवं विज़न | विकासशील इंसान पार्टी', 'mission'));
-app.get('/major-issues', renderRoute('प्रमुख मुद्दे | विकासशील इंसान पार्टी', 'issues'));
-app.get('/nvs', renderRoute('निषाद विकास संघ (NVS) | VIP Party', 'nvs'));
 
 // Menu 1: Gallery
 app.get('/gallery', renderRoute('गैलरी (फोटो एवं वीडियो) | VIP Party', 'gallery'));
