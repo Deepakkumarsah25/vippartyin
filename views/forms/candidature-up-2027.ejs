@@ -67,19 +67,6 @@
 
   <!-- Form Container -->
   <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
-    
-    <!-- Success Banner (Hidden Initially) -->
-    <div id="candidatureSuccess" class="hidden mb-8 p-6 sm:p-8 bg-emerald-50 border-2 border-emerald-400 rounded-3xl shadow-xl text-center animate-slide-up">
-      <div class="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
-        <i class="fa-solid fa-vote-yea"></i>
-      </div>
-      <h3 class="text-2xl font-black text-emerald-950 mb-2">उम्मीदवारी आवेदन सफलतापूर्वक दर्ज हो गया है!</h3>
-      <p class="text-emerald-800 text-sm max-w-xl mx-auto mb-4">
-        आपका उम्मीदवारी आवेदन क्रमांक: <span id="resCandId" class="font-black text-lg bg-white px-3 py-1 rounded-lg border border-emerald-300">VIP-UP27-XXXX</span>
-      </p>
-      <p class="text-xs text-emerald-700">केन्द्रीय संसदीय बोर्ड एवं उत्तर प्रदेश प्रदेश चुनाव समिति द्वारा समीक्षा उपरांत आपको संपर्क किया जाएगा।</p>
-    </div>
-
     <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-10">
       <div class="border-b border-gray-100 pb-5 mb-8 flex items-center justify-between flex-wrap gap-4">
         <div>
@@ -255,10 +242,29 @@
 
         const data = await res.json();
         if (res.ok && data.success) {
+          const successPayload = {
+            formType: 'candidature',
+            id: data.candidatureId || 'VIP-UP27-SUCCESS',
+            name: applicantName,
+            phone: mobile,
+            district: district,
+            loksabha: assemblyConstituency || '',
+            from: '/candidature-up-2027',
+            date: new Date().toLocaleDateString('en-GB')
+          };
+          try {
+            sessionStorage.setItem('vip_form_success', JSON.stringify(successPayload));
+          } catch (e) {}
+
           candidatureForm.reset();
-          resCandId.textContent = data.candidatureId || 'VIP-UP27-SUCCESS';
-          candidatureSuccess.classList.remove('hidden');
-          candidatureSuccess.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.location.href = '/forms/success?type=candidature' +
+            '&id=' + encodeURIComponent(successPayload.id) +
+            '&name=' + encodeURIComponent(applicantName) +
+            '&mobile=' + encodeURIComponent(mobile) +
+            '&district=' + encodeURIComponent(district) +
+            '&assembly=' + encodeURIComponent(assemblyConstituency) +
+            '&from=/candidature-up-2027';
+          return;
         } else {
           alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');
         }

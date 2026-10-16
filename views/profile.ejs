@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= pageTitle %></title>
+  <link rel="icon" href="/images/vip-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { primary: { DEFAULT: '#0066b2', 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#0066b2', 600: '#004b87', 700: '#003a6c', 800: '#002e54', 900: '#001e38', 950: '#001426' }, secondary: { DEFAULT: '#004b87', hover: '#003a6c' }, accent: '#f0f7ff', dark: '#0f172a' },
+        fontFamily: { sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'] }
+      } }
+    };
+  </script>
+  <link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/profile.css">
+</head>
+<body class="font-sans text-gray-700 bg-white antialiased">
+  <%- include('common/navbar') %>
+  <main class="profile-page">
+    <section class="profile-heading"><div><span class="profile-eyebrow">YOUR VIP ACCOUNT</span><h1>My profile</h1><p>Keep your contact details and address up to date.</p></div><a href="/" class="profile-home"><i class="fa-solid fa-arrow-left"></i> Website</a></section>
+    <div id="profileAlert" class="profile-alert" role="status"></div>
+    <form id="profileForm" class="profile-layout" enctype="multipart/form-data">
+      <aside class="profile-side">
+        <div class="profile-avatar-wrap">
+          <img id="profilePreview" class="profile-avatar" src="<%= profileUser.photoURL || '/images/vip-logo.svg' %>" alt="Profile photo">
+          <label class="profile-upload" for="profilePhoto" aria-label="Change profile photo"><i class="fa-solid fa-camera"></i></label>
+          <input id="profilePhoto" name="photo" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+        </div>
+        <h2 id="sideName"><%= profileUser.name %></h2>
+        <p id="sideEmail"><%= profileUser.email || 'Add an email address' %></p>
+        <div class="profile-side-note"><i class="fa-solid fa-shield-halved"></i><span>Your profile details are visible only to you in this account.</span></div>
+        <button type="submit" class="profile-save profile-save-side"><i class="fa-solid fa-floppy-disk"></i> Save profile</button>
+      </aside>
+      <section class="profile-form-card">
+        <div class="profile-card-heading"><div><h2>Personal information</h2><p>Edit your basic details and where you live.</p></div><i class="fa-regular fa-id-card"></i></div>
+        <div class="profile-fields">
+          <label class="profile-field"><span>Full name <b>*</b></span><input name="name" value="<%= profileUser.name %>" autocomplete="name" maxlength="100" required></label>
+          <label class="profile-field"><span>Email address</span><input name="email" type="email" value="<%= profileUser.email || '' %>" autocomplete="email" maxlength="160" placeholder="you@example.com"></label>
+          <label class="profile-field"><span>Mobile number</span><input name="phone" type="tel" inputmode="numeric" value="<%= profileUser.phone && !profileUser.phone.startsWith('google:') ? profileUser.phone : '' %>" autocomplete="tel-national" maxlength="10" placeholder="10-digit mobile number"></label>
+          <label class="profile-field profile-field-wide"><span>Address</span><textarea name="address" rows="3" maxlength="400" autocomplete="street-address" placeholder="House, street, village or locality"><%= profileUser.address || '' %></textarea></label>
+          <label class="profile-field"><span>District</span><input name="district" value="<%= profileUser.district || '' %>" autocomplete="address-level2" maxlength="100" placeholder="Your district"></label>
+          <label class="profile-field"><span>State</span><input name="state" value="<%= profileUser.state || '' %>" autocomplete="address-level1" maxlength="100" placeholder="Your state"></label>
+        </div>
+        <div class="profile-form-bottom"><span><i class="fa-regular fa-circle-check"></i> Changes are saved to your account.</span><button type="submit" id="saveProfile" class="profile-save"><i class="fa-solid fa-floppy-disk"></i> Save changes</button></div>
+      </section>
+    </form>
+  </main>
+  <%- include('common/footer') %>
+  <script src="/js/i18n.js"></script><script src="/js/main.js"></script>
+  <script>
+    const profileForm=document.getElementById('profileForm'),profileAlert=document.getElementById('profileAlert'),photoInput=document.getElementById('profilePhoto'),preview=document.getElementById('profilePreview'),saveButton=document.getElementById('saveProfile');
+    function showProfileAlert(message,type){profileAlert.textContent=message;profileAlert.className='profile-alert visible '+type;profileAlert.scrollIntoView({behavior:'smooth',block:'center'});}
+    photoInput.addEventListener('change',()=>{const file=photoInput.files[0];if(!file)return;if(file.size>5*1024*1024){photoInput.value='';showProfileAlert('Photo must be 5 MB or smaller.','error');return;}preview.src=URL.createObjectURL(file);});
+    profileForm.addEventListener('submit',async event=>{event.preventDefault();saveButton.disabled=true;saveButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving…';profileAlert.className='profile-alert';try{const response=await fetch('/api/profile',{method:'POST',body:new FormData(profileForm)}),data=await response.json();if(!response.ok||!data.success)throw new Error(data.message||'Profile could not be saved.');showProfileAlert(data.message,'success');document.getElementById('sideName').textContent=data.user.name;document.getElementById('sideEmail').textContent=data.user.email||data.user.phone;document.querySelectorAll('.navbar-profile-name').forEach(node=>node.textContent=data.user.name);document.querySelectorAll('.navbar-profile-email').forEach(node=>node.textContent=data.user.email||data.user.phone);if(data.user.photoURL){preview.src=data.user.photoURL;document.querySelectorAll('.navbar-profile-avatar').forEach(node=>node.src=data.user.photoURL);}}catch(error){showProfileAlert(error.message,'error');}finally{saveButton.disabled=false;saveButton.innerHTML='<i class="fa-solid fa-floppy-disk"></i> Save changes';}});
+  </script>
+</body>
+</html>
