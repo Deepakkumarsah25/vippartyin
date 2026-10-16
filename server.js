@@ -284,6 +284,110 @@ const donationRecordSchema = new mongoose.Schema(
 );
 const DonationRecord = mongoose.models.DonationRecord || mongoose.model('DonationRecord', donationRecordSchema);
 
+// Download Item Schema (Synchronized with shared MongoDB Atlas collection 'downloaditems')
+const downloadItemSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    category: {
+      type: String,
+      required: true,
+      enum: ['leaders-photo', 'infographics-banner', 'quotes', 'mobile-wallpaper'],
+      index: true,
+    },
+    imageUrl: { type: String, required: true, trim: true },
+    publicId: { type: String, default: '' },
+    caption: { type: String, default: '', trim: true },
+    author: { type: String, default: '', trim: true },
+    fileSize: { type: String, default: '1.5 MB' },
+    dimensions: { type: String, default: '1920x1080' },
+    format: { type: String, default: 'JPG' },
+    downloadsCount: { type: Number, default: 0 },
+    isPublished: { type: Boolean, default: true, index: true },
+    displayOrder: { type: Number, default: 0 },
+    tags: [{ type: String }],
+  },
+  { timestamps: true }
+);
+const DownloadItem = mongoose.models.DownloadItem || mongoose.model('DownloadItem', downloadItemSchema);
+
+// Helper function to fetch active downloads from DB with API fallback
+async function getDownloadItems(category = 'all', searchQuery = '') {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      const filter = { isPublished: true };
+      if (category && category !== 'all') {
+        filter.category = category;
+      }
+      if (searchQuery && searchQuery.trim()) {
+        const q = searchQuery.trim();
+        filter.$or = [
+          { title: { $regex: q, $options: 'i' } },
+          { caption: { $regex: q, $options: 'i' } },
+          { author: { $regex: q, $options: 'i' } },
+          { tags: { $in: [new RegExp(q, 'i')] } },
+        ];
+      }
+      return await DownloadItem.find(filter)
+        .sort({ displayOrder: 1, createdAt: -1 })
+        .lean();
+    }
+  } catch (err) {
+    console.warn('DB download fetch note:', err.message);
+  }
+
+  // API Fallback
+  try {
+    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+    const url = category && category !== 'all'
+      ? `${adminUrl}/api/downloads/api/list/${category}`
+      : `${adminUrl}/api/downloads/api/list`;
+    const res = await fetch(url);
+    const json = await res.json();
+    if (json.success && json.data) {
+      if (searchQuery && searchQuery.trim()) {
+        const q = searchQuery.trim().toLowerCase();
+        return json.data.filter(item => 
+          (item.title && item.title.toLowerCase().includes(q)) ||
+          (item.caption && item.caption.toLowerCase().includes(q)) ||
+          (item.author && item.author.toLowerCase().includes(q))
+        );
+      }
+      return json.data;
+    }
+  } catch (apiErr) {
+    console.warn('API fallback note:', apiErr.message);
+  }
+
+  return [];
+}
+
+// Helper to fetch download counts for category pills
+async function getDownloadStats() {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      const totalDownloads = await DownloadItem.countDocuments({ isPublished: true });
+      const leadersPhotoCount = await DownloadItem.countDocuments({ category: 'leaders-photo', isPublished: true });
+      const infographicsCount = await DownloadItem.countDocuments({ category: 'infographics-banner', isPublished: true });
+      const quotesCount = await DownloadItem.countDocuments({ category: 'quotes', isPublished: true });
+      const wallpaperCount = await DownloadItem.countDocuments({ category: 'mobile-wallpaper', isPublished: true });
+      return {
+        totalDownloads,
+        leadersPhotoCount,
+        infographicsCount,
+        quotesCount,
+        wallpaperCount,
+      };
+    }
+  } catch (err) {}
+  return {
+    totalDownloads: 0,
+    leadersPhotoCount: 0,
+    infographicsCount: 0,
+    quotesCount: 0,
+    wallpaperCount: 0,
+  };
+}
+
 // Helper function to fetch active hero banners from DB with API fallback
 async function getHeroBanners() {
   try {
@@ -639,12 +743,154 @@ app.get('/press', renderRoute('प्रेस एवं मीडिया | �
 app.get('/interview', renderRoute('विशेष साक्षात्कार (Interviews) | VIP Party', 'press'));
 app.get('/press-release', renderRoute('प्रेस विज्ञप्ति (Press Release) | VIP Party', 'press'));
 
-// Menu 1: Download
-app.get('/download', renderRoute('डाउनलोड सेन्टर | विकासशील इंसान पार्टी', 'download'));
-app.get('/download/leaders-photo', renderRoute('नेताओं की तस्वीरें | VIP Party', 'download'));
-app.get('/download/infographics-banner', renderRoute('इन्फोग्राफिक्स और बैनर | VIP Party', 'download'));
-app.get('/download/quotes', renderRoute('सुविचार एवं उद्धरण | VIP Party', 'download'));
-app.get('/download/mobile-wallpaper', renderRoute('मोबाइल वॉलपेपर | VIP Party', 'download'));
+// Menu 1: Download Section (Redirects to first independent section - no 'all' page)
+app.get('/download', (req, res) => {
+  const searchQuery = (req.query.q || '').trim();
+  const queryStr = searchQuery ? `?q=${encodeURIComponent(searchQuery)}` : '';
+  res.redirect(`/download/leaders-photo${queryStr}`);
+});
+
+app.get('/download/leaders-photo', async (req, res) => {
+  const searchQuery = (req.query.q || '').trim();
+  const items = await getDownloadItems('leaders-photo', searchQuery);
+  const stats = await getDownloadStats();
+  res.render('download/index', {
+    pageTitle: 'Leaders Photo | Vikassheel Insaan Party (VIP)',
+    activeNav: 'download',
+    currentCategory: 'leaders-photo',
+    searchQuery,
+    items,
+    stats,
+  });
+});
+
+app.get('/download/infographics-banner', async (req, res) => {
+  const searchQuery = (req.query.q || '').trim();
+  const items = await getDownloadItems('infographics-banner', searchQuery);
+  const stats = await getDownloadStats();
+  res.render('download/index', {
+    pageTitle: 'Infographics & Banner | Vikassheel Insaan Party (VIP)',
+    activeNav: 'download',
+    currentCategory: 'infographics-banner',
+    searchQuery,
+    items,
+    stats,
+  });
+});
+
+app.get('/download/quotes', async (req, res) => {
+  const searchQuery = (req.query.q || '').trim();
+  const items = await getDownloadItems('quotes', searchQuery);
+  const stats = await getDownloadStats();
+  res.render('download/index', {
+    pageTitle: 'Inspirational Quotes | Vikassheel Insaan Party (VIP)',
+    activeNav: 'download',
+    currentCategory: 'quotes',
+    searchQuery,
+    items,
+    stats,
+  });
+});
+
+app.get('/download/mobile-wallpaper', async (req, res) => {
+  const searchQuery = (req.query.q || '').trim();
+  const items = await getDownloadItems('mobile-wallpaper', searchQuery);
+  const stats = await getDownloadStats();
+  res.render('download/index', {
+    pageTitle: 'Mobile Wallpapers 4K | Vikassheel Insaan Party (VIP)',
+    activeNav: 'download',
+    currentCategory: 'mobile-wallpaper',
+    searchQuery,
+    items,
+    stats,
+  });
+});
+
+// Direct File Download Proxy (Increments download counter and serves attachment)
+app.get('/download/file/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    let item = null;
+    if (mongoose.connection.readyState === 1) {
+      item = await DownloadItem.findById(id);
+      if (item) {
+        item.downloadsCount = (item.downloadsCount || 0) + 1;
+        await item.save();
+      }
+    }
+    if (!item) {
+      return res.redirect('/download');
+    }
+
+    // Clean safe filename
+    const safeTitle = item.title.replace(/[^a-zA-Z0-9_\u0900-\u097F]/g, '_').substring(0, 50);
+    const ext = path.extname(item.imageUrl) || '.jpg';
+    const downloadName = `VIP_${safeTitle}${ext}`;
+
+    // If local path
+    if (item.imageUrl.startsWith('/')) {
+      const localPath = path.join(__dirname, 'public', item.imageUrl);
+      if (fs.existsSync(localPath)) {
+        return res.download(localPath, downloadName);
+      }
+      const backendLocalPath = path.resolve(__dirname, '../backend/public', item.imageUrl.replace(/^\//, ''));
+      if (fs.existsSync(backendLocalPath)) {
+        return res.download(backendLocalPath, downloadName);
+      }
+      const backendUploadPath = path.resolve(__dirname, '../backend/uploads/downloads', path.basename(item.imageUrl));
+      if (fs.existsSync(backendUploadPath)) {
+        return res.download(backendUploadPath, downloadName);
+      }
+    }
+
+    // If Cloudinary URL
+    if (item.imageUrl.includes('cloudinary.com')) {
+      const dlUrl = item.imageUrl.replace('/upload/', `/upload/fl_attachment:${encodeURIComponent(safeTitle)}/`);
+      return res.redirect(dlUrl);
+    }
+
+    // Remote HTTP URL: Stream as attachment
+    if (item.imageUrl.startsWith('http://') || item.imageUrl.startsWith('https://')) {
+      try {
+        const fetchRes = await fetch(item.imageUrl);
+        if (fetchRes.ok) {
+          const contentType = fetchRes.headers.get('content-type') || 'application/octet-stream';
+          res.setHeader('Content-Type', contentType);
+          res.setHeader('Content-Disposition', `attachment; filename="${downloadName}"`);
+          const arrayBuffer = await fetchRes.arrayBuffer();
+          return res.send(Buffer.from(arrayBuffer));
+        }
+      } catch (streamErr) {
+        console.warn('Proxy download stream error, falling back to redirect:', streamErr.message);
+      }
+    }
+
+    return res.redirect(item.imageUrl);
+  } catch (err) {
+    console.error('File download error:', err);
+    return res.redirect('/download');
+  }
+});
+
+// Download Counter Track API
+app.post('/api/download/track/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (mongoose.connection.readyState === 1) {
+      const item = await DownloadItem.findByIdAndUpdate(
+        id,
+        { $inc: { downloadsCount: 1 } },
+        { new: true }
+      );
+      if (item) {
+        return res.json({ success: true, downloadsCount: item.downloadsCount });
+      }
+    }
+    return res.json({ success: true, downloadsCount: 1 });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 // Menu 1: Forms Dedicated Pages
 app.get('/volunteer', (req, res) => res.render('forms/volunteer', { pageTitle: 'वालंटियर के रूप में जुड़ें | VIP Party', activeNav: 'forms' }));

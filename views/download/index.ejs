@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Downloads | Vikassheel Insaan Party (VIP)' %></title>
+  <meta name="title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'Downloads | Vikassheel Insaan Party (VIP)' %>">
+  <meta name="description" content="Download official Vikassheel Insaan Party (VIP) high-resolution promotional materials, leadership portraits, campaign banners, inspirational quotes, and 4K mobile wallpapers.">
+  <meta name="keywords" content="VIP Party Downloads, Mukesh Sahani Photo HD, VIP Party Banner, Son of Mallah Quotes, VIP Mobile Wallpaper">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f59e0b',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    /* Card Hover Animations & Shadows */
+    .dl-card-item {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dl-card-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 28px -8px rgba(0, 102, 178, 0.16), 0 6px 10px -4px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Lightbox Modal */
+    .lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 16, 32, 0.94);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .lightbox-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .lightbox-preview-img {
+      max-width: 92vw;
+      max-height: 82vh;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* Site Toast */
+    .site-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #001e38;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      z-index: 100000;
+      border-left: 4px solid #10b981;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .site-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Extra Cards Fade In */
+    @keyframes fadeInCard {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .fade-in-card {
+      animation: fadeInCard 0.35s ease forwards;
+    }
+  </style>
+</head>
+
+<body class="font-sans text-gray-700 bg-slate-50/60 antialiased flex flex-col min-h-screen">
+
+  <!-- 1. Shared Navigation Component -->
+  <%- include('../common/navbar') %>
+
+  <!-- ==============================================
+       HERO SECTION (MATCHING FORMS PAGE HERO DESIGN)
+       ============================================== -->
+  <section class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-12 sm:py-16 text-white text-center relative overflow-hidden">
+    <!-- Subtle Dot Mesh Background Matching Forms Page -->
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto px-4 relative z-10">
+      <span class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3 shadow-sm">
+        <%= currentCategory === 'leaders-photo' ? 'OFFICIAL ARCHIVE' :
+            currentCategory === 'infographics-banner' ? 'CAMPAIGN ASSETS' :
+            currentCategory === 'quotes' ? 'INSPIRING THOUGHTS' : '4K SMARTPHONE ASSETS' %>
+      </span>
+
+      <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight">
+        <%= currentCategory === 'leaders-photo' ? 'Leaders Photo' :
+            currentCategory === 'infographics-banner' ? 'Infographics & Banner' :
+            currentCategory === 'quotes' ? 'Inspirational Quotes' : 'Mobile Wallpapers' %>
+      </h1>
+
+      <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        <%= currentCategory === 'leaders-photo' ? 'High-resolution official portraits of Vikassheel Insaan Party leadership and prominent figures.' :
+            currentCategory === 'infographics-banner' ? 'Official digital banners and infographics for party events, campaigns, and public initiatives.' :
+            currentCategory === 'quotes' ? 'Inspiring thoughts, social justice quotes, and official statements of empowerment and pride.' :
+            'Official high-definition 4K wallpapers optimized for smartphone home and lock screens.' %>
+      </p>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       MAIN DOWNLOAD CONTENT GRID (SPACIOUS & WIDE LAYOUT)
+       ============================================== -->
+  <main class="flex-grow max-w-[1700px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+    <!-- Top Utility Bar: Clean Breadcrumbs & Search Bar -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <!-- Breadcrumb Navigation in English -->
+      <nav aria-label="Breadcrumb" class="inline-flex items-center gap-1.5 text-xs text-gray-500 font-semibold">
+        <a href="/" class="hover:text-primary transition flex items-center gap-1">
+          <i class="fa-solid fa-house text-[10px]"></i>
+          <span>Home</span>
+        </a>
+        <span>›</span>
+        <span>Downloads</span>
+        <span>›</span>
+        <span class="text-primary font-bold">
+          <%= currentCategory === 'leaders-photo' ? 'Leaders Photo' :
+              currentCategory === 'infographics-banner' ? 'Infographics & Banner' :
+              currentCategory === 'quotes' ? 'Quotes' : 'Mobile Wallpaper' %>
+        </span>
+      </nav>
+
+      <!-- Search Input in English -->
+      <form action="/download/<%= currentCategory %>" method="GET" class="w-full sm:w-80 relative">
+        <div class="relative flex items-center">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-gray-400 text-xs pointer-events-none"></i>
+          <input 
+            type="text" 
+            name="q" 
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+            placeholder="Search by title or author..." 
+            class="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent shadow-sm transition"
+          >
+          <% if (typeof searchQuery !== 'undefined' && searchQuery) { %>
+            <a href="/download/<%= currentCategory %>" class="absolute right-3 text-gray-400 hover:text-gray-700 text-xs" title="Clear filter">
+              <i class="fa-solid fa-xmark"></i>
+            </a>
+          <% } %>
+        </div>
+      </form>
+    </div>
+
+    <!-- Active Search Filter Pill in English -->
+    <% if (typeof searchQuery !== 'undefined' && searchQuery) { %>
+      <div class="mb-6 flex items-center justify-between bg-amber-50 border border-amber-200 text-amber-900 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-sm">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-magnifying-glass text-amber-600"></i>
+          <span>Results for "<%= searchQuery %>" (<%= items.length %> found)</span>
+        </div>
+        <a href="/download/<%= currentCategory %>" class="text-amber-800 hover:text-amber-950 font-bold underline">
+          Clear Filter
+        </a>
+      </div>
+    <% } %>
+
+    <!-- Cards Grid -->
+    <% if (items && items.length > 0) { %>
+
+      <!-- Dynamic Grid based on Category across Wide Spacious Layout -->
+      <div 
+        id="downloadGrid"
+        class="grid <%= 
+          currentCategory === 'mobile-wallpaper' 
+            ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-7' 
+            : currentCategory === 'leaders-photo'
+              ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6'
+              : currentCategory === 'infographics-banner'
+                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
+                : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'
+        %>"
+      >
+        <% items.forEach(function(item, index) { %>
+          <% const isInitialVisible = index < 12; %>
+          
+          <div 
+            class="dl-card-item bg-white rounded-2xl border border-gray-200/90 shadow-sm overflow-hidden flex flex-col group <%= currentCategory === 'mobile-wallpaper' ? 'max-w-[340px] w-full mx-auto' : '' %> <%= !isInitialVisible ? 'dl-extra-card hidden' : '' %>"
+            data-index="<%= index %>"
+          >
+            
+            <!-- Image Area with Click to Preview Lightbox -->
+            <div 
+              class="relative overflow-hidden bg-slate-950 cursor-pointer <%= 
+                item.category === 'mobile-wallpaper' 
+                  ? 'aspect-[9/16] max-h-[480px] sm:max-h-[500px]' 
+                  : item.category === 'leaders-photo'
+                    ? 'aspect-[4/5]'
+                    : item.category === 'infographics-banner'
+                      ? 'aspect-[16/10]'
+                      : 'aspect-square'
+              %> flex items-center justify-center"
+              onclick="openWebLightbox('<%= item.imageUrl %>', '<%= item.title.replace(/'/g, "\\'") %>', '<%= item._id %>', '<%= item.dimensions || 'HD' %>')"
+              title="Click to preview"
+            >
+              <!-- Exact Original High-Res Asset Image -->
+              <img 
+                src="<%= item.imageUrl %>" 
+                alt="<%= item.title %>" 
+                loading="<%= index < 12 ? 'eager' : 'lazy' %>" 
+                class="w-full h-full <%= item.category === 'mobile-wallpaper' || item.category === 'leaders-photo' ? 'object-cover' : 'object-contain' %> transition-transform duration-500 group-hover:scale-105"
+                onerror="this.src='/images/vip-logo.svg'"
+              >
+
+              <% if (item.category === 'mobile-wallpaper') { %>
+                <!-- Subtle Badge on Wallpaper: 9:16 HD Phone Format -->
+                <span class="absolute top-2.5 right-2.5 bg-black/60 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/15 flex items-center gap-1 shadow-sm pointer-events-none">
+                  <i class="fa-solid fa-mobile-screen text-[9px]"></i> 9:16
+                </span>
+              <% } %>
+
+              <!-- Subtle Zoom Icon on Hover -->
+              <div class="absolute inset-0 bg-primary-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                <span class="w-10 h-10 rounded-full bg-white/90 text-primary flex items-center justify-center text-sm shadow-lg">
+                  <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Card Footer: Title, Author & Attractive Download Button -->
+            <div class="p-3.5 sm:p-4 flex flex-col justify-between flex-grow bg-white">
+              
+              <!-- Title -->
+              <div class="mb-3">
+                <h3 class="text-xs sm:text-sm font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1 leading-snug" title="<%= item.title %>">
+                  <%= item.title %>
+                </h3>
+                <% if (item.author) { %>
+                  <p class="text-[11px] text-gray-500 line-clamp-1 mt-0.5 font-medium">
+                    <i class="fa-solid fa-user-tag text-[9px] text-primary/70 mr-1"></i><%= item.author %>
+                  </p>
+                <% } %>
+              </div>
+
+              <!-- Compact, Attractive Download Button in Pure English -->
+              <a 
+                href="/download/file/<%= item._id %>" 
+                onclick="triggerDownloadTrack('<%= item._id %>')"
+                class="w-full bg-primary hover:bg-primary-700 active:scale-95 text-white font-bold text-xs sm:text-sm py-2 sm:py-2.5 px-3 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5 select-none"
+              >
+                <i class="fa-solid fa-cloud-arrow-down text-amber-300"></i>
+                <span>Download</span>
+              </a>
+
+            </div>
+
+          </div>
+        <% }); %>
+      </div>
+
+      <!-- "View More" Button (Shown when items > 12) in English with Dynamic Counter -->
+      <% if (items && items.length > 12) { %>
+        <% const initialRemaining = items.length - 12; %>
+        <div class="mt-10 sm:mt-12 text-center" id="viewMoreContainer">
+          <button 
+            type="button" 
+            id="viewMoreBtn"
+            onclick="revealMoreCards()"
+            class="inline-flex items-center gap-2 bg-white hover:bg-blue-50 text-primary border-2 border-primary hover:border-primary-700 font-extrabold px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all text-xs sm:text-sm cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
+          >
+            <i class="fa-solid fa-chevron-down text-primary" id="viewMoreIcon"></i>
+            <span id="viewMoreText">View More (<span id="remainingCount"><%= initialRemaining %></span> <span id="moreText">more available</span>)</span>
+          </button>
+        </div>
+      <% } %>
+
+    <% } else { %>
+      <!-- Empty State in English -->
+      <div class="py-16 text-center">
+        <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+          <i class="fa-solid fa-folder-open"></i>
+        </div>
+        <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-1">No items found in this section</h3>
+        <p class="text-xs sm:text-sm text-gray-500 mb-4">Please select another category or refine your search query.</p>
+      </div>
+    <% } %>
+
+  </main>
+
+  <!-- ==============================================
+       LIGHTBOX PREVIEW MODAL (IN ENGLISH)
+       ============================================== -->
+  <div id="webLightbox" class="lightbox-backdrop" onclick="closeWebLightbox()">
+    <button type="button" class="absolute top-5 right-5 text-white/80 hover:text-white text-3xl font-bold p-2 z-20 focus:outline-none" aria-label="Close">
+      &times;
+    </button>
+    <div class="relative max-w-4xl max-h-[85vh] flex flex-col items-center" onclick="event.stopPropagation()">
+      <img id="lightboxImg" src="" alt="Full Resolution Image" class="lightbox-preview-img mb-3">
+      <div class="flex items-center justify-between w-full max-w-xl bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl text-white text-xs sm:text-sm font-semibold border border-white/20">
+        <span id="lightboxTitle" class="truncate pr-3">VIP Download Asset</span>
+        <a id="lightboxDlBtn" href="#" class="bg-primary hover:bg-primary-700 text-white font-bold px-4 py-1.5 rounded-lg flex items-center gap-1.5 text-xs whitespace-nowrap shadow-md">
+          <i class="fa-solid fa-cloud-arrow-down text-amber-300"></i>
+          <span>Download</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       SITE TOAST NOTIFICATION (IN ENGLISH)
+       ============================================== -->
+  <div id="siteToast" class="site-toast">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+    <span id="siteToastMsg">File download started...</span>
+  </div>
+
+  <!-- Shared Footer -->
+  <%- include('../common/footer') %>
+
+  <!-- Page Scripts -->
+  <script>
+    // View More Functionality (Dynamically updates count and reveals remaining cards)
+    function revealMoreCards() {
+      const hiddenCards = document.querySelectorAll('.dl-extra-card.hidden');
+      if (hiddenCards.length === 0) {
+        const viewMoreContainer = document.getElementById('viewMoreContainer');
+        if (viewMoreContainer) viewMoreContainer.style.display = 'none';
+        return;
+      }
+
+      // Reveal next batch of cards (up to 12 cards per click)
+      let revealedInThisBatch = 0;
+      hiddenCards.forEach(function(card) {
+        if (revealedInThisBatch < 12) {
+          card.classList.remove('hidden');
+          card.classList.add('fade-in-card');
+          revealedInThisBatch++;
+        }
+      });
+
+      // Calculate remaining hidden cards directly from DOM
+      const remainingNow = document.querySelectorAll('.dl-extra-card.hidden').length;
+      const countSpan = document.getElementById('remainingCount');
+      const moreTextSpan = document.getElementById('moreText');
+      if (countSpan) {
+        countSpan.textContent = remainingNow;
+      }
+      if (moreTextSpan) {
+        moreTextSpan.textContent = remainingNow === 1 ? 'more available' : 'more available';
+      }
+
+      // Hide button when all cards are visible
+      if (remainingNow === 0) {
+        const viewMoreContainer = document.getElementById('viewMoreContainer');
+        if (viewMoreContainer) {
+          viewMoreContainer.style.display = 'none';
+        }
+      }
+    }
+
+    // Lightbox Controls
+    function openWebLightbox(url, title, id, dim) {
+      const modal = document.getElementById('webLightbox');
+      const img = document.getElementById('lightboxImg');
+      const titleSpan = document.getElementById('lightboxTitle');
+      const dlBtn = document.getElementById('lightboxDlBtn');
+
+      if (!modal || !img) return;
+
+      img.src = url;
+      if (titleSpan) titleSpan.textContent = title || 'VIP Download Asset';
+      if (dlBtn) {
+        dlBtn.href = '/download/file/' + id;
+        dlBtn.onclick = function() {
+          triggerDownloadTrack(id);
+        };
+      }
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeWebLightbox() {
+      const modal = document.getElementById('webLightbox');
+      if (modal) modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Trigger Download Track & Show Friendly Toast
+    function triggerDownloadTrack(id) {
+      showToast('File download started...');
+      if (id) {
+        fetch('/api/download/track/' + id, { method: 'POST' }).catch(function() {});
+      }
+    }
+
+    // Simple Toast Trigger
+    function showToast(msg) {
+      const toast = document.getElementById('siteToast');
+      const msgSpan = document.getElementById('siteToastMsg');
+      if (!toast) return;
+
+      if (msgSpan) msgSpan.textContent = msg || 'File download started...';
+      toast.classList.add('show');
+      setTimeout(function() {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    // ESC Key Closes Lightbox
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeWebLightbox();
+    });
+  </script>
+
+</body>
+
+</html>

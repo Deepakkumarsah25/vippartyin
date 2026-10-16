@@ -4,63 +4,9 @@
      With Bilingual Language Switcher (Hindi & English)
      ============================================== -->
 
-<!-- 1. Top News / Announcement Ticker (Sticky Ticker) -->
-<div
-  class="sticky-ticker bg-primary-900 text-white text-xs sm:text-sm font-semibold flex items-center h-10 overflow-hidden shadow-sm select-none border-b border-primary-700">
-
-  <!-- Left Announcement Badge -->
-  <div
-    class="bg-primary-950 text-white font-bold px-3 sm:px-4 h-full flex items-center z-20 shadow-[4px_0_12px_rgba(0,0,0,0.25)] whitespace-nowrap relative select-none">
-    <i class="fa-solid fa-bullhorn mr-2 text-amber-400 animate-pulse"></i>
-    <span data-i18n="ticker.upcoming">आगामी कार्यक्रम</span>
-  </div>
-
-  <!-- Marquee Scroll -->
-  <div class="flex-grow overflow-hidden relative h-full flex items-center bg-primary-800">
-    <div class="animate-marquee-custom whitespace-nowrap flex items-center gap-16 pl-4">
-      <a href="/news"
-        class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
-        <span data-i18n="ticker.t1">🎯 विशाल निषाद आरक्षण महासम्मेलन | 📅 दिनांक: 15 नवम्बर 2026 | 📍 स्थान: गांधी
-          मैदान, पटना ➔ विवरण देखने के लिए यहाँ क्लिक करें</span>
-      </a>
-      <a href="/journey-of-mukesh-sahani"
-        class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
-        <span data-i18n="ticker.t2">★ 'सन ऑफ मल्लाह' श्री मुकेश सहनी का जनसंवाद कार्यक्रम | 📍 मुजफ्फरपुर | ➔ पार्टी से
-          जुड़ने के लिए ऑनलाइन आवेदन करें</span>
-      </a>
-      <a href="/scholarship"
-        class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
-        <span data-i18n="ticker.t3">🎓 अमर शहीद जुब्बा सहनी मेधा छात्रवृत्ति के लिए ऑनलाइन आवेदन शुरू ➔ अभी आवेदन
-          करें</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- Right Actions: Helpline & Language Switcher -->
-  <div
-    class="hidden lg:flex items-center gap-3 px-3 sm:px-4 h-full bg-primary-950 text-xs font-medium text-blue-200 whitespace-nowrap border-l border-primary-700">
-    <a href="tel:06122506830" class="hover:text-white flex items-center gap-1.5 transition-colors">
-      <i class="fa-solid fa-phone-volume text-amber-400"></i>
-      <span data-i18n="ticker.helpline">हेल्पलाइन: 0612-2506830</span>
-    </a>
-
-    <!-- Top Language Switcher Toggle -->
-    <div class="flex items-center bg-primary-900/90 rounded-full p-0.5 border border-primary-700/80 shadow-inner">
-      <button type="button" class="lang-btn active text-[11px] font-bold px-2 py-0.5 rounded-full transition-all"
-        data-lang="hi">
-        🇮🇳 हिंदी
-      </button>
-      <button type="button" class="lang-btn text-[11px] font-bold px-2 py-0.5 rounded-full transition-all"
-        data-lang="en">
-        English
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- 2. Main Navigation Bar (Sticky Nav) -->
+<!-- 2. Main Navigation Bar (Clean Sticky Nav) -->
 <nav
-  class="sticky z-50 bg-white shadow-sm border-b border-gray-100 transition-all duration-300 hover:shadow-md sticky-nav-offset"
+  class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100 transition-all duration-300 hover:shadow-md"
   id="vipNavbar">
   <div class="max-w-[1850px] mx-auto px-3 sm:px-6 xl:px-8">
     <div class="flex justify-between items-center h-20">
@@ -202,7 +148,7 @@
 
         <!-- 5. Download Dropdown -->
         <div class="relative group">
-          <a href="/download"
+          <a href="/download/leaders-photo"
             class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'download' ? 'text-primary' : '' %>">
             <span data-i18n="nav.download">डाउनलोड</span>
             <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
@@ -289,7 +235,7 @@
       <div class="hidden xl:flex flex-shrink-0 items-center space-x-2.5 2xl:space-x-3">
 
         <!-- Language Switcher Pill (Bilingual) -->
-        <!-- <div class="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 mr-1 shadow-inner">
+        <div class="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 mr-1 shadow-inner">
           <button type="button"
             class="lang-btn active text-[12px] 2xl:text-[13px] font-bold px-2.5 py-1 rounded-full transition-all"
             data-lang="hi">
@@ -300,7 +246,7 @@
             data-lang="en">
             English
           </button>
-        </div> -->
+        </div>
 
         <!-- Search Icon Button -->
         <button type="button" id="searchOpenBtn" aria-label="खोजें"
