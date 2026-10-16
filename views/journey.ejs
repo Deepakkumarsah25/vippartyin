@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party' %></title>
+  <meta name="title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party' %>">
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) के संस्थापक एवं राष्ट्रीय अध्यक्ष 'सन ऑफ मल्लाह' श्री मुकेश सहनी का प्रेरणादायी जीवन सफर, बॉलीवुड से समाजसेवा और बिहार में राजनीतिक क्रांति तक।">
+  <meta name="keywords" content="Mukesh Sahani, Son of Mallah, Journey of Mukesh Sahani, VIP Party, Nishad Vikas Sangh, Mukesh Film Works, Bihar Politics">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://vipparty.in/journey-of-mukesh-sahani">
+  <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party' %>">
+  <meta property="og:description" content="गरीबी और अभावों से निकलकर बॉलीवुड में व्यावसायिक सफलता और फिर वंचितों के अधिकारों के लिए समर्पित जननायक का प्रेरक जीवन।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans Devanagari & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- ========================================================
+       HERO BANNER & BREADCRUMBS
+       ======================================================== -->
+  <section class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 text-white py-12 sm:py-16 relative overflow-hidden border-b border-primary-700/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" class="mb-4">
+        <ol class="flex items-center space-x-2 text-xs sm:text-sm text-blue-200">
+          <li>
+            <a href="/" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-house text-[11px]"></i>
+              <span data-i18n="nav.home">होम</span>
+            </a>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-blue-200">
+            <span data-i18n="nav.about">हमारे बारे में</span>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-amber-300 font-bold" aria-current="page">
+            <span data-i18n="nav.journey_mukesh">मुकेश सहनी का सफर</span>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Badge & Title -->
+      <div class="max-w-4xl">
+        <span class="inline-block bg-amber-400 text-gray-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+          ★ 'सन ऑफ मल्लाह' श्री मुकेश सहनी • जीवन परिचय एवं राजनीतिक सफर
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
+          <%= (typeof page !== 'undefined' && page && page.title) ? page.title : 'मुकेश सहनी जी का जीवन परिचय एवं राजनीतिक सफर' %>
+        </h1>
+        <p class="text-blue-100 text-sm sm:text-base lg:text-lg max-w-2xl leading-relaxed">
+          गरीबी और अभावों से निकलकर बॉलीवुड में व्यावसायिक सफलता और फिर अपने समाज के स्वाभिमान व आरक्षण के लिए ऐतिहासिक संघर्ष की अमर गाथा।
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       LEADER FEATURED SHOWCASE & QUICK FACTS CARD
+       ======================================================== -->
+  <div class="relative z-20 -mt-6 sm:-mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sm:p-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Left: Leader Portrait (First section image if available) -->
+        <% 
+          let heroImage = '';
+          if (typeof page !== 'undefined' && page && page.sections && page.sections.length > 0) {
+            const firstImgSec = page.sections.find(s => s.image && s.image.trim() !== '');
+            if (firstImgSec) heroImage = firstImgSec.image;
+          }
+        %>
+        <% if (heroImage) { %>
+          <div class="lg:col-span-4">
+            <div class="relative rounded-2xl overflow-hidden shadow-md border-2 border-primary-100 aspect-[3/4] sm:aspect-[4/5] bg-slate-900 group">
+              <img 
+                src="<%= heroImage %>" 
+                alt="श्री मुकेश सहनी (सन ऑफ मल्लाह)" 
+                class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                loading="eager"
+              />
+              <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 sm:p-5 text-white">
+                <p class="text-xs font-bold text-amber-400 tracking-wide uppercase">संस्थापक एवं राष्ट्रीय अध्यक्ष</p>
+                <h3 class="text-lg sm:text-xl font-black">श्री मुकेश सहनी</h3>
+                <p class="text-xs text-blue-200">'सन ऑफ मल्लाह'</p>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Right: Leader Bio Highlights -->
+        <div class="<%= heroImage ? 'lg:col-span-8' : 'lg:col-span-12' %>">
+          
+          <div class="inline-flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wide mb-3 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+            <i class="fa-solid fa-star text-amber-500"></i>
+            <span>संघर्ष, संकल्प और स्वाभिमान का प्रतीक</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 tracking-tight leading-snug">
+            "अभावों से निकलकर समाज को उसका अधिकार दिलाना ही जीवन का ध्येय है"
+          </h2>
+
+          <p class="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">
+            श्री मुकेश सहनी की जीवन यात्रा आर्थिक कठिनाइयों से जूझते हुए व्यावसायिक ऊंचाइयां हासिल करने और फिर अपने निषाद, मल्लाह तथा समस्त शोषित-वंचित समाज की राजनीतिक व सामाजिक भागीदारी सुनिश्चित करने की अद्भुत मिसाल है।
+          </p>
+
+          <!-- Quick Fact Pills -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100 text-center">
+              <span class="text-[11px] font-bold text-gray-400 uppercase block">जन्म तिथि</span>
+              <p class="text-sm font-extrabold text-gray-900 mt-0.5">31 मार्च 1981</p>
+              <span class="text-[10px] text-primary font-semibold">सुपौल, बिहार</span>
+            </div>
+
+            <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100 text-center">
+              <span class="text-[11px] font-bold text-gray-400 uppercase block">मुंबई का सफर</span>
+              <p class="text-sm font-extrabold text-gray-900 mt-0.5">वर्ष 1999</p>
+              <span class="text-[10px] text-gray-500 font-semibold">18 वर्ष की आयु</span>
+            </div>
+
+            <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100 text-center">
+              <span class="text-[11px] font-bold text-gray-400 uppercase block">निषाद विकास संघ</span>
+              <p class="text-sm font-extrabold text-gray-900 mt-0.5">वर्ष 2016</p>
+              <span class="text-[10px] text-amber-600 font-semibold">सामाजिक क्रांति</span>
+            </div>
+
+            <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100 text-center">
+              <span class="text-[11px] font-bold text-gray-400 uppercase block">VIP पार्टी गठन</span>
+              <p class="text-sm font-extrabold text-gray-900 mt-0.5">4 नवम्बर 2018</p>
+              <span class="text-[10px] text-emerald-600 font-semibold">गांधी मैदान, पटना</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       4 MAJOR CHAPTERS OF LIFE (OVERVIEW STRIP)
+       ======================================================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      
+      <div class="bg-blue-50/70 p-5 rounded-2xl border border-blue-100 flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-sm">
+          01
+        </div>
+        <div>
+          <h4 class="font-black text-gray-900 text-sm mb-1">प्रारंभिक जीवन एवं संघर्ष</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">सुपौल के गरीब परिवार में जन्म और 1999 में मुंबई की ओर संघर्षपूर्ण प्रस्थान।</p>
+        </div>
+      </div>
+
+      <div class="bg-amber-50/70 p-5 rounded-2xl border border-amber-100 flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-sm">
+          02
+        </div>
+        <div>
+          <h4 class="font-black text-gray-900 text-sm mb-1">फिल्म जगत में सफलता</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">देवदास, बजरंगी भाईजान से लेकर मुकेश फिल्म वर्क्स तक व्यावसायिक कीर्तिमान।</p>
+        </div>
+      </div>
+
+      <div class="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-100 flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-sm">
+          03
+        </div>
+        <div>
+          <h4 class="font-black text-gray-900 text-sm mb-1">समाजसेवा व आरक्षण आंदोलन</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">निषाद विकास संघ की स्थापना, रथ यात्राएं, महाधरने और आरक्षण क्रांति।</p>
+        </div>
+      </div>
+
+      <div class="bg-purple-50/70 p-5 rounded-2xl border border-purple-100 flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-sm">
+          04
+        </div>
+        <div>
+          <h4 class="font-black text-gray-900 text-sm mb-1">विकासशील इंसान पार्टी</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">4 नवंबर 2018 को VIP की स्थापना और बिहार विधानसभा व संसद तक जन-आवाज।</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       CHRONOLOGICAL TIMELINE OF JOURNEY (FROM CMS SECTIONS)
+       ======================================================== -->
+  <% if (typeof page !== 'undefined' && page && page.sections && page.sections.length > 0) { %>
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="inline-block bg-primary-50 text-primary font-bold text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-2">
+          ऐतिहासिक जीवन प्रवाह
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight">
+          जीवन परिचय एवं महत्वपूर्ण पड़ाव
+        </h2>
+        <div class="w-16 h-1.5 bg-amber-400 mx-auto mt-3 rounded-full"></div>
+      </div>
+
+      <!-- Vertical Timeline Wrapper -->
+      <div class="relative border-l-2 border-primary-200 ml-4 sm:ml-8 md:ml-12 pl-6 sm:pl-10 space-y-10 sm:space-y-12">
+        
+        <% 
+          // Sort sections by order
+          const sortedSections = [...page.sections].sort((a, b) => (a.order || 0) - (b.order || 0));
+          
+          let stepNumber = 0;
+          sortedSections.forEach((sec, idx) => {
+            const hasHeading = Boolean(sec.heading && sec.heading.trim() !== '');
+            const hasDesc = Boolean(sec.description && sec.description.trim() !== '');
+            const hasImage = Boolean(sec.image && sec.image.trim() !== '');
+
+            // Skip the first standalone image if already used as leader portrait
+            if (idx === 0 && hasImage && !hasHeading && !hasDesc) {
+              return;
+            }
+
+            stepNumber++;
+        %>
+
+          <div class="relative group">
+            
+            <!-- Timeline Pin / Number Dot -->
+            <div class="absolute -left-[37px] sm:-left-[53px] top-1.5 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border-2 border-primary text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 flex items-center justify-center font-black text-xs sm:text-sm shadow-md">
+              <%= String(stepNumber).padStart(2, '0') %>
+            </div>
+
+            <!-- Milestone Card -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
+              
+              <% if (hasHeading) { %>
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <h3 class="text-lg sm:text-2xl font-black text-gray-900 tracking-tight leading-snug">
+                    <%= sec.heading %>
+                  </h3>
+                </div>
+              <% } %>
+
+              <% if (hasImage) { %>
+                <div class="rounded-xl overflow-hidden shadow-sm my-4 aspect-[16/9] sm:aspect-[21/9] bg-slate-900">
+                  <img 
+                    src="<%= sec.image %>" 
+                    alt="<%= sec.heading || ('मुकेश सहनी का जीवन सफर - ' + stepNumber) %>" 
+                    class="w-full h-full object-cover object-center"
+                    loading="lazy"
+                  />
+                </div>
+              <% } %>
+
+              <% if (hasDesc) { %>
+                <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+                  <% sec.description.split(/\r?\n/).filter(line => line.trim().length > 0).forEach(paragraph => { %>
+                    <p class="leading-relaxed"><%= paragraph %></p>
+                  <% }) %>
+                </div>
+              <% } %>
+
+            </div>
+
+          </div>
+
+        <% }) %>
+
+      </div>
+
+    </section>
+  <% } %>
+
+  <!-- ========================================================
+       INSPIRATIONAL QUOTE BLOCK
+       ======================================================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+    <div class="bg-gradient-to-r from-primary-900 to-primary-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden text-center">
+      
+      <div class="max-w-3xl mx-auto relative z-10">
+        <i class="fa-solid fa-quote-left text-3xl sm:text-4xl text-amber-400 mb-4 inline-block"></i>
+        <blockquote class="text-lg sm:text-2xl font-bold leading-relaxed mb-4">
+          "हमने राजनीति सत्ता सुख के लिए नहीं, बल्कि समाज के अंतिम व्यक्ति के सम्मान, अधिकार और स्वाभिमान को वापस दिलाने के लिए शुरू की है।"
+        </blockquote>
+        <p class="text-amber-300 font-black text-sm tracking-wider uppercase">— श्री मुकेश सहनी (सन ऑफ मल्लाह)</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Bilingual Translation & VIP Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+
+</body>
+</html>

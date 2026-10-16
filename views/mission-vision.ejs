@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'मिशन एवं विज़न | विकासशील इंसान पार्टी (VIP)' %></title>
+  <meta name="title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'मिशन एवं विज़न | विकासशील इंसान पार्टी (VIP)' %>">
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) का मिशन एवं विज़न: सामाजिक न्याय, समानता, गुणवत्तापूर्ण शिक्षा, उत्तम स्वास्थ्य और आर्थिक स्वावलंबन का रोडमैप।">
+  <meta name="keywords" content="VIP Party Mission, VIP Party Vision, Vikassheel Insaan Party, Mukesh Sahani, Bihar Development, Nishad Empowerment, Social Justice">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vipparty.in/mission-vision">
+  <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'मिशन एवं विज़न | विकासशील इंसान पार्टी (VIP)' %>">
+  <meta property="og:description" content="विकासशील इंसान पार्टी (VIP) का विज़न एवं मिशन: एक शिक्षित, विकसित और स्वाभिमानी समाज का निर्माण।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans Devanagari & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- ========================================================
+       HERO BANNER & BREADCRUMBS
+       ======================================================== -->
+  <section class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 text-white py-12 sm:py-16 relative overflow-hidden border-b border-primary-700/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" class="mb-4">
+        <ol class="flex items-center space-x-2 text-xs sm:text-sm text-blue-200">
+          <li>
+            <a href="/" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-house text-[11px]"></i>
+              <span data-i18n="nav.home">होम</span>
+            </a>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-blue-200">
+            <span data-i18n="nav.about">हमारे बारे में</span>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-amber-300 font-bold" aria-current="page">
+            <span data-i18n="nav.mission_vision">मिशन एवं विज़न</span>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Badge & Title -->
+      <div class="max-w-4xl">
+        <span class="inline-block bg-amber-400 text-gray-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+          विकासशील इंसान पार्टी • हमारा संकल्प और विज़न
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
+          हमारा मिशन एवं विज़न (Mission & Vision)
+        </h1>
+        <p class="text-blue-100 text-sm sm:text-base lg:text-lg max-w-2xl leading-relaxed">
+          सामाजिक समरसता, अम्बेडकरवाद, समान अवसर और बिहार के हर वर्ग के सर्वांगीण विकास का स्पष्ट रोडमैप।
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       QUICK DUAL CARDS (VISION & MISSION OVERVIEW)
+       ======================================================== -->
+  <div class="relative z-20 -mt-6 sm:-mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Vision Quick Card -->
+      <a href="#vision-section" class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 flex items-center gap-5 hover:border-primary transition-all duration-300 group">
+        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-primary flex items-center justify-center text-2xl font-black group-hover:bg-primary group-hover:text-white transition-colors duration-300 flex-shrink-0">
+          <i class="fa-solid fa-eye"></i>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-amber-500 uppercase tracking-wider block">हमारा दृष्टिकोण</span>
+          <h3 class="text-xl font-black text-gray-900 group-hover:text-primary transition-colors">Our Vision</h3>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1">समतामूलक समाज, अम्बेडकरवाद और सर्वांगीण सशक्तिकरण।</p>
+        </div>
+      </a>
+
+      <!-- Mission Quick Card -->
+      <a href="#mission-section" class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 flex items-center gap-5 hover:border-primary transition-all duration-300 group">
+        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-black group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 flex-shrink-0">
+          <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-primary uppercase tracking-wider block">हमारी कार्ययोजना</span>
+          <h3 class="text-xl font-black text-gray-900 group-hover:text-primary transition-colors">Our Mission</h3>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1">शिक्षा, स्वास्थ्य, रोजगार व कानूनी सुधार के 6 बुनियादी संकल्प।</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       SECTION 1: OUR VISION (विज़न विवरण)
+       ======================================================== -->
+  <% 
+    // Extract sections dynamically from CMS
+    const allSections = (typeof page !== 'undefined' && page && page.sections) ? page.sections : [];
+    
+    // Find Vision image and Vision text
+    const visionImageSec = allSections.find(s => s.image && s.image.trim() !== '' && (!s.heading || s.heading.toLowerCase().includes('vision')));
+    const visionTextSec = allSections.find(s => s.description && s.description.includes('सामाजिक न्याय, सामाजिक समरसता'));
+    
+    // Find Mission image
+    const missionImageSec = allSections.find(s => (s.heading && s.heading.toLowerCase().includes('mission')) || (s.image && s.image.trim() !== '' && s !== visionImageSec));
+    
+    // Find Mission points (sections with description starting with numbers or general points)
+    const missionPoints = allSections.filter(s => s !== visionTextSec && s.description && s.description.trim() !== '');
+  %>
+
+  <section id="vision-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 scroll-mt-24">
+    
+    <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100">
+      
+      <div class="inline-flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wide mb-3 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+        <i class="fa-solid fa-eye text-primary"></i>
+        <span>हमारा दीर्घकालिक दृष्टिकोण</span>
+      </div>
+
+      <h2 class="text-2xl sm:text-4xl font-black text-gray-900 mb-6 tracking-tight">
+        हमारा विज़न (Our Vision)
+      </h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Vision Graphic/Image -->
+        <% if (visionImageSec && visionImageSec.image) { %>
+          <div class="lg:col-span-5">
+            <div class="rounded-2xl overflow-hidden shadow-md border border-gray-100 bg-slate-100 aspect-[4/3] group">
+              <img 
+                src="<%= visionImageSec.image %>" 
+                alt="VIP Party Vision" 
+                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Vision Narrative Text -->
+        <div class="<%= (visionImageSec && visionImageSec.image) ? 'lg:col-span-7' : 'lg:col-span-12' %>">
+          
+          <% if (visionTextSec && visionTextSec.description) { %>
+            <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-4">
+              <% visionTextSec.description.split(/\r?\n/).filter(line => line.trim().length > 0).forEach((paragraph, idx) => { %>
+                
+                <% if (paragraph.includes('यही देशवासियों के प्रति प्रतिबद्धता है') || paragraph.includes('प्रतिबद्ध')) { %>
+                  <!-- Commitment Highlight Box -->
+                  <div class="bg-blue-50/70 p-4 rounded-xl border-l-4 border-primary text-primary-900 font-semibold my-2">
+                    <p><%= paragraph %></p>
+                  </div>
+                <% } else { %>
+                  <p class="leading-relaxed"><%= paragraph %></p>
+                <% } %>
+
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p class="text-gray-600 text-base leading-relaxed">
+              समाज में सामाजिक न्याय, सामाजिक समरसता, पारस्परिक सहयोग की भावना, एक समान शिक्षा और चिकित्सा की व्यवस्था और भारतीय संविधान के अनुसार आरक्षण व्यवस्था का निर्माण करना पार्टी का विज़न है।
+            </p>
+          <% } %>
+
+          <!-- Core Vision Focus Tags -->
+          <div class="flex flex-wrap gap-2 mt-6 pt-6 border-t border-gray-100">
+            <span class="bg-gray-100 text-gray-700 font-bold text-xs px-3 py-1 rounded-lg"># सामाजिक न्याय</span>
+            <span class="bg-gray-100 text-gray-700 font-bold text-xs px-3 py-1 rounded-lg"># अम्बेडकरवाद</span>
+            <span class="bg-gray-100 text-gray-700 font-bold text-xs px-3 py-1 rounded-lg"># समान शिक्षा व चिकित्सा</span>
+            <span class="bg-gray-100 text-gray-700 font-bold text-xs px-3 py-1 rounded-lg"># निषाद आरक्षण</span>
+            <span class="bg-gray-100 text-gray-700 font-bold text-xs px-3 py-1 rounded-lg"># वैज्ञानिक दृष्टिकोण</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================================================
+       SECTION 2: OUR MISSION (मिशन एवं कार्ययोजना)
+       ======================================================== -->
+  <section id="mission-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 scroll-mt-24">
+    
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="inline-block bg-amber-400 text-gray-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-2">
+        कार्ययोजना एवं संकल्प
+      </span>
+      <h2 class="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight">
+        हमारा मिशन (Our Mission)
+      </h2>
+      <p class="mt-2 text-gray-600 text-sm sm:text-base">
+        बिहार के पुनर्निर्माण और जन-कल्याण के लिए हमारे ठोस विकासात्मक लक्ष्य।
+      </p>
+      <div class="w-16 h-1 bg-primary mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <!-- Optional Mission Image Banner -->
+    <% if (missionImageSec && missionImageSec.image) { %>
+      <div class="rounded-2xl overflow-hidden shadow-sm mb-10 max-w-4xl mx-auto aspect-[16/9] sm:aspect-[21/9] bg-slate-900">
+        <img 
+          src="<%= missionImageSec.image %>" 
+          alt="VIP Party Mission Banner" 
+          class="w-full h-full object-cover object-center"
+          loading="lazy"
+        />
+      </div>
+    <% } %>
+
+    <!-- Mission Points Grid (Dynamic from CMS) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <% 
+        const icons = [
+          'fa-graduation-cap', 
+          'fa-road', 
+          'fa-heart-pulse', 
+          'fa-scale-balanced', 
+          'fa-industry', 
+          'fa-person-digging', 
+          'fa-shield-halved', 
+          'fa-handshake'
+        ];
+
+        missionPoints.forEach((point, index) => { 
+          const iconClass = icons[index % icons.length];
+          let cleanText = point.description.replace(/^\d+[\.\)]\s*/, '').trim();
+      %>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary/40 transition-all flex flex-col justify-between group">
+          
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center text-xl font-bold group-hover:bg-primary group-hover:text-white transition-colors">
+                <i class="fa-solid <%= iconClass %>"></i>
+              </div>
+              <span class="text-xs font-black text-gray-400 group-hover:text-amber-500 transition-colors">
+                बिंदु #<%= index + 1 %>
+              </span>
+            </div>
+
+            <p class="text-gray-800 text-sm sm:text-base leading-relaxed font-medium">
+              <%= cleanText %>
+            </p>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-gray-100 flex items-center text-xs font-bold text-primary">
+            <span>प्राथमिक संकल्प</span>
+            <i class="fa-solid fa-check ml-1.5 text-emerald-500"></i>
+          </div>
+
+        </div>
+
+      <% }) %>
+
+    </div>
+
+  </section>
+
+  <!-- ========================================================
+       SECTION 3: 4 FOUNDATIONAL PILLARS OF OUR RESOLVE
+       ======================================================== -->
+  <section class="bg-gray-50 py-14 sm:py-16 border-t border-gray-100 mb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="inline-block bg-primary text-white font-bold text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-2">
+          बुनियादी सिद्धांत
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+          सशक्त समाज के 4 मुख्य आधार
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h4 class="font-bold text-gray-900 mb-1">समान शिक्षा</h4>
+          <p class="text-xs text-gray-600">प्राथमिक से उच्च स्तर तक आधुनिक एवं विश्वस्तरीय गुणवत्तापूर्ण शिक्षा।</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <h4 class="font-bold text-gray-900 mb-1">उत्तम स्वास्थ्य</h4>
+          <p class="text-xs text-gray-600">हर नागरिक को बिना भेदभाव के गुणवत्तापूर्ण और सुलभ चिकित्सा सुविधाएं।</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <h4 class="font-bold text-gray-900 mb-1">उद्योग व रोजगार</h4>
+          <p class="text-xs text-gray-600">क्षेत्रवार कच्चे माल के अनुसार उद्योग और युवाओं को स्थानीय रोजगार।</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </div>
+          <h4 class="font-bold text-gray-900 mb-1">त्वरित न्याय</h4>
+          <p class="text-xs text-gray-600">भूमि एवं आपराधिक मुकदमों का एक वर्ष के अंदर समयबद्ध निपटारा।</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Bilingual Translation & VIP Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+
+</body>
+</html>

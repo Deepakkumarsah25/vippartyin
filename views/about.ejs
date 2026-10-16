@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'वीआईपी के बारे में | विकासशील इंसान पार्टी (VIP)' %></title>
+  <meta name="title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'वीआईपी के बारे में | विकासशील इंसान पार्टी (VIP)' %>">
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) का आधिकारिक परिचय। 'सन ऑफ मल्लाह' श्री मुकेश सहनी के नेतृत्व में सामाजिक न्याय, आरक्षण, और बिहार के वंचित एवं पिछड़े वर्गों के सर्वांगीण विकास का आंदोलन।">
+  <meta name="keywords" content="VIP Party, Vikassheel Insaan Party, About VIP, Mukesh Sahani, Son of Mallah, Nishad Reservation, Bihar Politics">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vipparty.in/about">
+  <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'वीआईपी के बारे में | विकासशील इंसान पार्टी (VIP)' %>">
+  <meta property="og:description" content="विकासशील इंसान पार्टी (VIP) का आधिकारिक परिचय और सामाजिक न्याय का संघर्ष।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans Devanagari & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured Exactly as in Home & Other Pages -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- ========================================================
+       PAGE HERO BANNER & BREADCRUMBS
+       ======================================================== -->
+  <section class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 text-white py-12 sm:py-16 relative overflow-hidden border-b border-primary-700/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" class="mb-4">
+        <ol class="flex items-center space-x-2 text-xs sm:text-sm text-blue-200">
+          <li>
+            <a href="/" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-house text-[11px]"></i>
+              <span data-i18n="nav.home">होम</span>
+            </a>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-blue-200">
+            <span data-i18n="nav.about">हमारे बारे में</span>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-amber-300 font-bold" aria-current="page">
+            <span data-i18n="nav.about_vip">वीआईपी के बारे में</span>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Badge & Title -->
+      <div class="max-w-4xl">
+        <span class="inline-block bg-amber-400 text-gray-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+          विकासशील इंसान पार्टी • आधिकारिक परिचय
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
+          <%= (typeof page !== 'undefined' && page && page.title) ? page.title : 'Vikassheel Insaan Party (VIP)' %>
+        </h1>
+        <p class="text-blue-100 text-sm sm:text-base lg:text-lg max-w-2xl leading-relaxed">
+          सामाजिक न्याय, समानता, मानवीय स्वाभिमान और बिहार के सर्वांगीण विकास को समर्पित जन-आंदोलन।
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       QUICK HIGHLIGHTS STRIP (4 METRICS)
+       ======================================================== -->
+  <div class="relative z-20 -mt-6 sm:-mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-5 sm:p-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+      
+      <!-- 1. स्थापना -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-flag"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">स्थापना वर्ष</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">4 नवम्बर 2018</p>
+          <span class="text-[10px] text-gray-600 block">गांधी मैदान, पटना</span>
+        </div>
+      </div>
+
+      <!-- 2. संस्थापक -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0 sm:pl-6">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">संस्थापक एवं अध्यक्ष</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">श्री मुकेश सहनी</p>
+          <span class="text-[10px] text-primary font-bold block">'सन ऑफ मल्लाह'</span>
+        </div>
+      </div>
+
+      <!-- 3. विचारधारा -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0 sm:pl-6">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">मूल विचार</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">सामाजिक न्याय व समानता</p>
+          <span class="text-[10px] text-gray-600 block">अम्बेडकरवाद व समरसता</span>
+        </div>
+      </div>
+
+      <!-- 4. प्रमुख लक्ष्य -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0 sm:pl-6">
+        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">प्रमुख लक्ष्य</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">निषाद आरक्षण व अधिकार</p>
+          <span class="text-[10px] text-gray-600 block">वंचित समाज का उत्थान</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       EXECUTIVE INTRODUCTION (CMS INTRO TEXT)
+       ======================================================== -->
+  <% if (typeof page !== 'undefined' && page && page.introText && page.introText.trim() !== '') { %>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
+      <div class="bg-gradient-to-br from-blue-50/70 via-white to-blue-50/40 rounded-3xl p-6 sm:p-10 border border-blue-100 shadow-sm relative overflow-hidden">
+        
+        <div class="max-w-4xl">
+          <div class="inline-flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wide mb-3 bg-white px-3 py-1 rounded-full border border-blue-100">
+            <i class="fa-solid fa-quote-left text-amber-500"></i>
+            <span>पार्टी का ध्येय एवं संकल्प</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 tracking-tight">
+            गरीबों, शोषितों और वंचितों के सम्मान व स्वाभिमान की आवाज
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base sm:leading-relaxed space-y-4">
+            <% page.introText.split(/\r?\n/).filter(line => line.trim().length > 0).forEach(paragraph => { %>
+              <p class="leading-relaxed"><%= paragraph %></p>
+            <% }) %>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  <% } %>
+
+  <!-- ========================================================
+       DYNAMIC CMS SECTIONS (FROM ADMIN PANEL DATABASE)
+       ======================================================== -->
+  <% if (typeof page !== 'undefined' && page && page.sections && page.sections.length > 0) { %>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+      
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="inline-block bg-primary-50 text-primary font-bold text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-2">
+          ऐतिहासिक संघर्ष एवं विस्तार
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+          पार्टी का इतिहास एवं संगठनात्मक गतिविधियां
+        </h2>
+        <div class="w-16 h-1 bg-amber-400 mx-auto mt-3 rounded-full"></div>
+      </div>
+
+      <div class="space-y-8 sm:space-y-12">
+        <% 
+          const sortedSections = [...page.sections].sort((a, b) => (a.order || 0) - (b.order || 0));
+          sortedSections.forEach((sec, index) => { 
+            const hasImage = Boolean(sec.image && sec.image.trim() !== '');
+            const hasHeading = Boolean(sec.heading && sec.heading.trim() !== '');
+            const hasDesc = Boolean(sec.description && sec.description.trim() !== '');
+            const isEven = (index % 2 === 0);
+        %>
+
+          <% if (hasImage && hasDesc) { %>
+            <!-- 1. BOTH IMAGE AND DESCRIPTION PRESENT -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-5 <%= isEven ? 'lg:order-1' : 'lg:order-2' %>">
+                  <div class="rounded-xl overflow-hidden shadow-sm aspect-[4/3] bg-gray-50 border border-gray-100">
+                    <img 
+                      src="<%= sec.image %>" 
+                      alt="<%= sec.heading || ('VIP Party ' + (index + 1)) %>" 
+                      class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+
+                <div class="lg:col-span-7 <%= isEven ? 'lg:order-2' : 'lg:order-1' %>">
+                  <% if (hasHeading) { %>
+                    <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-3 tracking-tight">
+                      <%= sec.heading %>
+                    </h3>
+                  <% } else { %>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary mb-3 bg-blue-50 px-3 py-1 rounded-full">
+                      <i class="fa-solid fa-circle-check text-primary"></i>
+                      <span>महत्वपूर्ण विवरण</span>
+                    </div>
+                  <% } %>
+
+                  <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3">
+                    <% sec.description.split(/\r?\n/).filter(line => line.trim().length > 0).forEach(paragraph => { %>
+                      <p class="leading-relaxed"><%= paragraph %></p>
+                    <% }) %>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          <% } else if (hasImage && !hasDesc) { %>
+            <!-- 2. IMAGE ONLY (FEATURED GALLERY FRAME) -->
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 max-w-4xl mx-auto">
+              <div class="rounded-xl overflow-hidden shadow-sm aspect-[16/9] sm:aspect-[21/9] bg-slate-900 relative">
+                <img 
+                  src="<%= sec.image %>" 
+                  alt="<%= sec.heading || 'VIP Party Archive' %>" 
+                  class="w-full h-full object-cover object-center"
+                  loading="lazy"
+                />
+                <% if (hasHeading) { %>
+                  <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 sm:p-6 text-white">
+                    <h3 class="text-base sm:text-xl font-bold"><%= sec.heading %></h3>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+
+          <% } else if (!hasImage && (hasHeading || hasDesc)) { %>
+            <!-- 3. TEXT ONLY CARD -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 border-l-4 border-l-primary max-w-4xl mx-auto">
+              <% if (hasHeading) { %>
+                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-3 tracking-tight">
+                  <%= sec.heading %>
+                </h3>
+              <% } %>
+              <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3">
+                <% sec.description.split(/\r?\n/).filter(line => line.trim().length > 0).forEach(paragraph => { %>
+                  <p class="leading-relaxed"><%= paragraph %></p>
+                <% }) %>
+              </div>
+            </div>
+          <% } %>
+
+        <% }) %>
+      </div>
+
+    </section>
+  <% } %>
+
+  <!-- ========================================================
+       4 CORE PILLARS OF VIP PARTY
+       ======================================================== -->
+  <section class="bg-gray-50 py-14 sm:py-16 border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="inline-block bg-primary text-white font-bold text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-2">
+          विचारधारा और सिद्धांत
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+          VIP के चार बुनियादी स्तंभ
+        </h2>
+        <p class="mt-2 text-gray-600 text-sm">
+          अंतिम पायदान पर खड़े व्यक्ति तक अधिकार और सम्मान पहुँचाना ही हमारा संकल्प है।
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Pillar 1 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center text-xl font-black mb-4">
+            <i class="fa-solid fa-scale-unbalanced-flip"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">सामाजिक समरसता</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            समाज के हर वर्ग, धर्म और जाति को बराबरी का दर्जा व आत्मसम्मान दिलाना और भेदभाव को मिटाना।
+          </p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-black mb-4">
+            <i class="fa-solid fa-hand-fist"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">निषाद आरक्षण</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            पश्चिम बंगाल और दिल्ली की तर्ज पर बिहार, झारखंड और उत्तर प्रदेश के निषाद समाज को SC/ST आरक्षण का अधिकार।
+          </p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-black mb-4">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">शिक्षा एवं स्वावलंबन</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            गरीब परिवारों के बच्चों को गुणवत्तापूर्ण शिक्षा और युवाओं को स्वरोजगार व आर्थिक विकास के साधन।
+          </p>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-black mb-4">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">युवा व महिला नेतृत्व</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            पार्टी संगठन से लेकर लोकतांत्रिक व्यवस्था में युवाओं और महिलाओं की बराबर और निर्णायक भागीदारी।
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Bilingual Translation & VIP Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+
+</body>
+</html>
