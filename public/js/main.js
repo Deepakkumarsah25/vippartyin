@@ -17,16 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
       mobileMenu.classList.toggle('hidden');
       mobileMenuBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
       mobileMenuBtn.setAttribute('aria-label', isHidden ? 'मुख्य मेनू बंद करें' : 'मुख्य मेनू खोलें');
-      const icon = mobileMenuBtn.querySelector('i');
-      if (icon) {
-        if (isHidden) {
-          icon.classList.remove('fa-bars');
-          icon.classList.add('fa-xmark');
-        } else {
-          icon.classList.remove('fa-xmark');
-          icon.classList.add('fa-bars');
-        }
-      }
+      const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
+      if (icon) icon.classList.toggle('is-open', isHidden);
     });
   }
 

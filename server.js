@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const galleryRoutes = require('./routes/galleryRoutes');
+const pressRoutes = require('./routes/pressRoutes');
 require('dotenv').config();
 
 const app = express();
@@ -391,6 +393,8 @@ app.get('/api/hero-banners', async (req, res) => {
   res.json({ success: true, count: banners.length, banners });
 });
 
+app.use('/api/gallery', galleryRoutes);
+
 // About VIP Group
 app.get('/about', renderRoute('पार्टी के बारे में | विकासशील इंसान पार्टी', 'about'));
 app.get('/journey-of-mukesh-sahani', renderRoute('श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party', 'journey'));
@@ -620,7 +624,7 @@ app.post('/api/donate/submit', async (req, res) => {
     return res.status(500).json({ success: false, message: 'सर्वर पर दान की जानकारी दर्ज करने में त्रुटि हुई।' });
   }
 });
-app.get('/news', renderRoute('ताजा वीआईपी समाचार | VIP Party', 'news'));
+app.use('/', pressRoutes);
 app.get('/events', renderRoute('आगामी कार्यक्रम व रैलियां | VIP Party', 'events'));
 app.get('/media', renderRoute('मीडिया एवं प्रेस कॉन्फ्रेंस | VIP Party', 'media'));
 
@@ -630,14 +634,11 @@ app.get('/major-issues', renderRoute('प्रमुख मुद्दे | �
 app.get('/nvs', renderRoute('निषाद विकास संघ (NVS) | VIP Party', 'nvs'));
 
 // Menu 1: Gallery
+app.use('/gallery', galleryRoutes);
 app.get('/gallery', renderRoute('गैलरी (फोटो एवं वीडियो) | VIP Party', 'gallery'));
-app.get('/gallery/photo', renderRoute('फोटो गैलरी | विकासशील इंसान पार्टी', 'gallery'));
-app.get('/gallery/video', renderRoute('वीडियो गैलरी | विकासशील इंसान पार्टी', 'gallery'));
 
 // Menu 1: Press
 app.get('/press', renderRoute('प्रेस एवं मीडिया | विकासशील इंसान पार्टी', 'press'));
-app.get('/interview', renderRoute('विशेष साक्षात्कार (Interviews) | VIP Party', 'press'));
-app.get('/press-release', renderRoute('प्रेस विज्ञप्ति (Press Release) | VIP Party', 'press'));
 
 // Menu 1: Download
 app.get('/download', renderRoute('डाउनलोड सेन्टर | विकासशील इंसान पार्टी', 'download'));
