@@ -390,154 +390,7 @@
     </div>
   </section>
 
-  <!-- ========================================================
-       4. SUCCESS MODAL & DIGITAL MEMBERSHIP ID CARD (RJD STYLE)
-       Branded with VIP Party Royal Navy Blue, Gold Trims & Boat Symbol
-       ======================================================== -->
-  <div id="success-modal" class="fixed inset-0 z-[200] hidden flex justify-center items-center p-3 sm:p-4" style="background: rgba(0, 8, 20, 0.85); backdrop-filter: blur(10px);">
-
-    <div id="modal-content" class="relative flex flex-col max-h-[96vh] w-full max-w-lg transform transition-all duration-500 scale-90 opacity-0" style="border-radius: 28px; overflow: hidden; background: linear-gradient(145deg, #021226, #06284d, #001e38); box-shadow: 0 30px 90px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.12);">
-
-      <!-- Ambient Glow Behind Modal -->
-      <div class="absolute inset-0 overflow-hidden pointer-events-none" style="border-radius: 28px;">
-        <div class="absolute w-72 h-72 rounded-full" style="background: radial-gradient(circle, rgba(0, 102, 178, 0.25) 0%, transparent 70%); top: -80px; right: -80px;"></div>
-        <div class="absolute w-56 h-56 rounded-full" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%); bottom: -60px; left: -60px;"></div>
-      </div>
-
-      <!-- Close Button -->
-      <button onclick="closeModal()" class="absolute top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-full transition-all duration-200" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7);" onmouseover="this.style.background='rgba(255,255,255,0.25)'; this.style.color='white';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.color='rgba(255,255,255,0.7)';">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <!-- Modal Header (Congratulations) -->
-      <div class="shrink-0 pt-7 pb-3 px-6 text-center relative z-10">
-        <div class="mx-auto mb-3 flex items-center justify-center" style="width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(16, 185, 129, 0.4);">
-          <i class="fa-solid fa-check text-white text-3xl"></i>
-        </div>
-        <h3 class="text-2xl font-black text-white mb-1 tracking-tight">🎉 बधाई हो!</h3>
-        <p class="text-xs sm:text-sm text-blue-100/80">
-          आप सफलतापूर्वक <span class="text-amber-400 font-bold">विकासशील इंसान पार्टी (VIP)</span> के आधिकारिक सदस्य बन गए हैं।
-        </p>
-      </div>
-
-      <!-- Modal Scrollable Content Container -->
-      <div class="overflow-y-auto flex-grow px-4 sm:px-6 pb-6 relative z-10 custom-scroll">
-        
-        <div class="flex items-center gap-3 mb-4">
-          <div class="flex-1 h-px bg-white/10"></div>
-          <span class="text-xs font-bold uppercase tracking-widest text-white/50">आपका डिजिटल सदस्यता कार्ड</span>
-          <div class="flex-1 h-px bg-white/10"></div>
-        </div>
-
-        <!-- Digital ID Card Container (Exact 360x640 Canvas for html2canvas) -->
-        <div id="id-card-wrapper" class="flex justify-center w-full">
-          <div id="id-card" style="width: 360px; min-width: 360px; height: 640px; position: relative; border-radius: 24px; overflow: hidden; font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif; background: #001f3f; box-shadow: 0 30px 80px rgba(0,0,0,0.7); box-sizing: border-box;">
-
-            <!-- Multi-layered Background with VIP Royal Navy Gradients -->
-            <div style="position: absolute; inset: 0; background: linear-gradient(165deg, #001529 0%, #003666 45%, #001f3f 100%);"></div>
-            
-            <!-- Subtle Watermark Boat / Emblem -->
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; width: 280px; height: 280px; pointer-events: none;">
-              <img src="/images/vip-logo.svg" alt="" style="width: 100%; height: 100%; object-fit: contain;">
-            </div>
-
-            <!-- Card Content Wrapper -->
-            <div style="position: relative; z-index: 10; padding: 24px 22px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
-
-              <!-- 1. Card Header -->
-              <div style="display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.12);">
-                <div style="background: white; border-radius: 14px; padding: 6px 10px; margin-bottom: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 8px;">
-                  <img src="/images/vip-logo.svg" alt="VIP" width="1024" height="1024" style="height: 40px; width: 40px; object-fit: contain; display: block;">
-                  <span style="color: #0066b2; font-weight: 900; font-size: 20px; letter-spacing: 0.5px; line-height: 1;">VIP</span>
-                </div>
-                <p style="font-size: 20px; font-weight: 900; color: white; margin: 0; line-height: 1.2; text-align: center;">विकासशील इंसान पार्टी</p>
-                <p style="font-size: 9.5px; color: #f59e0b; letter-spacing: 3px; text-transform: uppercase; margin: 4px 0 0 0; font-weight: 800;">VIKASSHEEL INSAAN PARTY</p>
-              </div>
-
-              <!-- 2. Card Member Profile Inner Box -->
-              <div style="width: 100%; background: rgba(0, 24, 48, 0.7); border-radius: 20px; padding: 18px 16px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
-
-                <!-- Profile Photo with Gold Ring & VIP Badge -->
-                <div style="position: relative; margin-bottom: 12px;">
-                  <div style="position: absolute; inset: -6px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b);"></div>
-                  <div style="position: absolute; inset: -2px; border-radius: 50%; background: white;"></div>
-                  <div style="width: 104px; height: 104px; border-radius: 50%; overflow: hidden; position: relative; background: #001a33;">
-                    <img id="card-photo" src="" alt="सदस्य फोटो" width="104" height="104" style="width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block;">
-                  </div>
-                  <!-- Small Boat Badge on bottom right of photo -->
-                  <div style="position: absolute; bottom: 0px; right: 0px; width: 28px; height: 28px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.5); border: 2px solid #f59e0b;">
-                    <img src="/images/vip-logo.svg" alt="" width="18" height="18" style="width: 18px; height: 18px; object-fit: contain;">
-                  </div>
-                </div>
-
-                <!-- Member Full Name -->
-                <h2 id="card-name" style="font-size: 20px; font-weight: 800; color: white; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px 0; line-height: 1.25;">
-                  नाम
-                </h2>
-
-                <!-- Official Member Badge -->
-                <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 30px; padding: 4px 16px; margin-bottom: 14px;">
-                  <span style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px;">✦ आधिकारिक सदस्य ✦</span>
-                </div>
-
-                <!-- Two Column District & Lok Sabha Info -->
-                <div style="width: 100%; display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-bottom: 12px;">
-                  <div style="text-align: left;">
-                    <p style="font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px 0; font-weight: 700;">जिला (DISTRICT)</p>
-                    <p id="card-district" style="font-size: 14px; font-weight: 800; color: white; margin: 0;">-</p>
-                  </div>
-                  <div style="text-align: right;">
-                    <p style="font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px 0; font-weight: 700;">लोकसभा (LOKSABHA)</p>
-                    <p id="card-loksabha" style="font-size: 14px; font-weight: 800; color: white; margin: 0;">-</p>
-                  </div>
-                </div>
-
-                <!-- Member ID Row -->
-                <div style="width: 100%; text-align: center;">
-                  <p style="font-size: 8.5px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 6px 0; font-weight: 700;">सदस्यता संख्या (MEMBER ID)</p>
-                  <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px; width: 100%;">
-                    <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.25);"></div>
-                    <span id="card-id" style="font-size: 16px; font-weight: 800; color: #ffffff; letter-spacing: 2px; font-family: 'Courier New', Courier, monospace; white-space: nowrap; line-height: 1;">VIP-2026-XXXX</span>
-                    <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.25);"></div>
-                  </div>
-                </div>
-
-              </div>
-
-              <!-- 3. Card Footer (Issue Date & Motto) -->
-              <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
-                <div style="text-align: left;">
-                  <p style="font-size: 8px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px 0; font-weight: 700;">जारी होने की तिथि</p>
-                  <p id="card-date" style="font-size: 12px; font-weight: 800; color: white; margin: 0;">-</p>
-                </div>
-                <div style="text-align: right;">
-                  <p style="font-size: 9px; color: #f59e0b; font-weight: 800; margin: 0; letter-spacing: 1px;">स्वाभिमान • हक • अधिकार</p>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Right Gold Border Accent Line -->
-            <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 6px; background: linear-gradient(to bottom, #f59e0b, #d97706, #f59e0b);"></div>
-
-          </div>
-        </div>
-
-        <!-- Action Buttons Below Card -->
-        <div class="mt-5 flex flex-col gap-2.5">
-          <button onclick="downloadIDCard()" id="download-btn" class="w-full flex justify-center items-center gap-2 font-bold py-3.5 px-4 rounded-xl transition-all duration-300" style="background: linear-gradient(135deg, #0066b2, #004b87); color: white; box-shadow: 0 8px 24px rgba(0, 102, 178, 0.4); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-size: 15px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(0, 102, 178, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(0, 102, 178, 0.4)';">
-            <i class="fa-solid fa-download"></i>
-            <span>आईडी कार्ड डाउनलोड करें</span>
-          </button>
-          
-          <button onclick="closeModal()" class="w-full flex justify-center items-center gap-2 font-semibold py-2.5 px-4 rounded-xl transition-all duration-200" style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); cursor: pointer; font-size: 14px;" onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.color='white';" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.color='rgba(255,255,255,0.7)';">
-            बंद करें
-          </button>
-        </div>
-
-      </div>
-    </div>
-  </div>
+  </section>
 
   <!-- 5. Footer (Shared Component) -->
   <%- include('../common/footer') %>
@@ -727,39 +580,36 @@
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          // Fill Digital ID Card
-          document.getElementById('card-name').textContent = data.data.name;
-          document.getElementById('card-id').textContent = data.data.unique_id;
-
           const distVal = formData.get('district') || '';
-          document.getElementById('card-district').textContent = distVal.split(' ')[0] || distVal;
-          
           const lokVal = formData.get('loksabha') || '';
-          document.getElementById('card-loksabha').textContent = lokVal.split(' ')[0] || lokVal || '-';
+          const cleanDistrict = distVal.split(' ')[0] || distVal || 'बिहार';
+          const cleanLoksabha = lokVal.split(' ')[0] || lokVal || '-';
 
-          const today = new Date();
-          document.getElementById('card-date').textContent =
-            String(today.getDate()).padStart(2, '0') + '/' +
-            String(today.getMonth() + 1).padStart(2, '0') + '/' +
-            today.getFullYear();
+          const successPayload = {
+            formType: 'member',
+            id: data.data.unique_id || data.data.memberId,
+            name: data.data.name,
+            phone: data.data.phone,
+            district: cleanDistrict,
+            loksabha: cleanLoksabha,
+            photo: memberPhotoPreview || data.data.photo || '/images/vip-logo.svg',
+            from: '/member',
+            date: new Date().toLocaleDateString('en-GB')
+          };
 
-          document.getElementById('card-photo').src = memberPhotoPreview || '/images/vip-logo.svg';
+          try {
+            sessionStorage.setItem('vip_form_success', JSON.stringify(successPayload));
+          } catch (e) {}
 
-          // Hide Loading & Show Modal
-          loadingState.classList.add('hidden');
-          formContainer.classList.remove('hidden');
           form.reset();
-          document.getElementById('image-preview-container').classList.add('hidden');
-
-          const modal = document.getElementById('success-modal');
-          const modalContent = document.getElementById('modal-content');
-          modal.classList.remove('hidden');
-
-          setTimeout(() => {
-            modalContent.classList.remove('scale-90', 'opacity-0');
-            modalContent.classList.add('scale-100', 'opacity-100');
-          }, 100);
-
+          window.location.href = '/forms/success?type=member' +
+            '&id=' + encodeURIComponent(successPayload.id) +
+            '&name=' + encodeURIComponent(successPayload.name) +
+            '&mobile=' + encodeURIComponent(successPayload.phone) +
+            '&district=' + encodeURIComponent(cleanDistrict) +
+            '&loksabha=' + encodeURIComponent(cleanLoksabha) +
+            '&from=/member';
+          return;
         } else {
           throw new Error(data.message || 'पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।');
         }
@@ -769,58 +619,6 @@
         formContainer.classList.remove('hidden');
         errorMsg.textContent = error.message;
         errorMsg.classList.remove('hidden');
-      });
-    }
-
-    function closeModal() {
-      const modal = document.getElementById('success-modal');
-      const modalContent = document.getElementById('modal-content');
-
-      modalContent.classList.remove('scale-100', 'opacity-100');
-      modalContent.classList.add('scale-90', 'opacity-0');
-
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 300);
-    }
-
-    // High Quality ID Card Download using html2canvas
-    function downloadIDCard() {
-      const btn = document.getElementById('download-btn');
-      const cardElement = document.getElementById('id-card');
-
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>आईडी कार्ड तैयार हो रहा है...</span>';
-
-      html2canvas(cardElement, {
-        scale: 3, // Ultra-sharp 3x retina quality
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null,
-        width: 360,
-        height: 640,
-        windowWidth: 360,
-        windowHeight: 640,
-        scrollX: 0,
-        scrollY: 0,
-        logging: false
-      }).then(canvas => {
-        const image = canvas.toDataURL('image/png', 1.0);
-        const link = document.createElement('a');
-        const memberId = document.getElementById('card-id').textContent.trim();
-        link.download = 'VIP_Member_Card_' + memberId + '.png';
-        link.href = image;
-        link.click();
-
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-check"></i><span>डाउनलोड सफल!</span>';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fa-solid fa-download"></i><span>आईडी कार्ड डाउनलोड करें</span>';
-        }, 2500);
-      }).catch(err => {
-        console.error('Download error:', err);
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-download"></i><span>आईडी कार्ड डाउनलोड करें</span>';
       });
     }
   </script>

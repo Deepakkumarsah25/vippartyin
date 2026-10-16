@@ -31,10 +31,14 @@
                 700: '#003a6c',
                 800: '#002e54',
                 900: '#001e38',
-              }
+                950: '#001426',
+              },
+              secondary: { DEFAULT: '#004b87', hover: '#003a6c' },
+              accent: '#f0f7ff',
+              dark: '#0f172a'
             },
             fontFamily: {
-              sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif'],
+              sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
             }
           }
         }
@@ -70,29 +74,30 @@
       }
     </style>
 </head>
-<body class="font-sans text-gray-800 bg-slate-50 antialiased flex flex-col min-h-screen">
+<body class="font-sans text-gray-700 bg-white antialiased flex flex-col min-h-screen">
 
     <!-- 1. Shared Navigation -->
     <%- include('common/navbar') %>
 
-    <!-- Hero Header (Identical to Form pages: volunteer, scholarship, candidature) -->
-    <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-12 sm:py-16 text-white text-center relative overflow-hidden">
+    <!-- Donation Hero: matched to the Contact page -->
+    <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-14 sm:py-20 relative overflow-hidden text-white shadow-inner">
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
-        <div class="max-w-4xl mx-auto px-4 relative z-10">
-            <span class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
-                सहयोग करें • बदलाव लाएं
-            </span>
-            <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight">
-                <%= (typeof settings !== 'undefined' && settings.pageTitle) ? settings.pageTitle : 'सहयोग करें - दान दें' %>
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-primary-500/20 blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <nav aria-label="Breadcrumb" class="mb-4 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-blue-200 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-md border border-white/15">
+                <a href="/" class="hover:text-white transition flex items-center gap-1.5"><i class="fa-solid fa-house text-xs"></i><span>Home</span></a>
+                <span class="text-blue-300">›</span><span class="text-amber-300">Support us</span>
+            </nav>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-md">
+                <%= (typeof settings !== 'undefined' && settings.pageTitle) ? settings.pageTitle : 'Support our work' %>
             </h1>
-            <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-                <%= (typeof settings !== 'undefined' && (settings.inspirationalMessage || settings.pageSubtitle)) ? (settings.inspirationalMessage || settings.pageSubtitle) : 'पार्टी को मजबूत बनाने और सामाजिक न्याय के संघर्ष में अपना बहुमूल्य आर्थिक योगदान दें।' %>
+            <p class="text-blue-100 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+                <%= (typeof settings !== 'undefined' && (settings.inspirationalMessage || settings.pageSubtitle)) ? (settings.inspirationalMessage || settings.pageSubtitle) : 'Your contribution helps strengthen our community work and serve people across Bihar.' %>
             </p>
         </div>
     </div>
-
     <!-- Main Container (Identical to Form pages layout & padding) -->
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
+    <main class="py-14 sm:py-20 bg-gray-50/60 flex-grow"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Official Security & Verification Alert Banner -->
         <div class="mb-8 p-4 sm:p-5 bg-blue-50 border border-blue-200 text-blue-900 rounded-2xl shadow-sm flex items-start sm:items-center gap-3.5">
@@ -106,8 +111,11 @@
             </div>
         </div>
 
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+            <div class="space-y-8">
+
         <!-- Verified Bank Account Details Card -->
-            <div class="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden mb-12">
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                 <div class="p-6 md:p-10">
                     
                     <!-- Card Top Header -->
@@ -237,7 +245,7 @@
             </div>
 
             <!-- Tax Exemption Notice Card (Section 80GGC) -->
-            <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-6 md:p-8 mb-12 shadow-sm">
+            <div class="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl flex-shrink-0 shadow">
                         <i class="fa-solid fa-shield-halved"></i>
@@ -253,8 +261,11 @@
                 </div>
             </div>
 
+            </div>
+            <div>
+
             <!-- Donation Receipt / Pledge Acknowledgment Form -->
-            <div class="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 md:p-10 mb-12" id="pledgeFormContainer">
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 lg:p-10" id="pledgeFormContainer">
                 <div class="text-center mb-8">
                     <span class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-block mb-2">
                         Donation Receipt / Confirmation
@@ -409,6 +420,10 @@
                     </div>
                 </div>
 
+            </div>
+            </div>
+        </div>
+        </div>
     </main>
 
     <!-- Shared Footer -->

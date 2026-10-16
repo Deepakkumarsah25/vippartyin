@@ -62,6 +62,11 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }
 });
+const profilePhotoUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => cb(['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype) ? null : new Error('Choose a JPG, PNG or WebP photo.'), true)
+});
 
 // Join Schema (Synchronized with vip-a MongoDB collections)
 const joinSchema = new mongoose.Schema(
@@ -144,6 +149,7 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, required: true, trim: true, index: true },
     email: { type: String, default: '', trim: true },
     password: { type: String, default: '' },
+    address: { type: String, default: '', trim: true },
     district: { type: String, default: '' },
     state: { type: String, default: 'Bihar' },
     membershipId: { type: String, default: null },
@@ -286,6 +292,50 @@ const donationRecordSchema = new mongoose.Schema(
 );
 const DonationRecord = mongoose.models.DonationRecord || mongoose.model('DonationRecord', donationRecordSchema);
 
+// CMS Page Schema (Synchronized with vip-a Admin Panel CMS)
+const cmsSectionSchema = new mongoose.Schema({
+  heading: { type: String, default: '' },
+  description: { type: String, default: '' },
+  image: { type: String, default: '' },
+  order: { type: Number, default: 0 },
+});
+
+const cmsPageSchema = new mongoose.Schema(
+  {
+    pageKey: { type: String, required: true, unique: true },
+    title: { type: String, default: '' },
+    bannerImage: { type: String, default: '' },
+    introText: { type: String, default: '' },
+    sections: [cmsSectionSchema],
+  },
+  { timestamps: true }
+);
+const CmsPage = mongoose.models.CmsPage || mongoose.model('CmsPage', cmsPageSchema, 'cmspages');
+
+// Prefer the admin CMS source so edits appear immediately; use the local DB only as fallback.
+async function getCmsPage(pageKey) {
+  try {
+    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+    const response = await fetch(`${adminUrl}/cms/api/${encodeURIComponent(pageKey)}?t=${Date.now()}`, {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(3000)
+    });
+    if (response.status === 404) return null;
+    if (response.ok) {
+      const json = await response.json();
+      if (json && json.success && json.data) return json.data;
+    }
+  } catch (error) {
+    console.warn(`CMS admin API unavailable for [${pageKey}]:`, error.message);
+  }
+  try {
+    if (mongoose.connection.readyState === 1) return await CmsPage.findOne({ pageKey }).lean();
+  } catch (error) {
+    console.warn(`CMS local database fallback failed for [${pageKey}]:`, error.message);
+  }
+  return null;
+}
+
 // Helper function to fetch active hero banners from DB with API fallback
 async function getHeroBanners() {
   try {
@@ -360,11 +410,54 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Global template variables middleware
+app.use(async (req, res, next) => {
+  req.currentUser = null;
+  const token = (req.headers.cookie || '').split(';').map((part) => part.trim()).find((part) => part.startsWith('vip_session='))?.slice('vip_session='.length);
+  if (token) {
+    try {
+      const [payload, signature] = decodeURIComponent(token).split('.');
+      const secret = process.env.AUTH_SESSION_SECRET || process.env.MONGODB_URI || 'vip-session-secret-change-me';
+      const expected = crypto.createHmac('sha256', secret).update(payload).digest();
+      const received = Buffer.from(signature, 'base64url');
+      if (received.length === expected.length && crypto.timingSafeEqual(received, expected)) {
+        const session = JSON.parse(Buffer.from(payload, 'base64url').toString());
+        if (session.exp > Date.now() && mongoose.connection.readyState === 1) {
+          req.currentUser = await User.findOne({ uid: session.uid }).select('-password').lean();
+        }
+      }
+    } catch (err) {
+      // Invalid or expired cookies are treated as signed out.
+    }
+  }
+  res.locals.currentUser = req.currentUser;
+  next();
+});
 app.use((req, res, next) => {
   res.locals.currentPath = req.path;
   res.locals.isDbConnected = isDbConnected;
   res.locals.siteName = 'विकासशील इंसान पार्टी (VIP)';
   res.locals.heroBanners = [];
+  next();
+});
+
+let tickerAnnouncementsCache = { expiresAt: 0, items: [], available: false };
+async function getTickerAnnouncements() {
+  if (tickerAnnouncementsCache.expiresAt > Date.now()) return tickerAnnouncementsCache;
+  try {
+    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+    const response = await fetch(`${adminUrl}/admin/website/ticker-announcements/api`, { signal: AbortSignal.timeout(1000) });
+    if (!response.ok) throw new Error(`Admin API returned ${response.status}`);
+    const payload = await response.json();
+    tickerAnnouncementsCache = { items: Array.isArray(payload.data) ? payload.data : [], available: true, expiresAt: Date.now() + 20000 };
+  } catch (error) {
+    tickerAnnouncementsCache = { ...tickerAnnouncementsCache, available: tickerAnnouncementsCache.items.length > 0, expiresAt: Date.now() + 5000 };
+  }
+  return tickerAnnouncementsCache;
+}
+app.use(async (req, res, next) => {
+  const ticker = await getTickerAnnouncements();
+  res.locals.tickerAnnouncements = ticker.items;
+  res.locals.tickerAnnouncementsAvailable = ticker.available;
   next();
 });
 
@@ -394,13 +487,186 @@ app.get('/api/hero-banners', async (req, res) => {
 });
 
 app.use('/api/gallery', galleryRoutes);
+app.get('/announcements/:slug', async (req, res) => {
+  try {
+    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+    const response = await fetch(`${adminUrl}/admin/website/ticker-announcements/api/${encodeURIComponent(req.params.slug)}`, { signal: AbortSignal.timeout(3500) });
+    if (response.status === 404) return res.status(404).render('index', { pageTitle: 'पेज नहीं मिला | VIP Party', activeNav: 'news', heroBanners: [] });
+    if (!response.ok) return res.status(503).send('Announcement abhi load nahi ho pa raha. Kripya kuch der baad try karein.');
+    const payload = await response.json();
+    if (!payload.success || !payload.data) return res.status(404).render('index', { pageTitle: 'पेज नहीं मिला | VIP Party', activeNav: 'news', heroBanners: [] });
+    res.render('announcement', { announcement: payload.data, pageTitle: `${payload.data.title} | VIP Party`, activeNav: 'news' });
+  } catch (error) {
+    console.error('Announcement page fetch failed:', error.message);
+    res.status(503).send('Announcement abhi load nahi ho pa raha. Kripya kuch der baad try karein.');
+  }
+});
 
 // About VIP Group
-app.get('/about', renderRoute('पार्टी के बारे में | विकासशील इंसान पार्टी', 'about'));
-app.get('/journey-of-mukesh-sahani', renderRoute('श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party', 'journey'));
+// About VIP Group (Synced with vip-a Admin Panel CMS: 'history-vip' / 'about')
+app.get('/about', async (req, res) => {
+  try {
+    // CMS Admin stores 'About VIP Party' under key 'history-vip' (fallback to 'about')
+    let pageData = await getCmsPage('history-vip');
+    if (!pageData || (!pageData.introText && (!pageData.sections || pageData.sections.length === 0))) {
+      const fallback = await getCmsPage('about');
+      if (fallback) pageData = fallback;
+    }
+
+    res.render('about', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | विकासशील इंसान पार्टी` : 'वीआईपी के बारे में | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'विकासशील इंसान पार्टी (VIP)',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /about page:', err);
+    res.render('about', {
+      pageTitle: 'वीआईपी के बारे में | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: {
+        title: 'विकासशील इंसान पार्टी (VIP)',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+// Journey of Mukesh Sahani (Synced with vip-a Admin Panel CMS: 'journey-mukesh-sahani')
+app.get('/journey-of-mukesh-sahani', async (req, res) => {
+  try {
+    let pageData = await getCmsPage('journey-mukesh-sahani');
+    if (!pageData || (!pageData.sections || pageData.sections.length === 0)) {
+      const fallback = await getCmsPage('journey-mukesh');
+      if (fallback && fallback.sections && fallback.sections.length > 0) pageData = fallback;
+    }
+
+    res.render('journey', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | VIP Party` : 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'मुकेश सहनी जी का जीवन परिचय एवं राजनीतिक सफर',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /journey-of-mukesh-sahani page:', err);
+    res.render('journey', {
+      pageTitle: 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
+      activeNav: 'about',
+      page: {
+        title: 'मुकेश सहनी जी का जीवन परिचय एवं राजनीतिक सफर',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+
+// Mission & Vision (Synced with vip-a Admin Panel CMS: 'mission-vision')
+app.get('/mission-vision', async (req, res) => {
+  try {
+    let pageData = await getCmsPage('mission-vision');
+
+    res.render('mission-vision', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | मिशन एवं विज़न | VIP Party` : 'मिशन एवं विज़न | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'हमारा मिशन एवं विज़न',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /mission-vision page:', err);
+    res.render('mission-vision', {
+      pageTitle: 'मिशन एवं विज़न | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'about',
+      page: {
+        title: 'हमारा मिशन एवं विज़न',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
 app.get('/jubba-sahani', renderRoute('अमर शहीद जुब्बा सहनी | जीवन एवं बलिदान | VIP Party', 'jubba'));
 app.get('/history', renderRoute('हमारा इतिहास | विकासशील इंसान पार्टी', 'history'));
-app.get('/ideology', renderRoute('पार्टी की विचारधारा एवं विज़न | VIP Party', 'ideology'));
+// Our Ideology (Synced with vip-a Admin Panel CMS: 'our-philosophy' / 'ideology')
+app.get('/ideology', async (req, res) => {
+  try {
+    let pageData = await getCmsPage('our-philosophy');
+    if (!pageData || (!pageData.sections || pageData.sections.length === 0)) {
+      const fallback = await getCmsPage('ideology');
+      if (fallback) pageData = fallback;
+    }
+
+    res.render('ideology', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} | हमारी विचारधारा | VIP Party` : 'हमारी विचारधारा एवं सिद्धांत | VIP Party',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'हमारी विचारधारा एवं सिद्धांत',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /ideology page:', err);
+    res.render('ideology', {
+      pageTitle: 'हमारी विचारधारा | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'about',
+      page: {
+        title: 'हमारी विचारधारा एवं सिद्धांत',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+
+// Nishad Vikas Sangh (NVS) (Synced with vip-a Admin Panel CMS: 'nishad-vikas-sangh')
+app.get(['/nvs', '/nishad-vikas-sangh'], async (req, res) => {
+  try {
+    let pageData = await getCmsPage('nishad-vikas-sangh');
+    if (!pageData || (!pageData.sections || pageData.sections.length === 0)) {
+      const fallback = await getCmsPage('nishad-vikas');
+      if (fallback && fallback.sections && fallback.sections.length > 0) pageData = fallback;
+    }
+
+    res.render('nvs', {
+      pageTitle: (pageData && pageData.title) ? `${pageData.title} (NVS) | VIP Party` : 'निषाद विकास संघ (NVS) | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: pageData || {
+        title: 'निषाद विकास संघ (NVS)',
+        introText: '',
+        sections: []
+      }
+    });
+  } catch (err) {
+    console.error('Error rendering /nvs page:', err);
+    res.render('nvs', {
+      pageTitle: 'निषाद विकास संघ (NVS) | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: {
+        title: 'निषाद विकास संघ (NVS)',
+        introText: '',
+        sections: []
+      }
+    });
+  }
+});
+
+// Major Issues (प्रमुख मुद्दे)
+app.get(['/major-issues', '/issues'], (req, res) => {
+  res.render('major-issues', {
+    pageTitle: 'प्रमुख मुद्दे (Major Issues) | विकासशील इंसान पार्टी',
+    activeNav: 'about'
+  });
+});
 app.get('/constitution', renderRoute('संविधान और नियम | विकासशील इंसान पार्टी', 'constitution'));
 app.get('/prerna', renderRoute('हमारी प्रेरणा पुंज | VIP Party', 'prerna'));
 app.get('/office', renderRoute('केन्द्रीय व प्रदेश कार्यालय | VIP Party', 'office'));
@@ -628,11 +894,6 @@ app.use('/', pressRoutes);
 app.get('/events', renderRoute('आगामी कार्यक्रम व रैलियां | VIP Party', 'events'));
 app.get('/media', renderRoute('मीडिया एवं प्रेस कॉन्फ्रेंस | VIP Party', 'media'));
 
-// Menu 1: About Sub-Items
-app.get('/mission-vision', renderRoute('मिशन एवं विज़न | विकासशील इंसान पार्टी', 'mission'));
-app.get('/major-issues', renderRoute('प्रमुख मुद्दे | विकासशील इंसान पार्टी', 'issues'));
-app.get('/nvs', renderRoute('निषाद विकास संघ (NVS) | VIP Party', 'nvs'));
-
 // Menu 1: Gallery
 app.use('/gallery', galleryRoutes);
 app.get('/gallery', renderRoute('गैलरी (फोटो एवं वीडियो) | VIP Party', 'gallery'));
@@ -660,21 +921,107 @@ app.get('/up-2027-candidature', (req, res) => res.redirect('/forms/candidature-u
 
 app.get('/forms/join-vip', (req, res) => res.redirect('/member'));
 
-// Menu 2: Dedicated Auth Pages (Login & SignUp in separate views/auth/ folder)
-app.get('/login', (req, res) => res.render('auth/login', { pageTitle: 'लॉगिन (Login) | VIP Party', activeNav: 'login' }));
-app.get('/auth/login', (req, res) => res.render('auth/login', { pageTitle: 'लॉगिन (Login) | VIP Party', activeNav: 'login' }));
+// Forms Hub & Dedicated Submission Success Page
+app.get('/forms', (req, res) => res.render('forms/index', { pageTitle: 'सभी आधिकारिक आवेदन फॉर्म | Official Forms | VIP Party', activeNav: 'forms' }));
+app.get('/forms/success', (req, res) => res.render('forms/success', { pageTitle: 'आवेदन सफलतापूर्वक दर्ज | Vikassheel Insaan Party (VIP)', activeNav: 'forms' }));
+app.get('/form-success', (req, res) => res.redirect('/forms/success'));
 
-app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup' }));
-app.get('/auth/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup' }));
+// Menu 2: Dedicated Auth Pages (Login & SignUp in separate views/auth/ folder)
+app.get('/login', (req, res) => res.render('auth/login', { pageTitle: 'Sign in | VIP Party', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
+app.get('/auth/login', (req, res) => res.redirect('/login'));
+
+app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'Create your account | VIP Party', activeNav: 'signup' }));
+app.get('/auth/signup', (req, res) => res.redirect('/signup'));
+app.get('/forgot-password', (req, res) => res.render('auth/forgot-password', { pageTitle: 'Reset password | VIP Party' }));
+app.get('/google-login-setup', (req, res) => res.type('text/plain').sendFile(path.join(__dirname, 'GOOGLE_LOGIN_SETUP.md')));
+app.get('/profile', (req, res) => {
+  if (!req.currentUser) return res.redirect('/login');
+  res.render('profile', { pageTitle: 'My profile | VIP Party', activeNav: 'profile', profileUser: req.currentUser });
+});
+app.post('/auth/logout', (req, res) => {
+  res.clearCookie('vip_session', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
+  res.redirect('/');
+});
+async function uploadProfilePhotoToCloudinary(file) {
+  const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
+    const error = new Error('Cloudinary is not configured. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET to the server environment.');
+    error.statusCode = 503;
+    throw error;
+  }
+  const timestamp = Math.floor(Date.now() / 1000);
+  const folder = 'vip-profiles';
+  const signature = crypto.createHash('sha1').update(`folder=${folder}&timestamp=${timestamp}${CLOUDINARY_API_SECRET}`).digest('hex');
+  const extension = ({ 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' })[file.mimetype];
+  const form = new FormData();
+  form.append('file', new Blob([file.buffer], { type: file.mimetype }), `profile-${Date.now()}.${extension}`);
+  form.append('api_key', CLOUDINARY_API_KEY);
+  form.append('timestamp', String(timestamp));
+  form.append('folder', folder);
+  form.append('signature', signature);
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(CLOUDINARY_CLOUD_NAME)}/image/upload`, { method: 'POST', body: form });
+  const result = await response.json();
+  if (!response.ok || !result.secure_url) {
+    console.error('Cloudinary profile upload failed:', result.error?.message || response.statusText);
+    const error = new Error('Cloudinary could not upload this photo. Check the Cloudinary settings and try again.');
+    error.statusCode = response.status >= 500 ? 502 : 400;
+    throw error;
+  }
+  return result.secure_url;
+}
+app.post('/api/profile', (req, res, next) => {
+  if (!req.currentUser) return res.status(401).json({ success: false, message: 'Please sign in to edit your profile.' });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Database is not connected. Profile changes cannot be saved yet.' });
+  profilePhotoUpload.single('photo')(req, res, (err) => {
+    if (err) return res.status(400).json({ success: false, message: err.message || 'Photo upload failed.' });
+    next();
+  });
+}, async (req, res) => {
+  try {
+    const name = String(req.body.name || '').trim();
+    const email = String(req.body.email || '').trim().toLowerCase();
+    const address = String(req.body.address || '').trim();
+    const district = String(req.body.district || '').trim();
+    const state = String(req.body.state || '').trim();
+    const phoneInput = String(req.body.phone || '').trim();
+    if (!name) return res.status(400).json({ success: false, message: 'Please enter your name.' });
+    if (phoneInput && !/^\d{10}$/.test(phoneInput)) return res.status(400).json({ success: false, message: 'Enter a valid 10-digit mobile number.' });
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ success: false, message: 'Enter a valid email address.' });
+    if ([name, email, address, district, state].some((value) => value.length > 400)) return res.status(400).json({ success: false, message: 'One or more profile fields are too long.' });
+    const update = { name, email, address, district, state };
+    if (phoneInput) update.phone = phoneInput;
+    if (req.file) update.photoURL = await uploadProfilePhotoToCloudinary(req.file);
+    const updatedUser = await User.findByIdAndUpdate(req.currentUser._id, { $set: update }, { returnDocument: 'after', runValidators: true }).select('-password').lean();
+    return res.json({ success: true, message: 'Profile saved successfully.', user: updatedUser });
+  } catch (err) {
+    console.error('Profile update error:', err);
+    return res.status(err.statusCode || 500).json({ success: false, message: err.statusCode === 503 ? err.message : (err.statusCode ? err.message : 'Profile could not be saved. Please try again.') });
+  }
+});
+app.post('/auth/login', async (req, res) => {
+  try {
+    const { phone, password } = req.body || {};
+    if (!phone || !password) return res.status(400).json({ success: false, message: 'Enter your mobile number and password.' });
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Sign-in is temporarily unavailable.' });
+    const user = await User.findOne({ phone: phone.trim() });
+    if (!user || !user.password || user.password !== password) return res.status(401).json({ success: false, message: 'Mobile number or password is incorrect.' });
+    setAuthCookie(res, user);
+    return res.json({ success: true, message: 'Signed in successfully.', redirect: '/profile' });
+  } catch (err) {
+    console.error('Login error:', err);
+    return res.status(500).json({ success: false, message: 'Sign-in could not be completed.' });
+  }
+});
 
 // Auth Form Handlers (Connecting to same MongoDB 'users' collection)
 app.post('/auth/signup', async (req, res) => {
   try {
     const { name, phone, email, district, password } = req.body;
-    if (!name || !phone) {
+    if (!name || !phone || !password || password.length < 8) {
       return res.status(400).json({ success: false, message: 'कृपया नाम और मोबाइल नंबर अनिवार्य रूप से भरें।' });
     }
 
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Registration is temporarily unavailable.' });
     if (mongoose.connection.readyState === 1) {
       const existing = await User.findOne({ phone: phone.trim() });
       if (existing) {
@@ -686,7 +1033,7 @@ app.post('/auth/signup', async (req, res) => {
         phone: phone.trim(),
         email: (email || '').trim(),
         district: (district || '').trim(),
-        password: password || '123456',
+        password,
         uid: 'VIP-USR-' + Date.now().toString().slice(-6)
       });
       console.log(`✅ New VIP User registered: ${newUser.name} (${newUser.phone})`);
@@ -699,32 +1046,34 @@ app.post('/auth/signup', async (req, res) => {
   }
 });
 
-app.post('/auth/login', async (req, res) => {
+function setAuthCookie(res, user) {
+  const payload = Buffer.from(JSON.stringify({ uid: user.uid, exp: Date.now() + 604800000 })).toString('base64url');
+  const secret = process.env.AUTH_SESSION_SECRET || process.env.MONGODB_URI || 'vip-session-secret-change-me';
+  const signature = crypto.createHmac('sha256', secret).update(payload).digest('base64url');
+  res.cookie('vip_session', `${payload}.${signature}`, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 604800000 });
+}
+
+app.post('/auth/google', async (req, res) => {
   try {
-    const { phone } = req.body;
-    if (!phone) {
-      return res.status(400).json({ success: false, message: 'कृपया मोबाइल नंबर दर्ज करें।' });
-    }
-
-    if (mongoose.connection.readyState === 1) {
-      const user = await User.findOne({ phone: phone.trim() });
-      if (!user) {
-        // Auto-create basic profile if first time
-        await User.create({
-          name: 'VIP Member',
-          phone: phone.trim(),
-          uid: 'VIP-USR-' + Date.now().toString().slice(-6)
-        });
-      }
-    }
-
-    return res.json({ success: true, message: 'लॉगिन सफल!', redirect: '/' });
+    if (!process.env.GOOGLE_CLIENT_ID) return res.status(503).json({ success: false, message: 'Google sign-in is not configured. Set GOOGLE_CLIENT_ID on the server.' });
+    const token = req.body?.credential;
+    if (!token) return res.status(400).json({ success: false, message: 'Google credential is missing.' });
+    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(token)}`);
+    if (!response.ok) return res.status(401).json({ success: false, message: 'Google could not verify this account.' });
+    const profile = await response.json();
+    if (profile.aud !== process.env.GOOGLE_CLIENT_ID || profile.email_verified !== 'true' || !profile.email) return res.status(401).json({ success: false, message: 'This Google account could not be verified.' });
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Sign-in is temporarily unavailable.' });
+    let user = await User.findOne({ email: profile.email.toLowerCase() });
+    if (!user) user = await User.create({ name: profile.name || 'VIP Member', phone: `google:${profile.sub}`, email: profile.email.toLowerCase(), photoURL: profile.picture || '', password: '' });
+    setAuthCookie(res, user);
+    return res.json({ success: true, redirect: '/profile' });
   } catch (err) {
-    console.error('Login error:', err);
-    return res.status(500).json({ success: false, message: 'लॉगिन में त्रुटि हुई।' });
+    console.error('Google sign-in error:', err);
+    return res.status(500).json({ success: false, message: 'Google sign-in could not be completed.' });
   }
 });
 
+app.post('/auth/forgot-password', (req, res) => res.status(503).json({ success: false, message: 'Password reset email is not configured yet. Please contact VIP support for help.' }));
 // Forms Submissions APIs (Saving to same MongoDB)
 app.post('/api/forms/volunteer', async (req, res) => {
   try {

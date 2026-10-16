@@ -23,42 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ------------------------------------------------------------------------
-  // 2. Search Modal
-  // ------------------------------------------------------------------------
-  const searchOpenBtn = document.getElementById('searchOpenBtn');
-  const searchCloseBtn = document.getElementById('searchCloseBtn');
-  const searchModal = document.getElementById('searchModal');
-  const searchInput = document.getElementById('searchInput');
-
-  function openSearch() {
-    if (searchModal) {
-      searchModal.classList.remove('hidden');
-      searchModal.classList.add('flex');
-      setTimeout(() => {
-        if (searchInput) searchInput.focus();
-      }, 100);
-    }
-  }
-
-  function closeSearch() {
-    if (searchModal) {
-      searchModal.classList.add('hidden');
-      searchModal.classList.remove('flex');
-    }
-  }
-
-  if (searchOpenBtn) searchOpenBtn.addEventListener('click', openSearch);
-  if (searchCloseBtn) searchCloseBtn.addEventListener('click', closeSearch);
-  if (searchModal) {
-    searchModal.addEventListener('click', (e) => {
-      if (e.target === searchModal) closeSearch();
-    });
-  }
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSearch();
-  });
-
-  // ------------------------------------------------------------------------
   // 2.5 Hero Banner Carousel (Synced with vip-a Admin Panel & Mobile App)
   // ------------------------------------------------------------------------
   const heroCarousel = document.getElementById('heroCarousel');

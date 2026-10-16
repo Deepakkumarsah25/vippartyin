@@ -67,19 +67,6 @@
 
   <!-- Form Container -->
   <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
-    
-    <!-- Success Banner (Hidden Initially) -->
-    <div id="volunteerSuccess" class="hidden mb-8 p-6 sm:p-8 bg-emerald-50 border-2 border-emerald-400 rounded-3xl shadow-xl text-center animate-slide-up">
-      <div class="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
-        <i class="fa-solid fa-check"></i>
-      </div>
-      <h3 class="text-2xl font-black text-emerald-950 mb-2">हार्दिक बधाई! आपका वालंटियर आवेदन दर्ज हो गया है।</h3>
-      <p class="text-emerald-800 text-sm max-w-xl mx-auto mb-4">
-        आपकी वालंटियर आईडी: <span id="resVolId" class="font-black text-lg bg-white px-3 py-1 rounded-lg border border-emerald-300">VIP-VOL-XXXX</span>
-      </p>
-      <p class="text-xs text-emerald-700">पार्टी की संगठन एवं अभियान टीम शीघ्र ही आपसे संपर्क करेगी।</p>
-    </div>
-
     <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-10">
       <div class="border-b border-gray-100 pb-5 mb-8 flex items-center justify-between flex-wrap gap-4">
         <div>
@@ -239,8 +226,6 @@
   <script src="/js/main.js"></script>
   <script>
     const volunteerForm = document.getElementById('volunteerForm');
-    const volunteerSuccess = document.getElementById('volunteerSuccess');
-    const resVolId = document.getElementById('resVolId');
     const volSubmitBtn = document.getElementById('volSubmitBtn');
     const volBtnText = document.getElementById('volBtnText');
 
@@ -281,10 +266,29 @@
 
         const data = await res.json();
         if (res.ok && data.success) {
+          const successPayload = {
+            formType: 'volunteer',
+            id: data.volunteerId || 'VIP-VOL-SUCCESS',
+            name: fullName,
+            phone: mobile,
+            district: district,
+            loksabha: assemblyConstituency || '',
+            from: '/volunteer',
+            date: new Date().toLocaleDateString('en-GB')
+          };
+          try {
+            sessionStorage.setItem('vip_form_success', JSON.stringify(successPayload));
+          } catch (e) {}
+
           volunteerForm.reset();
-          resVolId.textContent = data.volunteerId || 'VIP-VOL-SUCCESS';
-          volunteerSuccess.classList.remove('hidden');
-          volunteerSuccess.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.location.href = '/forms/success?type=volunteer' +
+            '&id=' + encodeURIComponent(successPayload.id) +
+            '&name=' + encodeURIComponent(fullName) +
+            '&mobile=' + encodeURIComponent(mobile) +
+            '&district=' + encodeURIComponent(district) +
+            '&assembly=' + encodeURIComponent(assemblyConstituency) +
+            '&from=/volunteer';
+          return;
         } else {
           alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');
         }

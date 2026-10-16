@@ -251,11 +251,6 @@ nav.scrolled {
   box-shadow: 0 10px 30px rgba(0, 30, 60, 0.1);
 }
 
-/* Modal utility */
-#searchModal.open {
-  display: flex !important;
-}
-
 /* Scroll to top visible */
 #scrollToTopBtn.visible {
   opacity: 1 !important;
