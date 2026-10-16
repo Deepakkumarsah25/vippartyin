@@ -372,7 +372,10 @@
         <button id="mobile-menu-btn" type="button" aria-label="मुख्य मेनू खोलें" aria-controls="mobile-menu"
           aria-expanded="false"
           class="flex h-11 w-11 items-center justify-center text-gray-700 hover:text-primary focus:outline-none transition-transform hover:scale-105">
-          <i class="fa-solid fa-bars text-2xl"></i>
+          <svg data-mobile-menu-icon class="mobile-menu-icon h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path class="mobile-menu-icon-bars" d="M4 6h16M4 12h16M4 18h16" />
+            <path class="mobile-menu-icon-close" d="m6 6 12 12M18 6 6 18" />
+          </svg>
         </button>
       </div>
 

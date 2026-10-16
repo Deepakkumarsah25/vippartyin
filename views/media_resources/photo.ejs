@@ -1,0 +1,96 @@
+﻿<!doctype html>
+<html lang="hi-IN">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= pageTitle %></title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { primary: { DEFAULT: '#0066b2', 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#0066b2', 600: '#004b87', 700: '#003a6c', 800: '#002e54', 900: '#001e38', 950: '#001426' }, secondary: { DEFAULT: '#004b87', hover: '#003a6c' }, accent: '#f0f7ff', dark: '#0f172a' },
+    fontFamily: { sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'] }
+  } }};
+</script>
+<link rel="stylesheet" href="/css/style.css">
+  <style>
+    :root { --gallery-primary: #0066b2; --gallery-primary-dark: #001e38; --gallery-hero-height: 190px; --gallery-hero-height-desktop: 235px; }
+    .gallery-hero { background-color: var(--gallery-primary-dark); }
+    .gallery-hero-overlay { background: linear-gradient(90deg, #001426 0%, var(--gallery-primary) 52%, #004b87 100%); }
+    .gallery-hero-content { min-height: var(--gallery-hero-height); padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .gallery-search { border: 2px solid #cbd5e1; box-shadow: 0 1px 2px rgb(15 23 42 / 8%); }
+    .gallery-search::placeholder { color: #94a3b8; }
+    .gallery-search-wrap:hover .gallery-search { border-color: #60a5fa; }
+    .gallery-search:focus { border-color: var(--gallery-primary); box-shadow: 0 0 0 4px rgb(0 102 178 / 14%); }
+    .gallery-chip { border: 2px solid #cbd5e1; background: #fff; color: #334155; }
+    .gallery-chip:hover { border-color: var(--gallery-primary); background: #eff6ff; color: #004b87; }
+    .gallery-chip.is-active { border-color: var(--gallery-primary); background: var(--gallery-primary); color: #fff; box-shadow: 0 1px 2px rgb(15 23 42 / 12%); }
+    .gallery-card { box-shadow: 0 12px 34px rgb(15 23 42 / 8%); }
+    .gallery-card img { transition: transform .35s ease; }
+    .gallery-card:hover img { transform: scale(1.04); }
+    @media (min-width: 640px) { .gallery-hero-content { min-height: var(--gallery-hero-height-desktop); padding-top: 2rem; padding-bottom: 2rem; } }
+  </style>
+</head>
+<body class="font-sans text-gray-700 bg-white antialiased">
+  <%- include('../common/navbar') %>
+  <main class="min-h-screen pb-20">
+    <section class="gallery-hero relative overflow-hidden text-white">
+      <div class="gallery-hero-overlay absolute inset-0"></div>
+      <div class="gallery-hero-content relative mx-auto flex max-w-7xl items-center justify-center px-5 text-center">
+        <div>
+          <p class="mb-2 text-sm font-bold uppercase tracking-[.2em] text-blue-200">VIP Party</p>
+          <h1 class="text-4xl font-black sm:text-6xl">फोटो गैलरी</h1>
+          <p class="mx-auto mt-3 max-w-2xl text-base text-blue-100 sm:text-lg">पार्टी की खास झलकियां</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="photo-gallery" class="mx-auto max-w-7xl px-5 pb-12 pt-6 sm:pb-16 sm:pt-8">
+      <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div id="gallery-categories" class="flex flex-wrap gap-2" aria-label="श्रेणी चुनें"></div>
+        <label class="gallery-search-wrap relative block w-full sm:w-72 lg:w-80"><span class="sr-only">तस्वीरें खोजें</span><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i><input id="gallery-search" type="search" placeholder="तस्वीरें खोजें..." class="gallery-search w-full rounded-full bg-white py-3 pl-11 pr-4 outline-none transition"></label>
+      </div>
+      <div id="gallery-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite"><div class="col-span-full rounded-2xl bg-white p-10 text-center text-slate-500">तस्वीरें लोड हो रही हैं...</div></div>
+      <div id="gallery-empty" class="hidden rounded-2xl bg-white p-10 text-center text-slate-500">इस खोज में कोई तस्वीर नहीं मिली।</div>
+    </section>
+  </main>
+  <%- include('../common/footer') %>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    (() => {
+      const grid = document.getElementById('gallery-grid');
+      const chips = document.getElementById('gallery-categories');
+      const search = document.getElementById('gallery-search');
+      const empty = document.getElementById('gallery-empty');
+      let items = [];
+      let category = 'all';
+      const safe = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+      const drawChips = () => {
+        const categories = ['all', ...new Set(items.map(item => item.category).filter(Boolean))];
+        chips.innerHTML = categories.map(value => `<button type="button" data-category="${safe(value)}" class="gallery-chip rounded-full px-4 py-2 text-sm font-bold transition ${value === category ? 'is-active' : ''}">${value === 'all' ? 'सभी तस्वीरें' : safe(value)}</button>`).join('');
+        chips.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { category = button.dataset.category; drawChips(); drawItems(); }));
+      };
+      const drawItems = () => {
+        const term = search.value.trim().toLowerCase();
+        const visible = items.filter(item => (category === 'all' || item.category === category) && `${item.title || ''} ${item.category || ''}`.toLowerCase().includes(term));
+        grid.innerHTML = visible.map(item => `<article class="gallery-card overflow-hidden rounded-2xl bg-white"><div class="aspect-[4/3] overflow-hidden bg-slate-100"><img src="${safe(item.cover || item.image || item.imageUrl || item.mediaUrl)}" alt="${safe(item.title || 'VIP Party gallery photo')}" class="h-full w-full object-cover" loading="lazy"></div><div class="p-5"><div class="flex items-center justify-between gap-3"><h3 class="line-clamp-2 font-bold text-slate-900">${safe(item.title || 'VIP Party')}</h3><span class="shrink-0 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">${safe(item.category || 'Gallery')}</span></div><p class="mt-3 text-sm text-slate-500">${item.date ? new Date(item.date).toLocaleDateString('hi-IN', {day:'numeric',month:'long',year:'numeric'}) : ''}</p></div></article>`).join('');
+        empty.classList.toggle('hidden', visible.length > 0);
+        grid.classList.toggle('hidden', visible.length === 0);
+      };
+      search.addEventListener('input', drawItems);
+      fetch('/api/gallery/albums?limit=30').then(response => { if (!response.ok) throw new Error('Gallery request failed'); return response.json(); }).then(result => {
+        items = Array.isArray(result) ? result : (result.data || result.media || []);
+        items = items.filter(item => item && (item.cover || item.image || item.imageUrl || item.mediaUrl));
+        drawChips(); drawItems();
+      }).catch(() => { grid.innerHTML = '<div class="col-span-full rounded-2xl bg-white p-10 text-center text-slate-500">तस्वीरें अभी लोड नहीं हो सकीं। कृपया थोड़ी देर बाद फिर प्रयास करें।</div>'; });
+    })();
+  </script>
+</body>
+</html>
+
+
+
