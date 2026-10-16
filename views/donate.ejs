@@ -75,63 +75,38 @@
     <!-- 1. Shared Navigation -->
     <%- include('common/navbar') %>
 
-    <!-- 2. Breadcrumb Navigation -->
-    <div class="bg-gray-100 border-b border-gray-200 py-3">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs md:text-sm font-semibold text-gray-600 flex items-center space-x-2">
-            <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
-                <i class="fa-solid fa-house text-xs"></i>
-                <span data-i18n="nav.home">होम</span>
-            </a>
-            <span class="text-gray-400">›</span>
-            <span class="text-primary font-bold" data-i18n="nav.support_us">सहयोग करें - दान दें</span>
-        </div>
-    </div>
-
-    <!-- 3. Top Hero Header (Matching RJD layout in VIP colors) -->
-    <div class="bg-gradient-to-r from-primary-800 via-primary to-primary-900 py-12 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-3xl md:text-5xl font-black mb-3 tracking-tight">
-                <%= settings.pageTitle || 'दान करें / Donate' %>
+    <!-- Hero Header (Identical to Form pages: volunteer, scholarship, candidature) -->
+    <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-12 sm:py-16 text-white text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            <span class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                सहयोग करें • बदलाव लाएं
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight">
+                <%= (typeof settings !== 'undefined' && settings.pageTitle) ? settings.pageTitle : 'सहयोग करें - दान दें' %>
             </h1>
-            <p class="text-blue-100 text-base md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-                <%= settings.pageSubtitle || 'पार्टी को मजबूत बनाने में अपना बहुमूल्य योगदान दें' %>
+            <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                <%= (typeof settings !== 'undefined' && (settings.inspirationalMessage || settings.pageSubtitle)) ? (settings.inspirationalMessage || settings.pageSubtitle) : 'पार्टी को मजबूत बनाने और सामाजिक न्याय के संघर्ष में अपना बहुमूल्य आर्थिक योगदान दें।' %>
             </p>
         </div>
     </div>
 
-    <!-- 4. Main Donation Section -->
-    <section class="py-12 md:py-16 flex-grow">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Main Container (Identical to Form pages layout & padding) -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
 
-            <!-- Party Branding Header -->
-            <div class="text-center mb-12 animate-fade-in-up">
-                <div class="w-24 h-24 bg-white rounded-full p-2 mb-6 shadow-xl mx-auto border-2 border-primary-100 transform hover:scale-105 transition-transform">
-                    <img src="/images/vip-logo.svg" alt="VIP Logo" class="w-full h-full object-contain">
-                </div>
-
-                <h2 class="text-3xl md:text-4xl font-black text-gray-950 tracking-tight">
-                    <%= settings.partyNameHindi || 'विकासशील इंसान पार्टी' %>
-                </h2>
-                <h3 class="text-lg md:text-xl font-bold text-primary mb-5 mt-1 tracking-wide">
-                    <%= settings.partyNameEnglish || 'Vikassheel Insaan Party' %>
-                </h3>
-
-                <div class="w-20 h-1.5 bg-gradient-to-r from-primary to-amber-500 mb-6 mx-auto rounded-full"></div>
-
-                <p class="text-gray-600 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-8 font-medium">
-                    <%= settings.inspirationalMessage || 'सामाजिक न्याय और बिहार के विकास की इस लड़ाई में अपना बहुमूल्य योगदान दें। आपका हर एक रुपया समाज में सकारात्मक बदलाव ला सकता है।' %>
-                </p>
-
-                <!-- Official Notice Banner -->
-                <div class="inline-flex items-center gap-3 bg-blue-50 border border-blue-200 text-blue-900 rounded-2xl px-6 py-4 shadow-sm mx-auto text-left max-w-2xl">
-                    <i class="fa-solid fa-circle-info text-2xl text-primary flex-shrink-0"></i>
-                    <p class="text-sm font-semibold leading-relaxed">
-                        <%= settings.noticeText || 'कृपया ध्यान दें: केवल इसी आधिकारिक बैंक खाते में दान करें। किसी अन्य व्यक्ति को नकद देने से बचें।' %>
-                    </p>
-                </div>
+        <!-- Official Security & Verification Alert Banner -->
+        <div class="mb-8 p-4 sm:p-5 bg-blue-50 border border-blue-200 text-blue-900 rounded-2xl shadow-sm flex items-start sm:items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center flex-shrink-0 text-lg shadow-sm">
+                <i class="fa-solid fa-shield-halved"></i>
             </div>
+            <div class="flex-grow">
+                <p class="text-xs sm:text-sm font-semibold leading-relaxed">
+                    <%= (typeof settings !== 'undefined' && (settings.noticeText || settings.officialNotice)) ? (settings.noticeText || settings.officialNotice) : 'कृपया ध्यान दें: केवल नीचे दिए गए पार्टी के आधिकारिक बैंक खाते या यूपीआई आईडी पर ही सहयोग राशि भेजें। किसी भी अन्य व्यक्तिगत खाते में राशि स्वीकार नहीं की जाती है।' %>
+                </p>
+            </div>
+        </div>
 
-            <!-- Verified Bank Account Details Card -->
+        <!-- Verified Bank Account Details Card -->
             <div class="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden mb-12">
                 <div class="p-6 md:p-10">
                     
@@ -434,67 +409,9 @@
                     </div>
                 </div>
 
-            </div>
+    </main>
 
-        </div>
-    </section>
-
-    <!-- 5. Bottom Pre-Footer Join Strip (Exact RJD Pattern) -->
-    <section class="bg-[#002e54] text-white py-12 border-t-4 border-amber-400">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                
-                <div class="flex items-center gap-6">
-                    <div class="bg-white/10 p-4 rounded-full border border-white/20 shadow-inner flex-shrink-0">
-                        <i class="fa-solid fa-user-plus text-3xl text-amber-300"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-black mb-1 tracking-tight text-white" data-i18n="callout.title">
-                            हमसे जुड़ें, बदलाव लाएं
-                        </h3>
-                        <p class="text-blue-100 text-sm max-w-lg leading-relaxed" data-i18n="callout.desc">
-                            विकासशील इंसान पार्टी (VIP) के साथ जुड़ें और स्वाभिमानी, शिक्षित और समृद्ध बिहार के निर्माण में भागीदार बनें।
-                        </p>
-                    </div>
-                </div>
-
-                <div class="relative group animate-slide-up w-full sm:w-auto">
-                    <a href="/member" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-gray-950 font-black px-8 py-3.5 rounded-xl text-base shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl inline-flex items-center justify-center gap-2 whitespace-nowrap">
-                        <span data-i18n="callout.btn">सदस्य बनें (Join VIP)</span>
-                        <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                    </a>
-                </div>
-
-                <!-- Follow Us -->
-                <div class="flex items-center gap-4">
-                    <span class="font-bold text-sm text-blue-200" data-i18n="callout.follow">हमें फॉलो करें:</span>
-                    <div class="flex gap-2">
-                        <a href="https://whatsapp.com" aria-label="VIP WhatsApp" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-green-600 flex items-center justify-center text-white transition-all hover:scale-110">
-                            <i class="fa-brands fa-whatsapp text-base"></i>
-                        </a>
-                        <a href="https://t.me" aria-label="VIP Telegram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-sky-500 flex items-center justify-center text-white transition-all hover:scale-110">
-                            <i class="fa-brands fa-telegram text-base"></i>
-                        </a>
-                        <a href="https://facebook.com" aria-label="VIP Facebook" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-blue-600 flex items-center justify-center text-white transition-all hover:scale-110">
-                            <i class="fa-brands fa-facebook-f text-base"></i>
-                        </a>
-                        <a href="https://x.com" aria-label="VIP X" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-black flex items-center justify-center text-white transition-all hover:scale-110">
-                            <i class="fa-brands fa-x-twitter text-base"></i>
-                        </a>
-                        <a href="https://instagram.com" aria-label="VIP Instagram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-pink-600 flex items-center justify-center text-white transition-all hover:scale-110">
-                            <i class="fa-brands fa-instagram text-base"></i>
-                        </a>
-                        <a href="https://youtube.com" aria-label="VIP YouTube" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 hover:bg-red-600 flex items-center justify-center text-white transition-all hover:scale-110">
-                            <i class="fa-brands fa-youtube text-base"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. Shared Footer -->
+    <!-- Shared Footer -->
     <%- include('common/footer') %>
 
     <!-- Toast Notification -->

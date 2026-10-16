@@ -93,30 +93,17 @@
   <!-- 1. Header & Navigation (Shared Component) -->
   <%- include('common/navbar') %>
 
-  <!-- Breadcrumb Navigation -->
-  <div class="bg-gray-100 border-b border-gray-200 py-2.5">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs md:text-sm font-semibold text-gray-600 flex items-center space-x-2">
-      <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
-        <i class="fa-solid fa-house text-xs"></i>
-        <span>होम</span>
-      </a>
-      <span class="text-gray-400">›</span>
-      <span class="text-primary font-bold">हमसे जुड़ें (Join VIP)</span>
-    </div>
-  </div>
-
-  <!-- 2. Hero Header Banner (Styled like RJD with VIP Party Royal Blue & Rally Overlay) -->
-  <div class="bg-gradient-to-r from-primary-950 via-primary-800 to-primary-900 py-12 md:py-16 relative overflow-hidden shadow-inner border-b-4 border-amber-400">
-    <!-- Rally Background Blend Overlay -->
-    <div class="absolute inset-0 bg-cover bg-center opacity-15 mix-blend-overlay" style="background-image: url('/images/event_rally.jpg');"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-      <div class="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-400/40 text-amber-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 backdrop-blur-sm">
-        <i class="fa-solid fa-anchor"></i> विकासशील इंसान पार्टी सदस्यता अभियान
-      </div>
-      <h1 class="text-3xl md:text-5xl font-black text-white mb-3 tracking-tight">सदस्य बनें</h1>
-      <p class="text-blue-100 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-medium">
+  <!-- Hero Header -->
+  <div class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 py-12 sm:py-16 text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10">
+      <span class="inline-block bg-amber-400 text-gray-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+        विकासशील इंसान पार्टी सदस्यता अभियान
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight">
+        सदस्य बनें
+      </h1>
+      <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
         विकासशील इंसान पार्टी परिवार से जुड़ें और स्वाभिमान, हक व अधिकार के महा-आंदोलन का हिस्सा बनें।
       </p>
     </div>
