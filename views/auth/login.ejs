@@ -154,11 +154,6 @@
         >
           <% if (googleClientId) { %>
             <!-- Google Identity Services renders the button here -->
-          <% } else { %>
-            <p class="google-hint">
-              Google sign-in is not configured yet.
-              Please contact the site administrator.
-            </p>
           <% } %>
         </div>
 
@@ -350,18 +345,27 @@
             callback: googleCredential
           });
 
-          window.google.accounts.id.renderButton(
-            googleButton,
-            {
+          const renderGoogleButton = () => {
+            const availableWidth = Math.floor(googleButton.getBoundingClientRect().width);
+            if (!availableWidth) return;
+            googleButton.replaceChildren();
+            window.google.accounts.id.renderButton(googleButton, {
               type: 'standard',
               theme: 'outline',
               size: 'large',
               text: 'continue_with',
               shape: 'rectangular',
-              width: 350,
+              width: Math.min(400, availableWidth),
               logo_alignment: 'left'
-            }
-          );
+            });
+          };
+
+          renderGoogleButton();
+          let resizeTimer;
+          window.addEventListener('resize', () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(renderGoogleButton, 150);
+          });
 
         } catch (error) {
           console.error(
