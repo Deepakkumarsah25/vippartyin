@@ -346,7 +346,7 @@ async function getDownloadItems(category = 'all', searchQuery = '') {
     if (json.success && json.data) {
       if (searchQuery && searchQuery.trim()) {
         const q = searchQuery.trim().toLowerCase();
-        return json.data.filter(item => 
+        return json.data.filter(item =>
           (item.title && item.title.toLowerCase().includes(q)) ||
           (item.caption && item.caption.toLowerCase().includes(q)) ||
           (item.author && item.author.toLowerCase().includes(q))
@@ -378,7 +378,7 @@ async function getDownloadStats() {
         wallpaperCount,
       };
     }
-  } catch (err) {}
+  } catch (err) { }
   return {
     totalDownloads: 0,
     leadersPhotoCount: 0,
@@ -467,6 +467,9 @@ app.use((req, res, next) => {
   res.locals.isDbConnected = isDbConnected;
   res.locals.siteName = 'विकासशील इंसान पार्टी (VIP)';
   res.locals.heroBanners = [];
+  res.locals.currentUser = req.currentUser || null;
+  res.locals.tickerAnnouncements = [];
+  res.locals.tickerAnnouncementsAvailable = false;
   next();
 });
 
@@ -743,11 +746,19 @@ app.get('/press', renderRoute('प्रेस एवं मीडिया | �
 app.get('/interview', renderRoute('विशेष साक्षात्कार (Interviews) | VIP Party', 'press'));
 app.get('/press-release', renderRoute('प्रेस विज्ञप्ति (Press Release) | VIP Party', 'press'));
 
-// Menu 1: Download Section (Redirects to first independent section - no 'all' page)
-app.get('/download', (req, res) => {
+// Menu 1: Download Section (Fully dynamic, responsive & connected to shared database)
+app.get('/download', async (req, res) => {
   const searchQuery = (req.query.q || '').trim();
-  const queryStr = searchQuery ? `?q=${encodeURIComponent(searchQuery)}` : '';
-  res.redirect(`/download/leaders-photo${queryStr}`);
+  const items = await getDownloadItems('all', searchQuery);
+  const stats = await getDownloadStats();
+  res.render('download/index', {
+    pageTitle: 'डाउनलोड सेन्टर | विकासशील इंसान पार्टी (VIP)',
+    activeNav: 'download',
+    currentCategory: 'all',
+    searchQuery,
+    items,
+    stats,
+  });
 });
 
 app.get('/download/leaders-photo', async (req, res) => {
@@ -755,7 +766,7 @@ app.get('/download/leaders-photo', async (req, res) => {
   const items = await getDownloadItems('leaders-photo', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
-    pageTitle: 'Leaders Photo | Vikassheel Insaan Party (VIP)',
+    pageTitle: 'नेताओं की तस्वीरें (Leaders Photo) | VIP Party',
     activeNav: 'download',
     currentCategory: 'leaders-photo',
     searchQuery,
@@ -769,7 +780,7 @@ app.get('/download/infographics-banner', async (req, res) => {
   const items = await getDownloadItems('infographics-banner', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
-    pageTitle: 'Infographics & Banner | Vikassheel Insaan Party (VIP)',
+    pageTitle: 'इन्फोग्राफिक्स और बैनर (Infographics & Banner) | VIP Party',
     activeNav: 'download',
     currentCategory: 'infographics-banner',
     searchQuery,
@@ -783,7 +794,7 @@ app.get('/download/quotes', async (req, res) => {
   const items = await getDownloadItems('quotes', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
-    pageTitle: 'Inspirational Quotes | Vikassheel Insaan Party (VIP)',
+    pageTitle: 'सुविचार एवं उद्धरण (Quotes) | VIP Party',
     activeNav: 'download',
     currentCategory: 'quotes',
     searchQuery,
@@ -797,7 +808,7 @@ app.get('/download/mobile-wallpaper', async (req, res) => {
   const items = await getDownloadItems('mobile-wallpaper', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
-    pageTitle: 'Mobile Wallpapers 4K | Vikassheel Insaan Party (VIP)',
+    pageTitle: 'मोबाइल वॉलपेपर 4K (Mobile Wallpaper) | VIP Party',
     activeNav: 'download',
     currentCategory: 'mobile-wallpaper',
     searchQuery,

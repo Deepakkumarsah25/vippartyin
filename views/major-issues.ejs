@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'प्रमुख मुद्दे (Major Issues) | विकासशील इंसान पार्टी' %></title>
+  <meta name="title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'प्रमुख मुद्दे (Major Issues) | विकासशील इंसान पार्टी' %>">
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) के 7 प्रमुख मुद्दे: सामाजिक सद्भाव, समान अधिकार, शांति और सुरक्षा, सामाजिक न्याय, गुणवत्तापूर्ण शिक्षा, स्वास्थ्य सेवा एवं रोजगार।">
+  <meta name="keywords" content="VIP Major Issues, प्रमुख मुद्दे, सामाजिक सद्भाव, समान अधिकार, सामाजिक न्याय, निषाद आरक्षण, मुकेश सहनी, Vikassheel Insaan Party">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vipparty.in/major-issues">
+  <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'प्रमुख मुद्दे (Major Issues) | विकासशील इंसान पार्टी' %>">
+  <meta property="og:description" content="सद्भाव, समान अधिकार, सुरक्षा, सामाजिक न्याय, शिक्षा, स्वास्थ्य और रोजगार — बिहार और देश के सर्वांगीण विकास का हमारा संकल्प।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans Devanagari & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- ========================================================
+       HERO BANNER & BREADCRUMBS
+       ======================================================== -->
+  <section class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 text-white py-12 sm:py-16 relative overflow-hidden border-b border-primary-700/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" class="mb-4">
+        <ol class="flex items-center space-x-2 text-xs sm:text-sm text-blue-200">
+          <li>
+            <a href="/" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-house text-[11px]"></i>
+              <span data-i18n="nav.home">होम</span>
+            </a>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-blue-200">
+            <span data-i18n="nav.about">हमारे बारे में</span>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-amber-300 font-bold" aria-current="page">
+            <span data-i18n="nav.major_issues">प्रमुख मुद्दे</span>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Hero Title & Subtitle -->
+      <div class="max-w-4xl">
+        <span class="inline-block bg-amber-400 text-gray-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+          ★ जनहित, सामाजिक न्याय एवं जन-कल्याण के 7 बुनियादी स्तंभ
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
+          पार्टी के प्रमुख मुद्दे (Major Issues)
+        </h1>
+        <p class="text-blue-100 text-sm sm:text-base lg:text-lg max-w-3xl leading-relaxed">
+          सामाजिक सद्भाव, समान अधिकार, सुरक्षा, सामाजिक न्याय, गुणवत्तापूर्ण शिक्षा, स्वास्थ्य सेवा और सम्मानजनक रोजगार — बिहार और देश के सर्वांगीण विकास का हमारा अटूट संकल्प।
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       QUICK OVERVIEW & JUMP BAR (7 ISSUES PILLS)
+       ======================================================== -->
+  <div class="relative z-20 -mt-6 sm:-mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-6">
+      
+      <div class="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-gray-100">
+        <span class="text-xs font-black text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-compass text-primary"></i>
+          <span>त्वरित नेविगेशन (Quick Jump)</span>
+        </span>
+        <span class="text-xs font-bold text-primary bg-blue-50 px-2.5 py-0.5 rounded-full">
+          कुल 7 प्रमुख मुद्दे
+        </span>
+      </div>
+
+      <!-- Jump Pills Container -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+        
+        <a href="#issue-1" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-50/80 text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+          <i class="fa-solid fa-people-group text-amber-500"></i>
+          <span>1. सामाजिक सद्भाव</span>
+        </a>
+
+        <a href="#issue-2" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-50/80 text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+          <i class="fa-solid fa-scale-balanced text-amber-500"></i>
+          <span>2. समान अधिकार</span>
+        </a>
+
+        <a href="#issue-3" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-50/80 text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+          <i class="fa-solid fa-shield-halved text-amber-500"></i>
+          <span>3. शांति और सुरक्षा</span>
+        </a>
+
+        <a href="#issue-4" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-50/80 text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+          <i class="fa-solid fa-hand-holding-heart text-amber-500"></i>
+          <span>4. सामाजिक न्याय</span>
+        </a>
+
+        <a href="#issue-5" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-50/80 text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+          <i class="fa-solid fa-graduation-cap text-amber-500"></i>
+          <span>5. गुणवत्तापूर्ण शिक्षा</span>
+        </a>
+
+        <a href="#issue-6" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-50/80 text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+          <i class="fa-solid fa-heart-pulse text-amber-500"></i>
+          <span>6. बेहतर स्वास्थ्य</span>
+        </a>
+
+        <a href="#issue-7" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-blue-50/80 text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+          <i class="fa-solid fa-briefcase text-amber-500"></i>
+          <span>7. रोजगार व उद्योग</span>
+        </a>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MAIN SECTION: 7 MAJOR ISSUES SHOWCASE CARDS
+       ======================================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 space-y-12 sm:space-y-16">
+
+    <!-- ========================================================
+         ISSUE #01: SOCIAL HARMONY (सामाजिक सद्भाव)
+         ======================================================== -->
+    <article id="issue-1" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Image Column -->
+        <div class="lg:col-span-5 lg:order-1">
+          <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/10] sm:aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+            <img 
+              src="/images/issues/social_harmony.png" 
+              alt="सामाजिक सद्भाव - Social Harmony" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <i class="fa-solid fa-people-group text-amber-400 mr-1.5"></i> सामाजिक सद्भाव
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Column -->
+        <div class="lg:col-span-7 lg:order-2">
+          
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary bg-blue-50 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-people-group text-amber-500"></i>
+              <span>मुद्दा #01 • सामाजिक एकता</span>
+            </div>
+            <span class="text-xs font-bold text-gray-400">Social Harmony</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug">
+            सामाजिक सद्भाव (Social Harmony)
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p>
+              समाज के सर्वांगीण विकास के लिए समाज में सद्भाव तथा सौहार्द का होना अत्यंत आवश्यक है। सामाजिक सद्भाव का माहौल ही समाज को तरक्की के रास्ते पर अग्रसर करता है। एक सामाजिक प्राणी होने के नाते मनुष्य समाज में रहता है तथा एक बेहतर, तरक्कीपसंद और अमन-चैन से परिपूर्ण समाज के लिए सामाजिक सद्भाव अत्यंत महत्वपूर्ण है।
+            </p>
+            <p>
+              सामाजिक सद्भाव के कारण ही समाज में विविधता होते हुए भी लोगों में आपसी प्रेम, मित्रता तथा भाईचारा रहता है और लोग एक-दूसरे के सुख-दुख में सहभागी बनते हैं। विकासशील इंसान पार्टी का उद्देश्य समाज में एक बेहतर प्रगतिशीलता का माहौल कायम करना तथा संपूर्ण समाज को एकजुट करना है।
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="mt-5 p-4 rounded-xl bg-blue-50/70 border-l-4 border-primary text-gray-800 text-xs sm:text-sm font-medium">
+            <p class="leading-relaxed">
+              <strong>पार्टी का संकल्प:</strong> बिना किसी भेद-भाव के हर जाति, वर्ग और समुदाय में आपसी विश्वास, सौहार्द और परस्पर सम्मान की मजबूत नींव रखना।
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#सौहार्दपूर्ण_माहौल</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#आपसी_भाईचारा</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#एकजुट_बिहार</span>
+          </div>
+
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ========================================================
+         ISSUE #02: EQUAL RIGHTS (समान अधिकार)
+         ======================================================== -->
+    <article id="issue-2" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Content Column -->
+        <div class="lg:col-span-7 lg:order-1">
+          
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary bg-blue-50 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-scale-balanced text-amber-500"></i>
+              <span>मुद्दा #02 • संवैधानिक समता</span>
+            </div>
+            <span class="text-xs font-bold text-gray-400">Equal Rights</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug">
+            समान अधिकार (Equal Rights)
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p>
+              पूरब से लेकर पश्चिम तथा उत्तर से लेकर दक्षिण तक भारत एक है तथा भारतीय संविधान में प्रत्येक नागरिक को समान अधिकार प्राप्त है। भारत का प्रत्येक नागरिक एक समान है तथा किसी भी आधार पर किसी के साथ किसी भी तरह का भेदभाव नहीं किया जा सकता है।
+            </p>
+            <p>
+              विकासशील इंसान पार्टी राज्य तथा देश में प्रत्येक नागरिक के लिए समान अधिकार सुनिश्चित करने के लिए निरंतर प्रयासशील है। इसी आधार पर हम बिहार में निषाद आरक्षण की मांग कर रहे हैं। देश के तमाम प्रदेशों में रहने वाले नागरिकों के लिए समान अधिकार व संवैधानिक हिस्सेदारी सुनिश्चित करना हमारी सर्वोच्च प्राथमिकता है।
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="mt-5 p-4 rounded-xl bg-amber-50/80 border-l-4 border-amber-500 text-amber-950 text-xs sm:text-sm font-medium">
+            <p class="leading-relaxed">
+              <strong>आरक्षण एवं समता:</strong> जब अन्य राज्यों में निषाद समाज को आरक्षण उपलब्ध है, तो बिहार, यूपी और झारखंड के निषादों के साथ यह भेदभाव क्यों? हम अंतिम सांस तक इस बराबरी की लड़ाई लड़ेंगे।
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#समान_अधिकार</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#निषाद_आरक्षण</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#संविधान_सम्मत_अधिकार</span>
+          </div>
+
+        </div>
+
+        <!-- Image Column -->
+        <div class="lg:col-span-5 lg:order-2">
+          <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/10] sm:aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+            <img 
+              src="/images/issues/equal_rights.png" 
+              alt="समान अधिकार - Equal Rights" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <i class="fa-solid fa-scale-balanced text-amber-400 mr-1.5"></i> समान अधिकार
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ========================================================
+         ISSUE #03: PEACE & SECURITY (शांति और सुरक्षा)
+         ======================================================== -->
+    <article id="issue-3" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Image Column -->
+        <div class="lg:col-span-5 lg:order-1">
+          <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/10] sm:aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+            <img 
+              src="/images/issues/peace_security.png" 
+              alt="शांति और सुरक्षा - Peace & Security" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <i class="fa-solid fa-shield-halved text-amber-400 mr-1.5"></i> शांति और सुरक्षा
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Column -->
+        <div class="lg:col-span-7 lg:order-2">
+          
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary bg-blue-50 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-shield-halved text-amber-500"></i>
+              <span>मुद्दा #03 • निर्भय समाज</span>
+            </div>
+            <span class="text-xs font-bold text-gray-400">Peace & Security</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug">
+            शांति और सुरक्षा (Peace & Security)
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p>
+              समाज में रहने वाला हर नागरिक शांतिपूर्ण और सुरक्षित माहौल चाहता है। शांति और सुरक्षा के माहौल में नागरिक की कार्यशक्ति और आत्मविश्वास में इजाफा होता है जिससे समाज, राज्य तथा देश निरंतर सुदृढ़ होता है।
+            </p>
+            <p>
+              एक शांतिपूर्ण तथा सुरक्षित समाज का निर्माण हर सरकार का प्राथमिक संवैधानिक दायित्व होता है। साथ ही प्रत्येक नागरिक को भी समाज में शांति तथा सुरक्षा का वातावरण बनाए रखने के लिए प्रयत्नशील होना चाहिए। विकासशील इंसान पार्टी का उद्देश्य भयमुक्त समाज का निर्माण करना है जहां महिलाएं, कमजोर वर्ग और बच्चे बिना किसी डर के गरिमापूर्ण जीवन जी सकें।
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="mt-5 p-4 rounded-xl bg-blue-50/70 border-l-4 border-primary text-gray-800 text-xs sm:text-sm font-medium">
+            <p class="leading-relaxed">
+              <strong>भयमुक्त शासन:</strong> अपराध और भय पर शून्य सहनशीलता (Zero Tolerance), निष्पक्ष पुलिसिंग और समाज के अंतिम व्यक्ति तक न्याय की त्वरित पहुँच।
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#भयमुक्त_बिहार</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#महिला_सुरक्षा</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#कानून_का_राज</span>
+          </div>
+
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ========================================================
+         ISSUE #04: SOCIAL JUSTICE (सामाजिक न्याय)
+         ======================================================== -->
+    <article id="issue-4" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Content Column -->
+        <div class="lg:col-span-7 lg:order-1">
+          
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary bg-blue-50 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-hand-holding-heart text-amber-500"></i>
+              <span>मुद्दा #04 • समतामूलक क्रांति</span>
+            </div>
+            <span class="text-xs font-bold text-gray-400">Social Justice</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug">
+            सामाजिक न्याय (Social Justice)
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p>
+              समाज में किसी के साथ सामाजिक, धार्मिक और सांस्कृतिक पूर्वाग्रहों के आधार पर भेदभाव नहीं होना चाहिए। हर किसी के पास इतने न्यूनतम संसाधन होने चाहिए कि वे ‘उत्तम जीवन’ की अपनी संकल्पना को साकार कर सकें।
+            </p>
+            <p>
+              हमारा प्रयास है कि मनुष्य के बीच सामाजिक स्थिति के आधार पर किसी प्रकार का भेद न माना जाए, प्रत्येक व्यक्ति को अपनी शक्तियों के समुचित विकास के समान अवसर उपलब्ध हों, किसी भी व्यक्ति का किसी भी रूप में शोषण न हो, समाज के प्रत्येक व्यक्ति की न्यूनतम आवश्यकताएं पूरी हों, आर्थिक सत्ता चंद हाथों में केंद्रित न हो और समाज का कमजोर वर्ग अपने को असहाय महसूस न करे। शोषणविहीन व समतामूलक समाज की स्थापना ही हमारा लक्ष्य है।
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="mt-5 p-4 rounded-xl bg-amber-50/80 border-l-4 border-amber-500 text-amber-950 text-xs sm:text-sm font-medium">
+            <p class="leading-relaxed">
+              <strong>शोषणविहीन व्यवस्था:</strong> जब तक वंचित और पिछड़े वर्गों को नीति-निर्धारण में यथोचित प्रतिनिधित्व नहीं मिलेगा, तब तक वास्तविक सामाजिक न्याय अधूरा रहेगा।
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#सामाजिक_न्याय</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#शोषण_मुक्ति</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#समतामूलक_समाज</span>
+          </div>
+
+        </div>
+
+        <!-- Image Column -->
+        <div class="lg:col-span-5 lg:order-2">
+          <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/10] sm:aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+            <img 
+              src="/images/issues/social_justice.png" 
+              alt="सामाजिक न्याय - Social Justice" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <i class="fa-solid fa-hand-holding-heart text-amber-400 mr-1.5"></i> सामाजिक न्याय
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ========================================================
+         ISSUE #05: QUALITY EDUCATION (गुणवत्तापूर्ण शिक्षा)
+         ======================================================== -->
+    <article id="issue-5" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Image Column -->
+        <div class="lg:col-span-5 lg:order-1">
+          <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/10] sm:aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+            <img 
+              src="/images/issues/education_empowerment.png" 
+              alt="गुणवत्तापूर्ण शिक्षा - Quality Education" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <i class="fa-solid fa-graduation-cap text-amber-400 mr-1.5"></i> गुणवत्तापूर्ण शिक्षा
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Column -->
+        <div class="lg:col-span-7 lg:order-2">
+          
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary bg-blue-50 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-graduation-cap text-amber-500"></i>
+              <span>मुद्दा #05 • भविष्य निर्माण</span>
+            </div>
+            <span class="text-xs font-bold text-gray-400">Quality Education</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug">
+            गुणवत्तापूर्ण शिक्षा (Quality Education)
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p>
+              सभी बच्चों के लिए उच्च गुणवत्तापूर्ण और आधुनिक शिक्षा सुलभ बनाना, जो उनके तार्किक चिंतन, डिजिटल साक्षरता और व्यावहारिक कौशल विकास को बढ़ावा दे।
+            </p>
+            <p>
+              हम सरकारी स्कूलों की बुनियादी सुविधाओं में क्रांतिकारी सुधार, वैश्विक मानकों के अनुरूप पाठ्यक्रम में समयानुकूल बदलाव, आधुनिक शिक्षण विधियों में शिक्षकों के नियमित प्रशिक्षण और युवाओं को उद्योग के अनुकूल बनाने के लिए व्यावसायिक पाठ्यक्रमों (Vocational Programs) की वकालत करते हैं ताकि बिहार के बेटे-बेटियां किसी भी मंच पर पीछे न रहें।
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="mt-5 p-4 rounded-xl bg-blue-50/70 border-l-4 border-primary text-gray-800 text-xs sm:text-sm font-medium">
+            <p class="leading-relaxed">
+              <strong>शिक्षा ही शक्ति है:</strong> बाबासाहेब डॉ. अंबेडकर के कथन "शिक्षा शेरनी का दूध है" को साकार करते हुए हर गांव और वंचित बस्ती तक डिजिटल व आधुनिक शिक्षा पहुँचाना।
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#स्मार्ट_स्कूल</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#डिजिटल_साक्षरता</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#कौशल_विकास</span>
+          </div>
+
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ========================================================
+         ISSUE #06: HEALTHCARE FOR ALL (सभी के लिए स्वास्थ्य सेवा)
+         ======================================================== -->
+    <article id="issue-6" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Content Column -->
+        <div class="lg:col-span-7 lg:order-1">
+          
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary bg-blue-50 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-heart-pulse text-amber-500"></i>
+              <span>मुद्दा #06 • निरोगी जीवन</span>
+            </div>
+            <span class="text-xs font-bold text-gray-400">Healthcare for All</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug">
+            सभी के लिए स्वास्थ्य सेवा (Healthcare for All)
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p>
+              प्राथमिक स्वास्थ्य नेटवर्क को मजबूत करते हुए प्रत्येक नागरिक के लिए सस्ती, व्यापक और गुणवत्तापूर्ण चिकित्सा सुविधाएं प्रदान करना हमारी सर्वोच्च प्राथमिकताओं में शामिल है।
+            </p>
+            <p>
+              हमारा लक्ष्य सामुदायिक क्लीनिकों और प्राथमिक स्वास्थ्य केंद्रों (PHC) की पहुंच का विस्तार करना, आवश्यक दवाओं और बुनियादी जांचों तक शत-प्रतिशत मुफ्त पहुंच सुनिश्चित करना, कम आय वाले परिवारों के लिए गंभीर बीमारियों के इलाज में विशेष सब्सिडी देना तथा पोषण, स्वच्छता व मानसिक स्वास्थ्य के बारे में व्यापक जन-जागरूकता अभियान चलाना है।
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="mt-5 p-4 rounded-xl bg-amber-50/80 border-l-4 border-amber-500 text-amber-950 text-xs sm:text-sm font-medium">
+            <p class="leading-relaxed">
+              <strong>स्वास्थ्य अधिकार:</strong> इलाज के अभाव में या गरीबी के कारण किसी भी व्यक्ति की जान न जाए — हर नागरिक को गरिमापूर्ण और निःशुल्क जीवनरक्षक चिकित्सा उपलब्ध कराई जाए।
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#मुफ्त_दवाएं</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#प्राथमिक_स्वास्थ्य</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#स्वस्थ_बिहार</span>
+          </div>
+
+        </div>
+
+        <!-- Image Column -->
+        <div class="lg:col-span-5 lg:order-2">
+          <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/10] sm:aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+            <img 
+              src="/images/issues/healthcare_for_all.png" 
+              alt="सभी के लिए स्वास्थ्य सेवा - Healthcare for All" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <i class="fa-solid fa-heart-pulse text-amber-400 mr-1.5"></i> बेहतर स्वास्थ्य
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ========================================================
+         ISSUE #07: EMPLOYMENT & ECONOMY (रोजगार और अर्थव्यवस्था)
+         ======================================================== -->
+    <article id="issue-7" class="scroll-mt-28 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Image Column -->
+        <div class="lg:col-span-5 lg:order-1">
+          <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/10] sm:aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+            <img 
+              src="/images/issues/employment_growth.png" 
+              alt="रोजगार और अर्थव्यवस्था - Employment & Economy" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <i class="fa-solid fa-briefcase text-amber-400 mr-1.5"></i> रोजगार और अर्थव्यवस्था
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Column -->
+        <div class="lg:col-span-7 lg:order-2">
+          
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary bg-blue-50 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-briefcase text-amber-500"></i>
+              <span>मुद्दा #07 • आत्मनिर्भर युवा</span>
+            </div>
+            <span class="text-xs font-bold text-gray-400">Employment & Economy</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug">
+            रोजगार और अर्थव्यवस्था (Employment & Economy)
+          </h2>
+
+          <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p>
+              औद्योगिक सहायता, स्टार्टअप इनक्यूबेशन और कौशल विकास के माध्यम से युवाओं के लिए बेहतर और सम्मानजनक रोजगार के अवसर पैदा करना और राज्य की अर्थव्यवस्था को नई गति प्रदान करना।
+            </p>
+            <p>
+              हमारा विशेष ध्यान स्थानीय विनिर्माण (Local Manufacturing), मत्स्य पालन व कृषि आधारित उद्योगों को बढ़ावा देने, छोटे व्यवसायों व स्थानीय उद्यमियों को आसान ऋण और मेंटरशिप प्रदान करने, बड़े बुनियादी ढांचा परियोजनाओं में निवेश आकर्षित करने तथा शिक्षा प्रणाली को सीधे बाजार के अनुकूल रोजगार के अवसरों से जोड़ने पर है।
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="mt-5 p-4 rounded-xl bg-blue-50/70 border-l-4 border-primary text-gray-800 text-xs sm:text-sm font-medium">
+            <p class="leading-relaxed">
+              <strong>पलायन रोको, रोजगार दो:</strong> बिहार के नौजवानों को अपनी माटी छोड़कर मजबूरी में दूसरे राज्यों में न भटकना पड़े — गृह राज्य में ही उद्योग और सम्मानजनक आजीविका उपलब्ध कराना हमारा संकल्प है।
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#पलायन_मुक्त_बिहार</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#स्थानीय_उद्योग</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-lg">#युवा_रोजगार</span>
+          </div>
+
+        </div>
+
+      </div>
+    </article>
+
+  </main>
+
+  <!-- ========================================================
+       INSPIRATIONAL STATEMENT BANNER
+       ======================================================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+    <div class="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl text-center relative overflow-hidden">
+      <div class="max-w-3xl mx-auto relative z-10">
+        <i class="fa-solid fa-quote-left text-3xl sm:text-4xl text-amber-400 mb-4 inline-block"></i>
+        <blockquote class="text-lg sm:text-2xl font-bold leading-relaxed mb-4">
+          "राजनीति हमारे लिए सत्ता सुख का साधन नहीं, बल्कि समाज के अंतिम पायदान पर खड़े व्यक्ति को सम्मान, सुरक्षा और बराबरी का हक दिलाने का माध्यम है।"
+        </blockquote>
+        <p class="text-amber-300 font-black text-sm tracking-wider uppercase">— सन ऑफ मल्लाह श्री मुकेश सहनी (संस्थापक, VIP)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Bilingual Translation & VIP Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+
+</body>
+</html>

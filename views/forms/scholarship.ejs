@@ -67,19 +67,6 @@
 
   <!-- Form Container -->
   <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 w-full flex-grow">
-    
-    <!-- Success Banner (Hidden Initially) -->
-    <div id="scholarshipSuccess" class="hidden mb-8 p-6 sm:p-8 bg-emerald-50 border-2 border-emerald-400 rounded-3xl shadow-xl text-center animate-slide-up">
-      <div class="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
-        <i class="fa-solid fa-graduation-cap"></i>
-      </div>
-      <h3 class="text-2xl font-black text-emerald-950 mb-2">छात्रवृत्ति आवेदन सफलतापूर्वक दर्ज कर लिया गया है!</h3>
-      <p class="text-emerald-800 text-sm max-w-xl mx-auto mb-4">
-        आपका आवेदन क्रमांक (Application ID): <span id="resSchId" class="font-black text-lg bg-white px-3 py-1 rounded-lg border border-emerald-300">VIP-SCH-XXXX</span>
-      </p>
-      <p class="text-xs text-emerald-700">मेरिट एवं दस्तावेजों के सत्यापन के उपरांत चयनित विद्यार्थियों को सूचना दी जाएगी।</p>
-    </div>
-
     <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-10">
       <div class="border-b border-gray-100 pb-5 mb-8 flex items-center justify-between flex-wrap gap-4">
         <div>
@@ -253,10 +240,28 @@
 
         const data = await res.json();
         if (res.ok && data.success) {
+          const successPayload = {
+            formType: 'scholarship',
+            id: data.applicationId || 'VIP-SCH-SUCCESS',
+            name: studentName,
+            phone: mobile,
+            district: district,
+            loksabha: assembly || '',
+            from: '/scholarship',
+            date: new Date().toLocaleDateString('en-GB')
+          };
+          try {
+            sessionStorage.setItem('vip_form_success', JSON.stringify(successPayload));
+          } catch (e) {}
+
           scholarshipForm.reset();
-          resSchId.textContent = data.applicationId || 'VIP-SCH-SUCCESS';
-          scholarshipSuccess.classList.remove('hidden');
-          scholarshipSuccess.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.location.href = '/forms/success?type=scholarship' +
+            '&id=' + encodeURIComponent(successPayload.id) +
+            '&name=' + encodeURIComponent(studentName) +
+            '&mobile=' + encodeURIComponent(mobile) +
+            '&district=' + encodeURIComponent(district) +
+            '&from=/scholarship';
+          return;
         } else {
           alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');
         }

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'ऑनलाइन आवेदन एवं पंजीकरण फॉर्म | Vikassheel Insaan Party (VIP)' %></title>
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) के आधिकारिक आवेदन एवं पंजीकरण पोर्टल। ऑनलाइन सदस्यता, वालंटियर, छात्रवृत्ति और चुनावी उम्मीदवारी हेतु ऑनलाइन आवेदन करें।">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            accent: '#f59e0b'
+          },
+          fontFamily: {
+            hindi: ['Noto Sans Devanagari', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'Noto Sans Devanagari', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- Navigation Bar -->
+  <%- include('../common/navbar') %>
+
+  <!-- Hero Header -->
+  <header class="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-950 text-white py-14 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto relative z-10 text-center">
+      <div class="inline-flex items-center gap-2 bg-amber-400 text-gray-950 font-black text-xs sm:text-sm px-4 py-1.5 rounded-full uppercase tracking-wider mb-4 shadow-md">
+        <i class="fa-solid fa-file-waveform"></i>
+        <span>VIP Official Application Portal</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4 font-hindi">
+        फॉर्म एवं पंजीकरण सेक्शन
+      </h1>
+      <p class="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+        विकासशील इंसान पार्टी (VIP) के विभिन्न अभियानों, सदस्यता, छात्रवृत्ति और संगठनात्मक गतिविधियों से जुड़ने के लिए उपयुक्त फॉर्म का चयन करें।
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content: Form Cards Grid -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <!-- Form Card 1: VIP Membership -->
+      <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 flex flex-col justify-between hover:shadow-2xl hover:border-primary/30 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full pointer-events-none transition-transform group-hover:scale-125"></div>
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-6 shadow-inner">
+            <i class="fa-solid fa-user-plus"></i>
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-primary bg-primary-50 px-3 py-1 rounded-full border border-primary/20">
+            आधिकारिक सदस्यता
+          </span>
+          <h2 class="text-2xl font-black text-gray-900 mt-3 mb-2 font-hindi">
+            वीआईपी पार्टी से जुड़ें (सदस्य बनें)
+          </h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-6">
+            सामाजिक न्याय और स्वाभिमान की इस ऐतिहासिक लड़ाई में VIP के सदस्य बनें और तुरंत अपना आधिकारिक डिजिटल सदस्यता पहचान पत्र (Digital ID Card) प्राप्त करें।
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-gray-500 mb-6">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> डिजिटल सदस्यता आईडी कार्ड तुरंत डाउनलोड करें</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> बूथ एवं पंचायत स्तर पर सक्रिय भागीदारी</li>
+          </ul>
+        </div>
+        <a href="/member" class="w-full bg-primary hover:bg-primary-700 text-white font-black py-3.5 px-6 rounded-xl text-center shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2">
+          <span>सदस्यता फॉर्म भरें</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Form Card 2: Volunteer -->
+      <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 flex flex-col justify-between hover:shadow-2xl hover:border-sky-500/30 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-sky-50 rounded-bl-full pointer-events-none transition-transform group-hover:scale-125"></div>
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center text-2xl mb-6 shadow-inner">
+            <i class="fa-solid fa-handshake-angle"></i>
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
+            युवा व सामाजिक विंग
+          </span>
+          <h2 class="text-2xl font-black text-gray-900 mt-3 mb-2 font-hindi">
+            वालंटियर के रूप में जुड़ें
+          </h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-6">
+            पार्टी के विभिन्न सामाजिक, सांस्कृतिक, आईटी, मीडिया और जमीनी अभियानों में अपना बहुमूल्य समय और कौशल समर्पित करने के लिए वालंटियर बनें।
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-gray-500 mb-6">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> सोशल मीडिया, कैंपेन और इवेंट प्रबंधन</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> विशिष्ट वालंटियर आईडी और प्रमाणपत्र</li>
+          </ul>
+        </div>
+        <a href="/volunteer" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-black py-3.5 px-6 rounded-xl text-center shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2">
+          <span>वालंटियर फॉर्म भरें</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Form Card 3: Scholarship -->
+      <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 flex flex-col justify-between hover:shadow-2xl hover:border-amber-400/30 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full pointer-events-none transition-transform group-hover:scale-125"></div>
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl mb-6 shadow-inner">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+            शिक्षा सहयोग योजना
+          </span>
+          <h2 class="text-2xl font-black text-gray-900 mt-3 mb-2 font-hindi">
+            जुब्बा सहनी मेधा छात्रवृत्ति योजना
+          </h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-6">
+            मेधावी एवं जरूरतमंद छात्र-छात्राओं को उच्च शिक्षा, प्रतियोगी परीक्षाओं और तकनीकी अध्ययन हेतु वित्तीय सहायता एवं प्रोत्साहन प्रदान करने की पहल।
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-gray-500 mb-6">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> सत्र 2026-2027 के लिए ऑनलाइन पंजीकरण</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> योग्यता एवं मेरिट आधारित चयन</li>
+          </ul>
+        </div>
+        <a href="/scholarship" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-black py-3.5 px-6 rounded-xl text-center shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2">
+          <span>छात्रवृत्ति फॉर्म भरें</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Form Card 4: Candidature UP 2027 -->
+      <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 flex flex-col justify-between hover:shadow-2xl hover:border-red-500/30 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full pointer-events-none transition-transform group-hover:scale-125"></div>
+        <div>
+          <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center text-2xl mb-6 shadow-inner">
+            <i class="fa-solid fa-vote-yea"></i>
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-red-700 bg-red-50 px-3 py-1 rounded-full border border-red-200">
+            विधानसभा चुनाव 2027
+          </span>
+          <h2 class="text-2xl font-black text-gray-900 mt-3 mb-2 font-hindi">
+            यूपी 2027 उम्मीदवारी आवेदन
+          </h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-6">
+            उत्तर प्रदेश विधानसभा चुनाव 2027 में विकासशील इंसान पार्टी के चुनाव चिन्ह पर चुनाव लड़ने के इच्छुक नेता एवं समाजसेवी ऑनलाइन उम्मीदवारी फॉर्म भरें।
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-gray-500 mb-6">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> संसदीय बोर्ड द्वारा गोपनीय व पारदर्शी समीक्षा</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> विधानसभा क्षेत्र वार आवेदन प्रक्रिया</li>
+          </ul>
+        </div>
+        <a href="/candidature-up-2027" class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3.5 px-6 rounded-xl text-center shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2">
+          <span>उम्मीदवारी फॉर्म भरें</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <%- include('../common/footer') %>
+
+  <!-- Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

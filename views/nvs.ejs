@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Title & Meta Tags -->
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'निषाद विकास संघ (NVS) | विकासशील इंसान पार्टी' %></title>
+  <meta name="title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'निषाद विकास संघ (NVS) | विकासशील इंसान पार्टी' %>">
+  <meta name="description" content="निषाद विकास संघ (NVS) का आधिकारिक परिचय: स्थापना, इतिहास, निषाद क्रांति, आरक्षण आंदोलन और 23 प्रमुख सामाजिक एवं संगठनात्मक उद्देश्य।">
+  <meta name="keywords" content="NVS, Nishad Vikas Sangh, Mukesh Sahani, Nishad Kranti, Nishad Reservation, Bihar Nishad, Son of Mallah">
+  <meta name="author" content="Vikassheel Insaan Party (VIP)">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vipparty.in/nvs">
+  <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'निषाद विकास संघ (NVS) | विकासशील इंसान पार्टी' %>">
+  <meta property="og:description" content="निषाद विकास संघ (NVS) - निषादों के सामाजिक, शैक्षिक, आर्थिक और राजनीतिक उत्थान को समर्पित क्रांतिकारी संगठन।">
+  <meta property="og:image" content="/images/vip-logo.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans Devanagari & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="font-sans text-gray-700 bg-white antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- ========================================================
+       HERO BANNER & BREADCRUMBS
+       ======================================================== -->
+  <section class="bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 text-white py-12 sm:py-16 relative overflow-hidden border-b border-primary-700/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" class="mb-4">
+        <ol class="flex items-center space-x-2 text-xs sm:text-sm text-blue-200">
+          <li>
+            <a href="/" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-house text-[11px]"></i>
+              <span data-i18n="nav.home">होम</span>
+            </a>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-blue-200">
+            <span data-i18n="nav.about">हमारे बारे में</span>
+          </li>
+          <li class="text-blue-400">/</li>
+          <li class="text-amber-300 font-bold" aria-current="page">
+            <span data-i18n="nav.nvs">(NVS) निषाद विकास संघ</span>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Badge & Title -->
+      <div class="max-w-4xl">
+        <span class="inline-block bg-amber-400 text-gray-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+          ★ सामाजिक क्रांति, एकता एवं आरक्षण आंदोलन का ऐतिहासिक संगठन
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
+          <%= (typeof page !== 'undefined' && page && page.title) ? page.title : 'निषाद विकास संघ (NVS)' %>
+        </h1>
+        <p class="text-blue-100 text-sm sm:text-base lg:text-lg max-w-3xl leading-relaxed">
+          <%= (typeof page !== 'undefined' && page && page.introText && page.introText.trim() !== '') 
+                ? page.introText 
+                : 'निषाद, मल्लाह, मछुआरा तथा पारंपरिक जल-आधारित समुदायों के सामाजिक, शैक्षिक, आर्थिक और राजनीतिक उत्थान को समर्पित क्रांतिकारी संगठन।' %>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       QUICK FACTS & ORIGIN STRIP (4 METRICS)
+       ======================================================== -->
+  <div class="relative z-20 -mt-6 sm:-mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-5 sm:p-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+      
+      <!-- 1. स्थापना -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-flag"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">स्थापना वर्ष</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">वर्ष 2010</p>
+          <span class="text-[10px] text-primary font-semibold block">सन ऑफ मल्लाह द्वारा</span>
+        </div>
+      </div>
+
+      <!-- 2. संस्थापक -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0 sm:pl-6">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">संस्थापक एवं अध्यक्ष</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">श्री मुकेश सहनी</p>
+          <span class="text-[10px] text-gray-600 block">राष्ट्रीय अध्यक्ष, NVS</span>
+        </div>
+      </div>
+
+      <!-- 3. ऐतिहासिक आंदोलन -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0 sm:pl-6">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-hand-fist"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">ऐतिहासिक आंदोलन</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">'निषाद क्रांति'</p>
+          <span class="text-[10px] text-emerald-700 font-semibold block">बिहार व उत्तर प्रदेश</span>
+        </div>
+      </div>
+
+      <!-- 4. मूल उद्देश्य -->
+      <div class="flex items-center gap-3.5 pt-2 sm:pt-0 sm:pl-6">
+        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0 text-xl font-bold shadow-sm">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider block">मूल अधिकार</span>
+          <p class="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">निषाद आरक्षण व आयोग</p>
+          <span class="text-[10px] text-purple-700 font-semibold block">राजनीतिक हिस्सेदारी</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       SECTION 1: THE REVOLUTIONARY STORY & HISTORY (CMS SECTIONS 1-4)
+       ======================================================== -->
+  <% 
+    const allSections = (typeof page !== 'undefined' && page && page.sections) ? page.sections : [];
+    
+    // Devanagari & Latin digit regex for list points
+    const listPointRegex = /^[\d\u0966-\u09EF]+[\.\)]/;
+
+    // Narrative sections (early history sections)
+    const narrativeSections = allSections.filter((s) => {
+      return s.description && !listPointRegex.test(s.description.trim());
+    });
+
+    // Objective / Points sections (all 23 points)
+    const objectiveSections = allSections.filter(s => {
+      return s.description && listPointRegex.test(s.description.trim());
+    });
+
+    // Heading section if present
+    const mainHeadingSec = allSections.find(s => s.heading && s.heading.includes('कार्य, उद्देश्य तथा विचारधारा'));
+    const supplementalSections = allSections.filter(s => !narrativeSections.includes(s) && !objectiveSections.includes(s) && (s.heading || s.description || s.image));
+  %>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+    
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+      <span class="inline-block bg-primary-50 text-primary font-bold text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-2">
+        क्रांति से चेतना तक
+      </span>
+      <h2 class="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight">
+        निषाद विकास संघ का ऐतिहासिक संघर्ष
+      </h2>
+      <p class="text-gray-600 text-xs sm:text-sm mt-2">
+        हक, अधिकार, आरक्षण और राजनीतिक स्वाभिमान की ऐतिहासिक यात्रा
+      </p>
+      <div class="w-16 h-1.5 bg-amber-400 mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <!-- Narrative Chapters -->
+    <div class="space-y-12 sm:space-y-16">
+      <% narrativeSections.forEach((sec, idx) => { 
+           const hasImage = Boolean(sec.image && sec.image.trim() !== '');
+           const paragraphs = sec.description.split(/\r?\n/).filter(line => line.trim().length > 0);
+      %>
+        
+        <% if (idx === 0) { %>
+          <!-- ==============================================
+               HISTORICAL CHAPTER #01: FOUNDATION (2010)
+               ============================================== -->
+          <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              <!-- Image Column -->
+              <div class="lg:col-span-5 lg:order-1">
+                <div class="rounded-2xl overflow-hidden shadow-md aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+                  <img 
+                    src="<%= sec.image %>" 
+                    alt="निषाद विकास संघ स्थापना" 
+                    class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div class="absolute bottom-3 left-3 bg-primary/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+                    <i class="fa-solid fa-flag text-amber-300 mr-1.5"></i> स्थापना: वर्ष 2010
+                  </div>
+                </div>
+              </div>
+
+              <!-- Content Column -->
+              <div class="lg:col-span-7 lg:order-2">
+                <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary mb-3 bg-blue-50 px-3.5 py-1.5 rounded-full">
+                  <i class="fa-solid fa-certificate text-amber-500"></i>
+                  <span>ऐतिहासिक अध्याय #01 • स्थापना एवं मूल संकल्प (2010)</span>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-4 leading-snug"><%= sec.heading || ("Section " + (idx + 1)) %></h3>
+
+                <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3">
+                  <% paragraphs.forEach(p => { %>
+                    <p><%= p %></p>
+                  <% }) %>
+                </div>
+
+                <!-- Highlight Box -->
+                <div class="mt-5 p-4 rounded-xl bg-amber-50/80 border-l-4 border-amber-500 text-amber-950 text-xs sm:text-sm font-medium">
+                  <p class="leading-relaxed">
+                    <strong>मूल उद्देश्य:</strong> भारत के मूलनिवासी होने के बावजूद उपेक्षित रहे निषाद वंशियों को शिक्षित व संगठित कर संवैधानिक अधिकार दिलाना।
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        <% } else if (idx === 1) { %>
+          <!-- ==============================================
+               HISTORICAL CHAPTER #02: SON OF MALLAH LEADERSHIP & 3 PILLARS
+               ============================================== -->
+          <div class="bg-gradient-to-br from-blue-50/70 via-white to-amber-50/40 rounded-3xl p-6 sm:p-10 shadow-sm border border-blue-100/80 hover:shadow-md transition-all">
+            
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary mb-4 bg-white px-3.5 py-1.5 rounded-full shadow-sm border border-blue-100">
+              <i class="fa-solid fa-user-shield text-amber-500"></i>
+              <span>ऐतिहासिक अध्याय #02 • सन ऑफ मल्लाह का संकल्प एवं नेतृत्व</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+              
+              <!-- Left Visual Card: Leadership & 3 Key Mandates -->
+              <div class="lg:col-span-5 flex flex-col justify-between">
+                <div class="bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white rounded-2xl p-6 shadow-md relative overflow-hidden border border-primary-700/60 h-full flex flex-col justify-between">
+                  
+                  <!-- Subtle Watermark -->
+                  <div class="absolute -right-6 -bottom-6 text-white/5 text-9xl pointer-events-none">
+                    <i class="fa-solid fa-anchor"></i>
+                  </div>
+
+                  <div>
+                    <div class="flex items-center gap-3.5 mb-5 pb-4 border-b border-white/10">
+                      <div class="w-12 h-12 rounded-xl bg-amber-400 text-gray-950 flex items-center justify-center text-xl font-black shadow flex-shrink-0">
+                        <i class="fa-solid fa-crown"></i>
+                      </div>
+                      <div>
+                        <span class="text-[11px] font-bold text-amber-300 uppercase tracking-wider block">संस्थापक एवं पथप्रदर्शक</span>
+                        <h4 class="text-base sm:text-lg font-black text-white">सन ऑफ़ मल्लाह श्री मुकेश सहनी</h4>
+                        <span class="text-[11px] text-blue-200 block">राष्ट्रीय अध्यक्ष, निषाद विकास संघ</span>
+                      </div>
+                    </div>
+
+                    <p class="text-xs text-blue-100 font-bold uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <i class="fa-solid fa-bullseye text-amber-400"></i>
+                      <span>संघ के 3 केंद्रीय संकल्प</span>
+                    </p>
+
+                    <!-- 3 Mandates List -->
+                    <div class="space-y-2.5 text-xs sm:text-sm">
+                      <div class="bg-white/10 p-3 rounded-xl border border-white/10 flex items-start gap-2.5">
+                        <i class="fa-solid fa-scale-balanced text-amber-400 mt-1 flex-shrink-0"></i>
+                        <div>
+                          <strong class="text-white block font-bold">1. निषाद आरक्षण</strong>
+                          <span class="text-blue-100 text-xs">निषाद वंशियों को SC सूची में शामिल कर आरक्षण अधिकार दिलाना</span>
+                        </div>
+                      </div>
+
+                      <div class="bg-white/10 p-3 rounded-xl border border-white/10 flex items-start gap-2.5">
+                        <i class="fa-solid fa-landmark text-amber-400 mt-1 flex-shrink-0"></i>
+                        <div>
+                          <strong class="text-white block font-bold">2. केंद्रीय मछुआरा आयोग</strong>
+                          <span class="text-blue-100 text-xs">केंद्र स्तर पर मछुआरों के विकास हेतु विशेष आयोग की स्थापना</span>
+                        </div>
+                      </div>
+
+                      <div class="bg-white/10 p-3 rounded-xl border border-white/10 flex items-start gap-2.5">
+                        <i class="fa-solid fa-users text-amber-400 mt-1 flex-shrink-0"></i>
+                        <div>
+                          <strong class="text-white block font-bold">3. राजनीतिक हिस्सेदारी</strong>
+                          <span class="text-blue-100 text-xs">संसद, विधानसभाओं और सत्ता में समाज का सशक्त प्रतिनिधित्व</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Tag -->
+                  <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-blue-200">
+                    <span>एकजुटता से ही अधिकार संभव</span>
+                    <i class="fa-solid fa-hand-fist text-amber-400"></i>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Right Content Column: Detailed Narrative -->
+              <div class="lg:col-span-7 flex flex-col justify-center">
+                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-3 leading-snug"><%= sec.heading || ("Section " + (idx + 1)) %></h3>
+
+                <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-4">
+                  <% paragraphs.forEach(p => { %>
+                    <p><%= p %></p>
+                  <% }) %>
+                </div>
+
+                <!-- Callout Quote Box -->
+                <div class="mt-5 p-4 rounded-xl bg-white border border-gray-100 shadow-sm">
+                  <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-quote-left text-xl text-primary mt-0.5"></i>
+                    <div>
+                      <p class="text-xs sm:text-sm font-semibold text-gray-800 leading-relaxed">
+                        "जब तक समाज का प्रत्येक व्यक्ति अपने हक और अधिकारों के प्रति शिक्षित और संगठित नहीं होगा, तब तक वास्तविक सामाजिक परिवर्तन अधूरा रहेगा।"
+                      </p>
+                      <span class="text-[11px] text-primary font-bold block mt-1.5">— श्री मुकेश सहनी</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Quick Tags -->
+                <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-gray-600">
+                  <span class="bg-blue-50 text-primary px-3 py-1 rounded-lg">#सामाजिक_जागरूकता</span>
+                  <span class="bg-amber-50 text-amber-900 px-3 py-1 rounded-lg">#आरक्षण_आंदोलन</span>
+                  <span class="bg-emerald-50 text-emerald-800 px-3 py-1 rounded-lg">#मछुआरा_आयोग</span>
+                  <span class="bg-purple-50 text-purple-800 px-3 py-1 rounded-lg">#राजनीतिक_प्रतिनिधित्व</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        <% } else if (idx === 2) { %>
+          <!-- ==============================================
+               HISTORICAL CHAPTER #03: NISHAD KRANTI & LANDMARK VICTORIES
+               ============================================== -->
+          <div class="bg-gradient-to-br from-amber-50/60 via-white to-blue-50/50 rounded-3xl p-6 sm:p-10 shadow-sm border border-amber-200/90 hover:shadow-md transition-all relative overflow-hidden">
+            
+            <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-amber-900 mb-4 bg-amber-100 px-3.5 py-1.5 rounded-full">
+              <i class="fa-solid fa-trophy text-amber-600"></i>
+              <span>ऐतिहासिक अध्याय #03 • 'निषाद क्रांति' एवं आरक्षण आंदोलन का ऐतिहासिक असर</span>
+            </div>
+
+            <div class="max-w-4xl mb-6">
+              <h3 class="text-xl sm:text-3xl font-black text-gray-900 mb-3 leading-snug"><%= sec.heading || ("Section " + (idx + 1)) %></h3>
+              
+              <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3">
+                <% paragraphs.forEach(p => { %>
+                  <p><%= p %></p>
+                <% }) %>
+              </div>
+            </div>
+
+            <!-- Two Landmark Milestone Cards (UP & Bihar) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+              
+              <!-- Milestone 1: UP Cabinet Recommendation -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-2 border-amber-300 hover:border-amber-400 transition-all flex flex-col justify-between group">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="bg-amber-100 text-amber-950 font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5">
+                      <i class="fa-solid fa-landmark text-amber-600"></i>
+                      <span>उत्तर प्रदेश कैबिनेट</span>
+                    </span>
+                    <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-md">
+                      दिसंबर 2016
+                    </span>
+                  </div>
+
+                  <h4 class="text-base sm:text-lg font-black text-gray-900 mb-2 group-hover:text-amber-700 transition-colors">
+                    SC सूची में शामिल करने की ऐतिहासिक अनुशंसा
+                  </h4>
+
+                  <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                    निषाद विकास संघ के विशाल जनांदोलन और 'निषाद क्रांति' के प्रभाव के फलस्वरूप <strong>दिसंबर 2016 में उत्तर प्रदेश कैबिनेट</strong> ने निषाद समाज को अनुसूचित जाति (SC) श्रेणी में शामिल करने की अनुशंसा आधिकारिक रूप से केंद्र सरकार को भेजी।
+                  </p>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-amber-100 flex items-center justify-between text-xs font-bold text-amber-800">
+                  <span>ऐतिहासिक कैबिनेट निर्णय</span>
+                  <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                </div>
+              </div>
+
+              <!-- Milestone 2: Bihar Government 24-Hour Agreement -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-2 border-blue-300 hover:border-blue-400 transition-all flex flex-col justify-between group">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="bg-blue-100 text-primary-950 font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5">
+                      <i class="fa-solid fa-bolt text-primary"></i>
+                      <span>बिहार सरकार पर असर</span>
+                    </span>
+                    <span class="text-xs font-extrabold text-primary bg-blue-50 px-2.5 py-0.5 rounded-md">
+                      मात्र 24 घंटे में
+                    </span>
+                  </div>
+
+                  <h4 class="text-base sm:text-lg font-black text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                    ऐतिहासिक जन-आंदोलन के आगे मांग स्वीकार
+                  </h4>
+
+                  <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                    संघ के अभूतपूर्व जन-समर्थन और ऐतिहासिक आंदोलन के आगे <strong>बिहार सरकार ने मात्र 24 घंटों के भीतर</strong> झुकते हुए निषाद विकास संघ की महत्वपूर्ण मांगों और प्रस्तावों पर अपनी आधिकारिक सहमति प्रदान की।
+                  </p>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-blue-100 flex items-center justify-between text-xs font-bold text-primary">
+                  <span>जनशक्ति की ऐतिहासिक विजय</span>
+                  <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        <% } else if (idx === 3) { %>
+          <!-- ==============================================
+               HISTORICAL CHAPTER #04: EXPANSION & POLITICAL MILESTONE
+               ============================================== -->
+          <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              <!-- Image Column -->
+              <div class="lg:col-span-5 lg:order-2">
+                <div class="rounded-2xl overflow-hidden shadow-md aspect-[4/3] bg-slate-900 border border-gray-100 group relative">
+                  <img 
+                    src="<%= sec.image %>" 
+                    alt="निषाद विकास संघ रैली एवं विस्तार" 
+                    class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-lg">
+                    <i class="fa-solid fa-users text-amber-400 mr-1.5"></i> बिहार एवं यूपी में विशाल जनाधार
+                  </div>
+                </div>
+              </div>
+
+              <!-- Content Column -->
+              <div class="lg:col-span-7 lg:order-1">
+                <div class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary mb-3 bg-blue-50 px-3.5 py-1.5 rounded-full">
+                  <i class="fa-solid fa-certificate text-amber-500"></i>
+                  <span>ऐतिहासिक अध्याय #04 • संगठन विस्तार एवं राजनीतिक मुकाम</span>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-4 leading-snug"><%= sec.heading || ("Section " + (idx + 1)) %></h3>
+
+                <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-3">
+                  <% paragraphs.forEach(p => { %>
+                    <p><%= p %></p>
+                  <% }) %>
+                </div>
+
+                <!-- Electoral Milestone Badges -->
+                <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-100 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      2015
+                    </div>
+                    <div>
+                      <strong class="text-xs font-bold text-gray-900 block">बिहार विधानसभा चुनाव</strong>
+                      <span class="text-[11px] text-gray-600 block">निषाद उम्मीदवारों को टिकट व सरकार में भागीदारी</span>
+                    </div>
+                  </div>
+
+                  <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-100 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      2017
+                    </div>
+                    <div>
+                      <strong class="text-xs font-bold text-gray-900 block">उत्तर प्रदेश चुनाव</strong>
+                      <span class="text-[11px] text-gray-600 block">4 निषाद विधायकों को मंत्रिमंडल में स्थान</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        <% } %>
+
+      <% }) %>
+    </div>
+
+  </section>
+
+  <!-- ========================================================
+       SECTION 2: 23 CORE OBJECTIVES & PRINCIPLES (PAGINATED & RESPONSIVE)
+       ======================================================== -->
+  <section id="objectives-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 scroll-mt-24">
+    
+    <div id="objectives-heading" class="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+      <span class="inline-block bg-amber-400 text-gray-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider mb-2">
+        कार्ययोजना, लक्ष्य एवं दर्शन
+      </span>
+      <h2 class="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight">
+        <%= (mainHeadingSec && mainHeadingSec.heading) ? mainHeadingSec.heading : 'निषाद विकास संघ के कार्य, उद्देश्य तथा विचारधारा' %>
+      </h2>
+      <p class="mt-2 text-gray-600 text-xs sm:text-base">
+        समाज के सर्वांगीण विकास, शिक्षा, संगठन और न्याय के लिए 23 बुनियादी उद्देश्य
+      </p>
+      <div class="w-16 h-1 bg-primary mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <!-- Quick Jump Tabs (Categorized into 3 Pages of 9 points) -->
+    <div class="flex items-center justify-center mb-8">
+      <div class="inline-flex p-1.5 bg-gray-100 rounded-2xl max-w-full overflow-x-auto shadow-inner gap-1">
+        
+        <button 
+          type="button" 
+          onclick="switchObjectivePage(1)" 
+          id="tab-btn-1" 
+          class="tab-phase-btn active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap bg-white text-primary shadow-sm"
+        >
+          <i class="fa-solid fa-bullhorn mr-1.5 text-amber-500"></i>
+          <span>भाग 1 (बिंदु 1 - 9)</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="switchObjectivePage(2)" 
+          id="tab-btn-2" 
+          class="tab-phase-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap text-gray-600 hover:text-gray-900"
+        >
+          <i class="fa-solid fa-user-gear mr-1.5 text-blue-500"></i>
+          <span>भाग 2 (बिंदु 10 - 18)</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="switchObjectivePage(3)" 
+          id="tab-btn-3" 
+          class="tab-phase-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap text-gray-600 hover:text-gray-900"
+        >
+          <i class="fa-solid fa-scale-balanced mr-1.5 text-emerald-500"></i>
+          <span>भाग 3 (बिंदु 19 - 23)</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="switchObjectivePage('all')" 
+          id="tab-btn-all" 
+          class="tab-phase-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap text-gray-600 hover:text-gray-900"
+        >
+          <i class="fa-solid fa-list-check mr-1.5 text-purple-500"></i>
+          <span>सभी 23 बिंदु</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Objectives Grid -->
+    <div id="objectives-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      
+      <% 
+        const iconsList = [
+          'fa-bullhorn',          // 1. जन-जागृति
+          'fa-users-line',        // 2. वंचित समाज को संगठित करना
+          'fa-handshake',         // 3. आपसी भाईचारा
+          'fa-scale-balanced',    // 4. आदर्शों तथा सिद्धांतों
+          'fa-graduation-cap',    // 5. शिक्षित समाज
+          'fa-people-group',      // 6. समाज में उचित भागीदारी
+          'fa-landmark-dome',     // 7. राजनीति में उचित भागीदारी
+          'fa-briefcase',         // 8. आर्थिक संपन्नता व रोजगार
+          'fa-user-check',        // 9. मानव संसाधन इस्तेमाल
+          'fa-award',             // 10. सामाजिक व्यक्तियों के कार्यों को मान्यता
+          'fa-box-open',          // 11. उचित संसाधन उपलब्ध कराना
+          'fa-brain',             // 12. व्यक्ति कौशल विकास
+          'fa-crown',             // 13. नेतृत्व क्षमता विकास
+          'fa-compass',           // 14. आतंरिक एवं बाह्य वातावरण
+          'fa-network-wired',     // 15. समूह व विभिन्न घटक
+          'fa-shield-halved',     // 16. सामाजिक, सांस्कृतिक व आध्यात्मिक
+          'fa-equals',            // 17. समान अधिकार व समतामूलक समाज
+          'fa-lightbulb',         // 18. युवाओं का मार्गदर्शन
+          'fa-hand-fist',         // 19. कर्मठ साथियों का संगठन
+          'fa-monument',          // 20. सांस्कृतिक विरासत की रक्षा
+          'fa-broom',             // 21. बुराइयों एवं कुरीतियों को दूर करना
+          'fa-peace',             // 22. सांप्रदायिक संघर्षों को रोकना
+          'fa-heart'              // 23. सामाजिक एकता व भाईचारा
+        ];
+
+        objectiveSections.forEach((item, index) => { 
+          const icon = iconsList[index % iconsList.length];
+          // Strip leading number cleanly
+          let cleanText = item.description.replace(/^[\d\u0966-\u09EF]+[\.\)]\s*/, '').trim();
+          
+          // Determine page (1-9 = page 1, 10-18 = page 2, 19-23 = page 3)
+          let pageNum = 1;
+          if (index >= 9 && index < 18) {
+            pageNum = 2;
+          } else if (index >= 18) {
+            pageNum = 3;
+          }
+      %>
+
+        <div 
+          data-page="<%= pageNum %>" 
+          class="objective-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary/40 transition-all flex flex-col justify-between group <%= pageNum > 1 ? 'hidden' : '' %>"
+        >
+          
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-11 h-11 rounded-xl bg-blue-50 text-primary flex items-center justify-center text-lg font-bold group-hover:bg-primary group-hover:text-white transition-colors shadow-sm">
+                <i class="fa-solid <%= icon %>"></i>
+              </div>
+              <span class="text-xs font-black bg-amber-50 text-amber-900 border border-amber-200/60 px-2.5 py-0.5 rounded-full group-hover:bg-amber-400 group-hover:text-gray-950 transition-colors">
+                बिंदु #<%= String(index + 1).padStart(2, '0') %>
+              </span>
+            </div>
+
+            <p class="text-gray-800 text-sm sm:text-base font-semibold leading-relaxed">
+              <%= cleanText %>
+            </p>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 font-bold">
+            <span class="text-primary flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-check text-[10px] text-amber-500"></i>
+              <span>उद्देश्य संकल्प</span>
+            </span>
+            <i class="fa-solid fa-arrow-right text-[10px] text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all"></i>
+          </div>
+
+        </div>
+
+      <% }) %>
+
+    </div>
+
+    <!-- Responsive Pagination Bar -->
+    <div id="objectives-pagination" class="mt-10 bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+      
+      <!-- Counter Status -->
+      <div class="text-xs sm:text-sm font-semibold text-gray-600 flex items-center gap-2">
+        <i class="fa-solid fa-layer-group text-primary"></i>
+        <span>प्रदर्शित: <strong id="item-range-label" class="text-gray-900 font-extrabold">बिंदु 1 से 9</strong> (कुल 23 बिंदु)</span>
+        <span class="text-gray-300">|</span>
+        <span>पृष्ठ <strong id="current-page-label" class="text-primary font-black">1</strong> / 3</span>
+      </div>
+
+      <!-- Pagination Buttons -->
+      <div class="flex items-center gap-2">
+        
+        <!-- Prev Button -->
+        <button 
+          type="button" 
+          id="btn-prev-page" 
+          onclick="prevObjectivePage()" 
+          disabled
+          class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border border-gray-200 text-gray-400 bg-gray-50 cursor-not-allowed transition-all inline-flex items-center gap-1.5"
+        >
+          <i class="fa-solid fa-chevron-left text-[11px]"></i>
+          <span>पिछला</span>
+        </button>
+
+        <!-- Numbered Page Pills -->
+        <button 
+          type="button" 
+          onclick="switchObjectivePage(1)" 
+          id="page-pill-1" 
+          class="page-num-pill w-9 h-9 rounded-xl text-xs sm:text-sm font-black transition-all bg-primary text-white shadow-sm flex items-center justify-center"
+        >
+          1
+        </button>
+
+        <button 
+          type="button" 
+          onclick="switchObjectivePage(2)" 
+          id="page-pill-2" 
+          class="page-num-pill w-9 h-9 rounded-xl text-xs sm:text-sm font-black transition-all bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center"
+        >
+          2
+        </button>
+
+        <button 
+          type="button" 
+          onclick="switchObjectivePage(3)" 
+          id="page-pill-3" 
+          class="page-num-pill w-9 h-9 rounded-xl text-xs sm:text-sm font-black transition-all bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center"
+        >
+          3
+        </button>
+
+        <!-- Next Button -->
+        <button 
+          type="button" 
+          id="btn-next-page" 
+          onclick="nextObjectivePage()" 
+          class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border border-gray-200 text-gray-700 hover:text-primary hover:border-primary/40 bg-white shadow-sm transition-all inline-flex items-center gap-1.5"
+        >
+          <span>अगला</span>
+          <i class="fa-solid fa-chevron-right text-[11px]"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <% if (supplementalSections.length) { %>
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 space-y-6">
+    <% supplementalSections.forEach(section => { %>
+    <article class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+      <% if (section.image) { %><img src="<%= section.image %>" alt="<%= section.heading || 'Nishad Vikas Sangh' %>" class="w-full max-h-[420px] object-cover rounded-xl mb-6" loading="lazy"><% } %>
+      <% if (section.heading) { %><h2 class="text-xl sm:text-2xl font-black text-gray-900 mb-3"><%= section.heading %></h2><% } %>
+      <% if (section.description) { %><p class="text-gray-700 leading-8 whitespace-pre-line"><%= section.description %></p><% } %>
+    </article>
+    <% }) %>
+  </section>
+  <% } %>
+
+  <!-- ========================================================
+       INSPIRATIONAL STATEMENT BANNER
+       ======================================================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+    <div class="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl text-center relative overflow-hidden">
+      <div class="max-w-3xl mx-auto relative z-10">
+        <i class="fa-solid fa-quote-left text-3xl sm:text-4xl text-amber-400 mb-4 inline-block"></i>
+        <blockquote class="text-lg sm:text-2xl font-bold leading-relaxed mb-4">
+          "निषाद समाज को संगठित और शिक्षित करके उनके राजनीतिक, सामाजिक और आर्थिक अधिकार वापस दिलाना ही हमारे जीवन का सबसे बड़ा संकल्प है।"
+        </blockquote>
+        <p class="text-amber-300 font-black text-sm tracking-wider uppercase">— सन ऑफ मल्लाह श्री मुकेश सहनी (संस्थापक, NVS)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Pagination Script for 23 Points -->
+  <script>
+    let currentObjectivePage = 1;
+    const totalObjectivePages = 3;
+
+    function switchObjectivePage(page, shouldScroll = false) {
+      const cards = document.querySelectorAll('.objective-card');
+      const tabBtns = document.querySelectorAll('.tab-phase-btn');
+      const pagePills = document.querySelectorAll('.page-num-pill');
+      const prevBtn = document.getElementById('btn-prev-page');
+      const nextBtn = document.getElementById('btn-next-page');
+      const rangeLabel = document.getElementById('item-range-label');
+      const pageLabel = document.getElementById('current-page-label');
+      const paginationBar = document.getElementById('objectives-pagination');
+
+      currentObjectivePage = page;
+
+      // Update Tabs active state
+      tabBtns.forEach(btn => {
+        btn.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+        btn.classList.add('text-gray-600');
+      });
+
+      const activeTab = document.getElementById('tab-btn-' + page);
+      if (activeTab) {
+        activeTab.classList.add('bg-white', 'text-primary', 'shadow-sm');
+        activeTab.classList.remove('text-gray-600');
+      }
+
+      if (page === 'all') {
+        // Show all cards
+        cards.forEach(card => card.classList.remove('hidden'));
+        if (rangeLabel) rangeLabel.textContent = 'बिंदु 1 से 23';
+        if (pageLabel) pageLabel.textContent = '1-3';
+        if (paginationBar) paginationBar.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        if (paginationBar) paginationBar.classList.remove('opacity-50', 'pointer-events-none');
+        const num = parseInt(page, 10);
+        
+        cards.forEach(card => {
+          if (parseInt(card.getAttribute('data-page'), 10) === num) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        // Update range label
+        if (rangeLabel) {
+          if (num === 1) rangeLabel.textContent = 'बिंदु 1 से 9';
+          else if (num === 2) rangeLabel.textContent = 'बिंदु 10 से 18';
+          else if (num === 3) rangeLabel.textContent = 'बिंदु 19 से 23';
+        }
+        if (pageLabel) pageLabel.textContent = num;
+
+        // Update Pill buttons
+        pagePills.forEach(pill => {
+          pill.classList.remove('bg-primary', 'text-white', 'shadow-sm');
+          pill.classList.add('bg-gray-100', 'text-gray-700');
+        });
+        const activePill = document.getElementById('page-pill-' + num);
+        if (activePill) {
+          activePill.classList.add('bg-primary', 'text-white', 'shadow-sm');
+          activePill.classList.remove('bg-gray-100', 'text-gray-700');
+        }
+
+        // Prev Button state
+        if (prevBtn) {
+          if (num <= 1) {
+            prevBtn.disabled = true;
+            prevBtn.className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border border-gray-200 text-gray-400 bg-gray-50 cursor-not-allowed transition-all inline-flex items-center gap-1.5';
+          } else {
+            prevBtn.disabled = false;
+            prevBtn.className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border border-gray-200 text-gray-700 hover:text-primary hover:border-primary/40 bg-white shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer';
+          }
+        }
+
+        // Next Button state
+        if (nextBtn) {
+          if (num >= totalObjectivePages) {
+            nextBtn.disabled = true;
+            nextBtn.className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border border-gray-200 text-gray-400 bg-gray-50 cursor-not-allowed transition-all inline-flex items-center gap-1.5';
+          } else {
+            nextBtn.disabled = false;
+            nextBtn.className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border border-gray-200 text-gray-700 hover:text-primary hover:border-primary/40 bg-white shadow-sm transition-all inline-flex items-center gap-1.5 cursor-pointer';
+          }
+        }
+      }
+
+      // Smooth scroll back to top of objectives section if requested or if past header
+      if (shouldScroll) {
+        const target = document.getElementById('objectives-heading');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    }
+
+    function prevObjectivePage() {
+      if (currentObjectivePage > 1 && currentObjectivePage !== 'all') {
+        switchObjectivePage(currentObjectivePage - 1, true);
+      }
+    }
+
+    function nextObjectivePage() {
+      if (currentObjectivePage < totalObjectivePages && currentObjectivePage !== 'all') {
+        switchObjectivePage(currentObjectivePage + 1, true);
+      }
+    }
+  </script>
+
+  <!-- Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Bilingual Translation & VIP Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+
+</body>
+</html>
