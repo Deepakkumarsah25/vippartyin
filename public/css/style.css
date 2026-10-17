@@ -220,26 +220,6 @@ body {
 /* ==========================================================================
    Hero Visual Mask Blend for Leader
    ========================================================================== */
-/* Give the home page banner a taller, more readable crop on phones. */
-@media (max-width: 767px) {
-  .home-hero .hero-carousel-slides {
-    aspect-ratio: auto;
-    height: clamp(340px, 95vw, 480px);
-    min-height: 340px;
-  }
-
-  .home-hero .hero-slide img {
-    object-position: center center;
-  }
-}
-
-@media (max-width: 767px) and (max-height: 500px) {
-  .home-hero .hero-carousel-slides {
-    height: min(72vh, 400px);
-    min-height: 280px;
-  }
-}
-
 @media (min-width: 1400px) {
   .hero-banner-container {
     max-width: 1400px !important;
