@@ -147,10 +147,10 @@ const VIP_TRANSLATIONS = {
     'footer.about_heading': 'VIP',
     'footer.about_sub': 'विकासशील इंसान पार्टी',
     'footer.about_desc': 'सामाजिक न्याय, समान अधिकार और समृद्ध बिहार के लिए हमारा संघर्ष जारी है। विकासशील इंसान पार्टी (VIP) का मुख्य उद्देश्य शोषित, वंचित, अति-पिछड़े और निषाद समाज का संवैधानिक अधिकार और सशक्तीकरण है। "सन ऑफ मल्लाह" श्री मुकेश सहनी के नेतृत्व में शिक्षित, विकसित, रोजगारयुक्त और समृद्ध बिहार बनाने के हमारे विजन, नेतृत्व, समाचार और कार्यक्रमों के बारे में जानें।',
-    'footer.quote': '"जिसकी जितनी संख्या भारी, उसकी उतनी हिस्सेदारी।"',
     'footer.quick_links': 'त्वरित लिंक',
     'footer.key_links': 'महत्वपूर्ण लिंक',
     'footer.contact_info': 'संपर्क सूत्र',
+    'footer.party_name': 'विकासशील इंसान पार्टी (VIP)',
     'footer.rights': 'सर्वाधिकार सुरक्षित।',
     'footer.privacy': 'गोपनीयता नीति',
     'footer.terms': 'नियम एवं शर्तें',
@@ -311,10 +311,10 @@ const VIP_TRANSLATIONS = {
     'footer.about_heading': 'VIP',
     'footer.about_sub': 'Vikassheel Insaan Party',
     'footer.about_desc': 'Our struggle for social justice, equal rights, and a prosperous Bihar continues. Vikassheel Insaan Party (VIP) stands for constitutional rights and empowerment of the underprivileged and Nishad community under the visionary leadership of Shri Mukesh Sahani.',
-    'footer.quote': '"Proportionate representation according to demographic strength."',
     'footer.quick_links': 'Quick Links',
     'footer.key_links': 'Important Links',
     'footer.contact_info': 'Contact Info',
+    'footer.party_name': 'Vikassheel Insaan Party (VIP)',
     'footer.rights': 'All Rights Reserved.',
     'footer.privacy': 'Privacy Policy',
     'footer.terms': 'Terms & Conditions',
@@ -383,18 +383,22 @@ window.VIP_LANG = {
     // 3. Update active state of language toggle buttons
     document.querySelectorAll('.lang-btn').forEach((btn) => {
       const btnLang = btn.getAttribute('data-lang');
-      const isTopTicker = btn.closest('.sticky-ticker');
+      const isTopTicker = btn.closest('.sticky-ticker') || btn.closest('.bg-primary-950') || btn.closest('.bg-primary-900');
+
       if (btnLang === lang) {
-        btn.classList.add('bg-primary', 'text-white', 'shadow-sm', 'active');
-        btn.classList.remove('text-gray-700', 'text-blue-200', 'hover:text-primary', 'hover:text-white');
-      } else {
-        btn.classList.remove('bg-primary', 'text-white', 'shadow-sm', 'active');
+        btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
+        btn.classList.remove('text-gray-700', 'hover:text-primary');
         if (isTopTicker) {
-          btn.classList.add('text-blue-200', 'hover:text-white');
+          btn.classList.remove('hover:text-amber-300');
+        }
+      } else {
+        btn.classList.remove('bg-primary', 'shadow-sm');
+        if (isTopTicker) {
           btn.classList.remove('text-gray-700', 'hover:text-primary');
+          btn.classList.add('text-white', 'hover:text-amber-300');
         } else {
+          btn.classList.remove('text-white');
           btn.classList.add('text-gray-700', 'hover:text-primary');
-          btn.classList.remove('text-blue-200', 'hover:text-white');
         }
       }
     });
