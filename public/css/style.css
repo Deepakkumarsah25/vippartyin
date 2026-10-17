@@ -48,6 +48,7 @@ body {
   background-color: var(--bg-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  padding-top: 120px;
 }
 
 /* ==========================================================================
@@ -73,13 +74,19 @@ body {
 }
 
 .sticky-ticker {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
 }
 
 .sticky-nav-offset {
   top: 40px !important;
+  position: fixed !important;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 /* Keep the ticker and navigation stacked while sticky, and fit the drawer
