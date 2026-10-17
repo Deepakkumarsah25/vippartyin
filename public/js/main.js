@@ -20,6 +20,36 @@ document.addEventListener('DOMContentLoaded', () => {
       const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
       if (icon) icon.classList.toggle('is-open', isHidden);
     });
+
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.setAttribute('aria-label', 'मुख्य मेनू खोलें');
+        const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
+        if (icon) icon.classList.remove('is-open');
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.setAttribute('aria-label', 'मुख्य मेनू खोलें');
+        const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
+        if (icon) icon.classList.remove('is-open');
+        mobileMenuBtn.focus();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.matchMedia('(min-width: 1536px)').matches) {
+        mobileMenu.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
+        if (icon) icon.classList.remove('is-open');
+      }
+    });
   }
 
   // ------------------------------------------------------------------------

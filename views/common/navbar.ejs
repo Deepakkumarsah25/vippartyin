@@ -18,45 +18,51 @@
   <!-- Marquee Scroll -->
   <div class="flex-grow overflow-hidden relative h-full flex items-center bg-primary-800">
     <div class="animate-marquee-custom whitespace-nowrap flex items-center gap-16 pl-4">
-      <% if (typeof tickerAnnouncementsAvailable !== 'undefined' && tickerAnnouncementsAvailable) { %>
-      <% (tickerAnnouncements || []).forEach(item => { %>
-      <a href="/announcements/<%= item.slug %>" class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm"><span><%= item.tickerText %></span></a>
-      <% }) %>
-      <% } else { %>
-      <a href="/news"
-        class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
-        <span data-i18n="ticker.t1">🎯 विशाल निषाद आरक्षण महासम्मेलन | 📅 दिनांक: 15 नवम्बर 2026 | 📍 स्थान: गांधी
-          मैदान, पटना ➔ विवरण देखने के लिए यहाँ क्लिक करें</span>
-      </a>
-      <a href="/journey-of-mukesh-sahani"
-        class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
-        <span data-i18n="ticker.t2">★ 'सन ऑफ मल्लाह' श्री मुकेश सहनी का जनसंवाद कार्यक्रम | 📍 मुजफ्फरपुर | ➔ पार्टी से
-          जुड़ने के लिए ऑनलाइन आवेदन करें</span>
-      </a>
-      <a href="/scholarship"
-        class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
-        <span data-i18n="ticker.t3">🎓 अमर शहीद जुब्बा सहनी मेधा छात्रवृत्ति के लिए ऑनलाइन आवेदन शुरू ➔ अभी आवेदन
-          करें</span>
-      </a>
-      <% } %>
+      <% if (typeof tickerAnnouncementsAvailable !=='undefined' && tickerAnnouncementsAvailable) { %>
+        <% (tickerAnnouncements || []).forEach(item=> { %>
+          <a href="/announcements/<%= item.slug %>"
+            class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm"><span>
+              <%= item.tickerText %>
+            </span></a>
+          <% }) %>
+            <% } else { %>
+              <a href="/news"
+                class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
+                <span data-i18n="ticker.t1">🎯 विशाल निषाद आरक्षण महासम्मेलन | 📅 दिनांक: 15 नवम्बर 2026 | 📍 स्थान:
+                  गांधी
+                  मैदान, पटना ➔ विवरण देखने के लिए यहाँ क्लिक करें</span>
+              </a>
+              <a href="/journey-of-mukesh-sahani"
+                class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
+                <span data-i18n="ticker.t2">★ 'सन ऑफ मल्लाह' श्री मुकेश सहनी का जनसंवाद कार्यक्रम | 📍 मुजफ्फरपुर | ➔
+                  पार्टी से
+                  जुड़ने के लिए ऑनलाइन आवेदन करें</span>
+              </a>
+              <a href="/scholarship"
+                class="text-white hover:text-amber-300 transition-colors font-bold tracking-wide flex items-center text-xs sm:text-sm">
+                <span data-i18n="ticker.t3">🎓 अमर शहीद जुब्बा सहनी मेधा छात्रवृत्ति के लिए ऑनलाइन आवेदन शुरू ➔ अभी
+                  आवेदन
+                  करें</span>
+              </a>
+              <% } %>
     </div>
   </div>
 
   <!-- Right Actions: Helpline & Language Switcher -->
   <div
-    class="hidden lg:flex items-center gap-3 px-3 sm:px-4 h-full bg-primary-950 text-xs font-medium text-blue-200 whitespace-nowrap border-l border-primary-700">
+    class="hidden 2xl:flex items-center gap-3 px-3 sm:px-4 h-full bg-primary-950 text-xs font-medium text-blue-200 whitespace-nowrap border-l border-primary-700">
     <a href="tel:06122506830" class="hover:text-white flex items-center gap-1.5 transition-colors">
       <i class="fa-solid fa-phone-volume text-amber-400"></i>
       <span data-i18n="ticker.helpline">हेल्पलाइन: 0612-2506830</span>
     </a>
 
     <!-- Top Language Switcher Toggle -->
-    <div class="flex items-center bg-primary-900/90 rounded-full p-0.5 border border-primary-700/80 shadow-inner">
-      <button type="button" class="lang-btn active text-[11px] font-bold px-2 py-0.5 rounded-full transition-all"
+    <div class="flex items-center bg-white/10 rounded-full p-0.5 border border-white/20 shadow-inner">
+      <button type="button" class="lang-btn active text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all bg-primary text-white shadow-sm"
         data-lang="hi">
         🇮🇳 हिंदी
       </button>
-      <button type="button" class="lang-btn text-[11px] font-bold px-2 py-0.5 rounded-full transition-all"
+      <button type="button" class="lang-btn text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all text-white hover:text-amber-300"
         data-lang="en">
         English
       </button>
@@ -92,7 +98,7 @@
            Exact Structure: Home, About Us, Gallery, Press, Download, Forms, Contact Us
            ============================================== -->
       <div
-        class="desktop-primary-nav hidden xl:flex flex-1 flex-nowrap items-center justify-center gap-1 2xl:gap-2.5 mx-2 2xl:mx-4 text-[14px] xl:text-[15px] 2xl:text-[17px] font-bold">
+        class="desktop-primary-nav hidden 2xl:flex flex-1 flex-nowrap items-center justify-center gap-1 2xl:gap-2.5 mx-2 2xl:mx-4 text-[14px] xl:text-[15px] 2xl:text-[17px] font-bold">
 
         <!-- 1. Home -->
         <a href="/"
@@ -114,32 +120,26 @@
               <div class="py-2 text-[13.5px] 2xl:text-[15px]">
                 <a href="/about"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-circle-info mr-2 text-primary text-xs"></i>
                   <span data-i18n="nav.about_vip">वीआईपी के बारे में</span>
                 </a>
                 <a href="/journey-of-mukesh-sahani"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-semibold">
-                  <i class="fa-solid fa-user-tie mr-2 text-amber-500 text-xs"></i>
                   <span data-i18n="nav.journey_mukesh">मुकेश सहनी का सफर</span>
                 </a>
                 <a href="/mission-vision"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-bullseye mr-2 text-primary text-xs"></i>
                   <span data-i18n="nav.mission_vision">मिशन एवं विज़न</span>
                 </a>
                 <a href="/ideology"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-scale-balanced mr-2 text-primary text-xs"></i>
                   <span data-i18n="nav.ideology">हमारी विचारधारा</span>
                 </a>
                 <a href="/major-issues"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-hand-fist mr-2 text-red-500 text-xs"></i>
                   <span data-i18n="nav.major_issues">प्रमुख मुद्दे</span>
                 </a>
                 <a href="/nvs"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors border-t border-gray-100 mt-1">
-                  <i class="fa-solid fa-users-rays mr-2 text-blue-600 text-xs"></i>
                   <span data-i18n="nav.nvs">(NVS) निषाद विकास संघ</span>
                 </a>
               </div>
@@ -161,12 +161,10 @@
               <div class="py-2 text-[13.5px] 2xl:text-[15px]">
                 <a href="/gallery/photo"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-regular fa-image mr-2 text-primary text-xs"></i>
                   <span data-i18n="nav.photo">फोटो</span>
                 </a>
                 <a href="/gallery/video"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-video mr-2 text-red-500 text-xs"></i>
                   <span data-i18n="nav.video">वीडियो</span>
                 </a>
               </div>
@@ -188,17 +186,14 @@
               <div class="py-2 text-[13.5px] 2xl:text-[15px]">
                 <a href="/news"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-newspaper mr-2 text-primary text-xs"></i>
                   <span data-i18n="nav.news">समाचार</span>
                 </a>
                 <a href="/interview"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-microphone-lines mr-2 text-amber-500 text-xs"></i>
                   <span data-i18n="nav.interview">इंटरव्यू</span>
                 </a>
                 <a href="/press-release"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-regular fa-newspaper mr-2 text-green-600 text-xs"></i>
                   <span data-i18n="nav.press_release">प्रेस विज्ञप्ति</span>
                 </a>
               </div>
@@ -220,22 +215,18 @@
               <div class="py-2 text-[13.5px] 2xl:text-[15px]">
                 <a href="/download/leaders-photo"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-camera-retro mr-2 text-primary text-xs"></i>
                   <span data-i18n="nav.leaders_photo">नेताओं की तस्वीरें</span>
                 </a>
                 <a href="/download/infographics-banner"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-chart-pie mr-2 text-amber-500 text-xs"></i>
                   <span data-i18n="nav.infographics_banner">इन्फोग्राफिक्स और बैनर</span>
                 </a>
                 <a href="/download/quotes"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-quote-left mr-2 text-blue-500 text-xs"></i>
                   <span data-i18n="nav.quotes">सुविचार एवं उद्धरण</span>
                 </a>
                 <a href="/download/mobile-wallpaper"
                   class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                  <i class="fa-solid fa-mobile-screen mr-2 text-emerald-600 text-xs"></i>
                   <span data-i18n="nav.mobile_wallpaper">मोबाइल वॉलपेपर</span>
                 </a>
               </div>
@@ -256,28 +247,23 @@
               class="bg-white rounded-xl shadow-2xl border border-gray-100 transform origin-top-left scale-95 group-hover:scale-100 transition-all duration-200 overflow-hidden">
               <div class="py-2 text-[13.5px] 2xl:text-[15px]">
                 <a href="/forms"
-                  class="flex items-center px-4 py-2 text-primary bg-blue-50/60 hover:bg-blue-100 transition-colors font-bold border-b border-gray-100">
-                  <i class="fa-solid fa-layer-group mr-2.5 text-primary text-xs"></i>
+                  class="block px-4 py-2 text-primary bg-blue-50/60 hover:bg-blue-100 transition-colors font-bold border-b border-gray-100">
                   <span>सभी फॉर्म देखें (All Forms)</span>
                 </a>
                 <a href="/member"
-                  class="flex items-center px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
-                  <i class="fa-solid fa-user-plus mr-2.5 text-primary text-xs"></i>
+                  class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
                   <span data-i18n="nav.join_party">वीआईपी पार्टी से जुड़ें</span>
                 </a>
                 <a href="/volunteer"
-                  class="flex items-center px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
-                  <i class="fa-solid fa-handshake-angle mr-2.5 text-sky-600 text-xs"></i>
+                  class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
                   <span data-i18n="nav.join_volunteer">वालंटियर के रूप में जुड़ें</span>
                 </a>
                 <a href="/scholarship"
-                  class="flex items-center px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
-                  <i class="fa-solid fa-graduation-cap mr-2.5 text-amber-500 text-xs"></i>
+                  class="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors font-medium">
                   <span data-i18n="nav.scholarship">जुब्बा सहनी छात्रवृत्ति योजना</span>
                 </a>
                 <a href="/candidature-up-2027"
-                  class="flex items-center px-4 py-2.5 text-gray-800 hover:bg-blue-50 hover:text-primary transition-colors font-bold border-t border-gray-100 mt-1">
-                  <i class="fa-solid fa-vote-yea mr-2.5 text-red-500 text-xs"></i>
+                  class="block px-4 py-2.5 text-gray-800 hover:bg-blue-50 hover:text-primary transition-colors font-bold border-t border-gray-100 mt-1">
                   <span data-i18n="nav.candidature_up">यूपी 2027 उम्मीदवारी आवेदन</span>
                 </a>
               </div>
@@ -298,7 +284,7 @@
            Login / SignUp | Support Us | Join VIP
            + Language Switcher
            ============================================== -->
-      <div class="hidden xl:flex flex-shrink-0 items-center space-x-2.5 2xl:space-x-3">
+      <div class="hidden 2xl:flex flex-shrink-0 items-center space-x-2.5 2xl:space-x-3">
 
         <!-- Language Switcher Pill (Bilingual) -->
         <!-- <div class="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 mr-1 shadow-inner">
@@ -316,16 +302,29 @@
 
         <!-- Account menu -->
         <% if (currentUser) { %>
-        <div class="relative group">
-          <a href="/profile" class="text-gray-700 hover:text-primary px-3 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold flex items-center gap-2 hover:bg-gray-100 whitespace-nowrap">
-            <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt="" class="w-8 h-8 rounded-full object-cover navbar-profile-avatar"><% } else { %><i class="fa-solid fa-circle-user text-primary text-xl"></i><% } %>
-            <span class="navbar-profile-name"><%= currentUser.name %></span><i class="fa-solid fa-chevron-down text-[10px]"></i>
-          </a>
-          <div class="absolute top-full right-0 pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]">
-            <div class="bg-white rounded-xl shadow-2xl border border-gray-100 p-3">
-              <p class="px-2 pb-2 text-xs text-gray-500 truncate"><%= currentUser.email || currentUser.phone %></p>
-              <a href="/profile" class="block px-3 py-2 text-sm font-bold rounded-lg text-gray-700 hover:bg-blue-50">My profile</a>
-              <form action="/auth/logout" method="post"><button class="w-full text-left px-3 py-2 text-sm font-bold rounded-lg text-red-600 hover:bg-red-50" type="submit">Sign out</button></form>
+          <div class="relative group">
+            <a href="/profile"
+              class="text-gray-700 hover:text-primary px-3 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold flex items-center gap-2 hover:bg-gray-100 whitespace-nowrap">
+              <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
+                  class="w-8 h-8 rounded-full object-cover navbar-profile-avatar">
+                <% } else { %><i class="fa-solid fa-circle-user text-primary text-xl"></i>
+                  <% } %>
+                    <span class="navbar-profile-name">
+                      <%= currentUser.name %>
+                    </span><i class="fa-solid fa-chevron-down text-[10px]"></i>
+            </a>
+            <div
+              class="absolute top-full right-0 pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]">
+              <div class="bg-white rounded-xl shadow-2xl border border-gray-100 p-3">
+                <p class="px-2 pb-2 text-xs text-gray-500 truncate">
+                  <%= currentUser.email || currentUser.phone %>
+                </p>
+                <a href="/profile"
+                  class="block px-3 py-2 text-sm font-bold rounded-lg text-gray-700 hover:bg-blue-50">My profile</a>
+                <form action="/auth/logout" method="post"><button
+                    class="w-full text-left px-3 py-2 text-sm font-bold rounded-lg text-red-600 hover:bg-red-50"
+                    type="submit">Sign out</button></form>
+              </div>
             </div>
           </div>
         </div>
@@ -335,8 +334,8 @@
             <i class="fa-solid fa-user-circle mr-1.5 text-base text-primary"></i><span data-i18n="nav.login_signup">लॉगिन / साइनअप</span><i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
           </a>
           <div class="absolute top-full right-0 pt-2 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]"><div class="bg-white rounded-xl shadow-2xl border border-gray-100 p-2 overflow-hidden">
-            <a href="/login" class="flex items-center px-3.5 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary rounded-lg text-[13.5px] font-bold"><i class="fa-solid fa-right-to-bracket mr-2.5 text-primary text-xs"></i><span>लॉगिन (Login)</span></a>
-            <a href="/signup" class="flex items-center px-3.5 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary rounded-lg text-[13.5px] font-bold"><i class="fa-solid fa-user-plus mr-2.5 text-emerald-600 text-xs"></i><span>साइन अप (Sign Up)</span></a>
+            <a href="/login" class="block px-3.5 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary rounded-lg text-[13.5px] font-bold"><span>लॉगिन (Login)</span></a>
+            <a href="/signup" class="block px-3.5 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-primary rounded-lg text-[13.5px] font-bold"><span>साइन अप (Sign Up)</span></a>
           </div></div>
         </div>
         <% } %>
@@ -347,16 +346,16 @@
           <span data-i18n="nav.support_us">सहयोग करें</span>
         </a>
 
-        <!-- Menu 2: Join VIP (सदस्य बनें) -->
-        <a href="/member"
-          class="bg-primary hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap">
-          <i class="fa-solid fa-user-plus mr-1.5"></i>
-          <span data-i18n="nav.join_vip">सदस्य बनें</span>
-        </a>
+              <!-- Menu 2: Join VIP (सदस्य बनें) -->
+              <a href="/member"
+                class="bg-primary hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap">
+                <i class="fa-solid fa-user-plus mr-1.5"></i>
+                <span data-i18n="nav.join_vip">सदस्य बनें</span>
+              </a>
       </div>
 
       <!-- Mobile Top Actions: Language Pill + Hamburger -->
-      <div class="xl:hidden flex items-center gap-2">
+      <div class="2xl:hidden flex items-center gap-2">
 
         <!-- Mobile Compact Language Switcher -->
         <div class="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 text-xs">
@@ -372,7 +371,8 @@
         <button id="mobile-menu-btn" type="button" aria-label="मुख्य मेनू खोलें" aria-controls="mobile-menu"
           aria-expanded="false"
           class="flex h-11 w-11 items-center justify-center text-gray-700 hover:text-primary focus:outline-none transition-transform hover:scale-105">
-          <svg data-mobile-menu-icon class="mobile-menu-icon h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg data-mobile-menu-icon class="mobile-menu-icon h-7 w-7" viewBox="0 0 24 24" fill="none"
+            aria-hidden="true">
             <path class="mobile-menu-icon-bars" d="M4 6h16M4 12h16M4 18h16" />
             <path class="mobile-menu-icon-close" d="m6 6 12 12M18 6 6 18" />
           </svg>
@@ -386,7 +386,7 @@
        MOBILE DRAWER MENU (FULL RESPONSIVE ACCORDION)
        ============================================== -->
   <div id="mobile-menu"
-    class="hidden xl:hidden bg-white border-t border-gray-100 animate-slide-up origin-top max-h-[calc(100vh-80px)] overflow-y-auto">
+    class="hidden 2xl:hidden bg-white border-t border-gray-100 animate-slide-up origin-top max-h-[calc(100vh-120px)] overflow-y-auto">
     <div class="px-4 pt-3 pb-8 space-y-1">
 
       <!-- Mobile Language Switcher Full Banner -->
@@ -514,7 +514,7 @@
         </button>
         <div id="mobile-forms-menu" class="hidden pl-4 space-y-1 mt-1 border-l-2 border-blue-200 ml-4">
           <a href="/forms" class="block px-3 py-2 text-sm font-bold rounded-md transition-colors text-primary hover:bg-blue-50">
-            <i class="fa-solid fa-layer-group mr-2 text-primary"></i> सभी फॉर्म देखें
+            सभी फॉर्म देखें
           </a>
           <a href="/member" class="block px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-50"
             data-i18n="nav.join_party">वीआईपी पार्टी से जुड़ें</a>
@@ -543,31 +543,46 @@
       <div class="mt-5 pt-5 border-t border-gray-100 flex flex-col space-y-3">
         <!-- Account actions -->
         <% if (currentUser) { %>
-        <a href="/profile" class="w-full bg-blue-50 text-primary px-3 py-3 rounded-xl font-bold flex items-center gap-3 text-sm">
-          <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt="" class="w-10 h-10 rounded-full object-cover navbar-profile-avatar"><% } else { %><i class="fa-solid fa-circle-user text-2xl"></i><% } %>
-          <span class="min-w-0"><span class="block truncate navbar-profile-name"><%= currentUser.name %></span><span class="block text-xs font-medium text-gray-500 truncate navbar-profile-email"><%= currentUser.email || currentUser.phone %></span></span>
-        </a>
-        <a href="/profile" class="w-full border border-gray-200 text-gray-700 px-4 py-3 rounded-xl font-bold flex items-center justify-center">My profile</a>
-        <form action="/auth/logout" method="post"><button type="submit" class="w-full bg-red-50 text-red-600 px-4 py-3 rounded-xl font-bold">Sign out</button></form>
-        <% } else { %>
-        <div class="grid grid-cols-2 gap-2">
-          <a href="/login" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-3 rounded-xl font-bold flex items-center justify-center text-sm"><i class="fa-solid fa-right-to-bracket mr-1.5 text-primary"></i><span>लॉगिन</span></a>
-          <a href="/signup" class="w-full bg-blue-50 hover:bg-blue-100 text-primary border border-blue-200 px-3 py-3 rounded-xl font-bold flex items-center justify-center text-sm"><i class="fa-solid fa-user-plus mr-1.5"></i><span>साइनअप</span></a>
-        </div>
-        <% } %>
-        <!-- Support Us -->
-        <a href="/donate"
-          class="w-full border-2 border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white px-5 py-3 rounded-xl font-bold flex items-center justify-center transition-colors">
-          <i class="fa-regular fa-heart mr-2 text-amber-500"></i>
-          <span data-i18n="nav.support_us">सहयोग करें</span>
-        </a>
+          <a href="/profile"
+            class="w-full bg-blue-50 text-primary px-3 py-3 rounded-xl font-bold flex items-center gap-3 text-sm">
+            <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
+                class="w-10 h-10 rounded-full object-cover navbar-profile-avatar">
+              <% } else { %><i class="fa-solid fa-circle-user text-2xl"></i>
+                <% } %>
+                  <span class="min-w-0"><span class="block truncate navbar-profile-name">
+                      <%= currentUser.name %>
+                    </span><span class="block text-xs font-medium text-gray-500 truncate navbar-profile-email">
+                      <%= currentUser.email || currentUser.phone %>
+                    </span></span>
+          </a>
+          <a href="/profile"
+            class="w-full border border-gray-200 text-gray-700 px-4 py-3 rounded-xl font-bold flex items-center justify-center">My
+            profile</a>
+          <form action="/auth/logout" method="post"><button type="submit"
+              class="w-full bg-red-50 text-red-600 px-4 py-3 rounded-xl font-bold">Sign out</button></form>
+          <% } else { %>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="/login"
+                class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-3 rounded-xl font-bold flex items-center justify-center text-sm"><i
+                  class="fa-solid fa-right-to-bracket mr-1.5 text-primary"></i><span>लॉगिन</span></a>
+              <a href="/signup"
+                class="w-full bg-blue-50 hover:bg-blue-100 text-primary border border-blue-200 px-3 py-3 rounded-xl font-bold flex items-center justify-center text-sm"><i
+                  class="fa-solid fa-user-plus mr-1.5"></i><span>साइनअप</span></a>
+            </div>
+            <% } %>
+              <!-- Support Us -->
+              <a href="/donate"
+                class="w-full border-2 border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white px-5 py-3 rounded-xl font-bold flex items-center justify-center transition-colors">
+                <i class="fa-regular fa-heart mr-2 text-amber-500"></i>
+                <span data-i18n="nav.support_us">सहयोग करें</span>
+              </a>
 
-        <!-- Join VIP -->
-        <a href="/member"
-          class="w-full bg-primary hover:bg-primary-700 text-white px-5 py-3 rounded-xl font-bold flex items-center justify-center transition-colors shadow-md">
-          <i class="fa-solid fa-user-plus mr-2"></i>
-          <span data-i18n="nav.join_vip">सदस्य बनें (Join VIP)</span>
-        </a>
+              <!-- Join VIP -->
+              <a href="/member"
+                class="w-full bg-primary hover:bg-primary-700 text-white px-5 py-3 rounded-xl font-bold flex items-center justify-center transition-colors shadow-md">
+                <i class="fa-solid fa-user-plus mr-2"></i>
+                <span data-i18n="nav.join_vip">सदस्य बनें (Join VIP)</span>
+              </a>
       </div>
 
     </div>

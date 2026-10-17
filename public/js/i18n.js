@@ -38,6 +38,33 @@ const VIP_TRANSLATIONS = {
     'nav.infographics_banner': 'इन्फोग्राफिक्स और बैनर',
     'nav.quotes': 'सुविचार एवं उद्धरण',
     'nav.mobile_wallpaper': 'मोबाइल वॉलपेपर',
+
+    // Download Section UI
+    'download.hero_badge': 'VIP डिजिटल मीडिया व डाउनलोड सेन्टर',
+    'download.h_hub': 'पार्टी प्रचार सामग्री एवं आधिकारिक डाउनलोड्स',
+    'download.h_leaders': 'नेताओं की तस्वीरें (Leaders Photo)',
+    'download.h_banners': 'अभियान बैनर और इन्फोग्राफिक्स (Infographics & Banner)',
+    'download.h_quotes': 'सुविचार एवं प्रेरक उद्धरण (Quotes)',
+    'download.h_wallpapers': 'आधिकारिक 4K मोबाइल वॉलपेपर (Mobile Wallpaper)',
+    'download.hero_subtitle': 'विकासशील इंसान पार्टी के राष्ट्रीय नेतृत्व, चुनाव अभियान बैनर, प्रेरक विचार और मोबाइल वॉलपेपर उच्च गुणवत्ता (HD) में निःशुल्क डाउनलोड करें और सोशल मीडिया पर साझा करें।',
+    'download.search_placeholder': 'खोजें: मुकेश सहनी, आरक्षण रैली, सुविचार, वॉलपेपर...',
+    'download.search_btn': 'खोजें',
+    'download.tab_all': 'सभी सामग्री (All)',
+    'download.tab_leaders': 'नेताओं की तस्वीरें',
+    'download.tab_banners': 'इन्फोग्राफिक्स और बैनर',
+    'download.tab_quotes': 'सुविचार एवं उद्धरण',
+    'download.tab_wallpaper': 'मोबाइल वॉलपेपर',
+    'download.cat_leaders_title': 'नेताओं की तस्वीरें',
+    'download.cat_leaders_desc': 'राष्ट्रीय अध्यक्ष मुकेश सहनी, अमर शहीद जुब्बा सहनी और पार्टी नेतृत्व की हाई-रेजोल्यूशन पोर्ट्रेट्स।',
+    'download.cat_banners_title': 'अभियान बैनर',
+    'download.cat_banners_desc': 'निषाद आरक्षण संकल्प रैली, पार्टी चुनाव चिह्न नाव और सोशल मीडिया हेतु 16:9 व चौकोर डिजिटल बैनर।',
+    'download.cat_quotes_title': 'सुविचार एवं उद्धरण',
+    'download.cat_quotes_desc': 'सामाजिक न्याय, समान अधिकार और स्वाभिमान के प्रेरक विचार WhatsApp व Facebook पर साझा करने हेतु।',
+    'download.cat_wallpapers_title': 'मोबाइल वॉलपेपर',
+    'download.cat_wallpapers_desc': 'स्मार्टफोन लॉकस्क्रीन और होमस्क्रीन के लिए तैयार 1080x1920 9:16 अल्ट्रा HD 4K पार्टी वॉलपेपर्स।',
+    'download.btn_download': 'डाउनलोड करें (Download HD)',
+    'download.guide_title': 'आधिकारिक उपयोग मार्गदर्शिका (Usage Guidelines)',
+    'download.guide_subtitle': 'पार्टी कार्यकर्ताओं, मीडिया एवं समर्थकों हेतु महत्वपूर्ण निर्देश',
     'nav.forms': 'फॉर्म',
     'nav.join_party': 'वीआईपी पार्टी से जुड़ें',
     'nav.join_volunteer': 'वालंटियर के रूप में जुड़ें',
@@ -120,10 +147,10 @@ const VIP_TRANSLATIONS = {
     'footer.about_heading': 'VIP',
     'footer.about_sub': 'विकासशील इंसान पार्टी',
     'footer.about_desc': 'सामाजिक न्याय, समान अधिकार और समृद्ध बिहार के लिए हमारा संघर्ष जारी है। विकासशील इंसान पार्टी (VIP) का मुख्य उद्देश्य शोषित, वंचित, अति-पिछड़े और निषाद समाज का संवैधानिक अधिकार और सशक्तीकरण है। "सन ऑफ मल्लाह" श्री मुकेश सहनी के नेतृत्व में शिक्षित, विकसित, रोजगारयुक्त और समृद्ध बिहार बनाने के हमारे विजन, नेतृत्व, समाचार और कार्यक्रमों के बारे में जानें।',
-    'footer.quote': '"जिसकी जितनी संख्या भारी, उसकी उतनी हिस्सेदारी।"',
     'footer.quick_links': 'त्वरित लिंक',
     'footer.key_links': 'महत्वपूर्ण लिंक',
     'footer.contact_info': 'संपर्क सूत्र',
+    'footer.party_name': 'विकासशील इंसान पार्टी (VIP)',
     'footer.rights': 'सर्वाधिकार सुरक्षित।',
     'footer.privacy': 'गोपनीयता नीति',
     'footer.terms': 'नियम एवं शर्तें',
@@ -175,6 +202,33 @@ const VIP_TRANSLATIONS = {
     'nav.infographics_banner': 'Infographics & Banner',
     'nav.quotes': 'Quotes',
     'nav.mobile_wallpaper': 'Mobile Wallpaper',
+
+    // Download Section UI
+    'download.hero_badge': 'VIP Digital Media & Download Centre',
+    'download.h_hub': 'Official Party Campaign Media & Downloads',
+    'download.h_leaders': 'Leaders Photo (Official High-Res Portraits)',
+    'download.h_banners': 'Campaign Banners & Infographics',
+    'download.h_quotes': 'Inspirational Quotes & Thoughts',
+    'download.h_wallpapers': 'Official 4K Mobile Wallpapers',
+    'download.hero_subtitle': 'Download high-resolution official portraits of VIP leadership, election campaign banners, inspirational quotes, and 4K mobile wallpapers free to use and share on social media.',
+    'download.search_placeholder': 'Search: Mukesh Sahani, Reservation Rally, Quotes, Wallpapers...',
+    'download.search_btn': 'Search',
+    'download.tab_all': 'All Items',
+    'download.tab_leaders': 'Leaders Photo',
+    'download.tab_banners': 'Infographics & Banner',
+    'download.tab_quotes': 'Quotes & Thoughts',
+    'download.tab_wallpaper': 'Mobile Wallpaper',
+    'download.cat_leaders_title': 'Leaders Photo',
+    'download.cat_leaders_desc': 'High-resolution official portraits of National President Mukesh Sahani, Amar Shaheed Jubba Sahani, and leadership.',
+    'download.cat_banners_title': 'Campaign Banners',
+    'download.cat_banners_desc': 'Official Nishad Aarakshan Sankalp Rally posters, party boat symbol banners, and 16:9 digital assets.',
+    'download.cat_quotes_title': 'Quotes & Thoughts',
+    'download.cat_quotes_desc': 'Inspirational thoughts on social justice, equal rights, and self-respect ready to share on WhatsApp and social media.',
+    'download.cat_wallpapers_title': 'Mobile Wallpapers',
+    'download.cat_wallpapers_desc': 'Ultra HD 4K 1080x1920 9:16 mobile lockscreen and homescreen wallpapers for smartphones.',
+    'download.btn_download': 'Download HD',
+    'download.guide_title': 'Official Usage Guidelines',
+    'download.guide_subtitle': 'Essential instructions for party karyakartas, media, and supporters',
     'nav.forms': 'Forms',
     'nav.join_party': 'Join VIP Party',
     'nav.join_volunteer': 'Join as a Volunteer',
@@ -257,10 +311,10 @@ const VIP_TRANSLATIONS = {
     'footer.about_heading': 'VIP',
     'footer.about_sub': 'Vikassheel Insaan Party',
     'footer.about_desc': 'Our struggle for social justice, equal rights, and a prosperous Bihar continues. Vikassheel Insaan Party (VIP) stands for constitutional rights and empowerment of the underprivileged and Nishad community under the visionary leadership of Shri Mukesh Sahani.',
-    'footer.quote': '"Proportionate representation according to demographic strength."',
     'footer.quick_links': 'Quick Links',
     'footer.key_links': 'Important Links',
     'footer.contact_info': 'Contact Info',
+    'footer.party_name': 'Vikassheel Insaan Party (VIP)',
     'footer.rights': 'All Rights Reserved.',
     'footer.privacy': 'Privacy Policy',
     'footer.terms': 'Terms & Conditions',
@@ -329,12 +383,23 @@ window.VIP_LANG = {
     // 3. Update active state of language toggle buttons
     document.querySelectorAll('.lang-btn').forEach((btn) => {
       const btnLang = btn.getAttribute('data-lang');
+      const isTopTicker = btn.closest('.sticky-ticker') || btn.closest('.bg-primary-950') || btn.closest('.bg-primary-900');
+
       if (btnLang === lang) {
         btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
         btn.classList.remove('text-gray-700', 'hover:text-primary');
+        if (isTopTicker) {
+          btn.classList.remove('hover:text-amber-300');
+        }
       } else {
-        btn.classList.remove('bg-primary', 'text-white', 'shadow-sm');
-        btn.classList.add('text-gray-700', 'hover:text-primary');
+        btn.classList.remove('bg-primary', 'shadow-sm');
+        if (isTopTicker) {
+          btn.classList.remove('text-gray-700', 'hover:text-primary');
+          btn.classList.add('text-white', 'hover:text-amber-300');
+        } else {
+          btn.classList.remove('text-white');
+          btn.classList.add('text-gray-700', 'hover:text-primary');
+        }
       }
     });
 
