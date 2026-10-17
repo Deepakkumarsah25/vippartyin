@@ -38,6 +38,8 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
 }
 
 body {
@@ -78,6 +80,26 @@ body {
 
 .sticky-nav-offset {
   top: 0 !important;
+}
+
+.mobile-menu-icon path {
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  transform-origin: center;
+}
+
+.mobile-menu-icon-close {
+  opacity: 0;
+}
+
+.mobile-menu-icon.is-open .mobile-menu-icon-bars {
+  opacity: 0;
+}
+
+.mobile-menu-icon.is-open .mobile-menu-icon-close {
+  opacity: 1;
 }
 
 /* ==========================================================================

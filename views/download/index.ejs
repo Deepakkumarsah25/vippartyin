@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" prefix="og: http://ogp.me/ns#">
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
 
 <head>
   <meta charset="UTF-8">
@@ -18,10 +18,10 @@
   <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
   <link rel="apple-touch-icon" href="/images/vip-logo.svg">
 
-  <!-- Google Fonts: Plus Jakarta Sans & Noto Sans Devanagari -->
+  <!-- Google Fonts: Plus Jakarta Sans, Noto Sans Devanagari & Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- FontAwesome 6 Free Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -51,11 +51,11 @@
               DEFAULT: '#004b87',
               hover: '#003a6c',
             },
-            accent: '#f59e0b',
+            accent: '#f0f7ff',
             dark: '#0f172a'
           },
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
           }
         }
       }
@@ -389,6 +389,10 @@
 
   <!-- Shared Footer -->
   <%- include('../common/footer') %>
+
+  <!-- Bilingual Translation & Master Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
 
   <!-- Page Scripts -->
   <script>

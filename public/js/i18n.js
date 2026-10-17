@@ -383,12 +383,19 @@ window.VIP_LANG = {
     // 3. Update active state of language toggle buttons
     document.querySelectorAll('.lang-btn').forEach((btn) => {
       const btnLang = btn.getAttribute('data-lang');
+      const isTopTicker = btn.closest('.sticky-ticker');
       if (btnLang === lang) {
-        btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
-        btn.classList.remove('text-gray-700', 'hover:text-primary');
+        btn.classList.add('bg-primary', 'text-white', 'shadow-sm', 'active');
+        btn.classList.remove('text-gray-700', 'text-blue-200', 'hover:text-primary', 'hover:text-white');
       } else {
-        btn.classList.remove('bg-primary', 'text-white', 'shadow-sm');
-        btn.classList.add('text-gray-700', 'hover:text-primary');
+        btn.classList.remove('bg-primary', 'text-white', 'shadow-sm', 'active');
+        if (isTopTicker) {
+          btn.classList.add('text-blue-200', 'hover:text-white');
+          btn.classList.remove('text-gray-700', 'hover:text-primary');
+        } else {
+          btn.classList.add('text-gray-700', 'hover:text-primary');
+          btn.classList.remove('text-blue-200', 'hover:text-white');
+        }
       }
     });
 

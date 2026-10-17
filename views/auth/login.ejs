@@ -1,1 +1,381 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><%= pageTitle %></title><link rel="icon" href="/images/vip-logo.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/auth.css"><% if (googleClientId) { %><script src="https://accounts.google.com/gsi/client" async defer></script><% } %></head><body class="auth-body"><main class="auth-shell"><aside class="auth-story"><a class="auth-brand" href="/"><img src="/images/vip-logo.svg" alt="VIP"><span>VIKASSHEEL INSAAN PARTY</span></a><div class="auth-story-copy"><span class="auth-eyebrow">People first. Progress together.</span><h1>A stronger voice begins with you.</h1><p>Connect with your community, stay close to the movement and help shape a more hopeful future.</p></div><div class="auth-quote">जनता की आवाज़ · जनता का सम्मान</div></aside><section class="auth-content"><a class="auth-back" href="/">← Back to website</a><div class="auth-card"><a class="auth-brand auth-mobile-brand" href="/"><img src="/images/vip-logo.svg" alt="VIP"><span style="color:#10253f">VIP PARTY</span></a><div class="auth-kicker">Welcome back</div><h2>Sign in to your account</h2><p class="auth-subtitle">Pick up where you left off. Your community is waiting.</p><div id="loginAlert" class="auth-alert" role="status"></div><form id="loginForm"><div class="auth-fields"><div class="auth-field"><label for="loginPhone">Mobile number</label><input id="loginPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="10-digit mobile number" required></div><div class="auth-field"><div class="auth-password-row"><label for="loginPassword">Password</label><a href="/forgot-password">Forgot password?</a></div><input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></div></div><button id="loginSubmitBtn" class="auth-primary" type="submit">Sign in <span aria-hidden="true">→</span></button></form><div class="auth-divider">OR CONTINUE WITH</div><div id="googleButton" class="google-button<% if (!googleClientId) { %> is-disabled<% } %>" role="button" tabindex="0" aria-disabled="<%= googleClientId ? 'false' : 'true' %>"><svg class="google-mark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.73 7.18l7.62 5.91c4.45-4.11 7.15-10.16 7.15-17.56z"/><path fill="#FBBC05" d="M10.53 28.59a14.4 14.4 0 0 1 0-9.18l-7.98-6.19a23.98 23.98 0 0 0 0 21.56l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.89l-7.62-5.91c-2.12 1.42-4.84 2.26-8.28 2.26-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</div><% if (!googleClientId) { %><p class="google-hint">Google sign-in needs a Google OAuth client ID. Follow the <a href="/google-login-setup" target="_blank" rel="noopener">setup steps</a> to enable it.</p><% } %><div class="auth-switch">New to the community? <a href="/signup">Create an account</a></div><p class="auth-legal">By continuing, you agree to our community guidelines and applicable <a href="/">terms</a>.</p></div></section></main><script>const form=document.getElementById('loginForm'),alertBox=document.getElementById('loginAlert'),submit=document.getElementById('loginSubmitBtn');function message(text,type='error'){alertBox.textContent=text;alertBox.className='auth-alert show '+type}form.addEventListener('submit',async e=>{e.preventDefault();alertBox.className='auth-alert';submit.disabled=true;submit.textContent='Signing you in…';try{const r=await fetch('/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:document.getElementById('loginPhone').value.trim(),password:document.getElementById('loginPassword').value})}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Could not sign in.');message('You are signed in. Taking you to the website…','success');setTimeout(()=>location.href=d.redirect||'/',600)}catch(e){message(e.message)}finally{submit.disabled=false;submit.innerHTML='Sign in <span aria-hidden="true">→</span>'}});async function googleCredential(response){try{const r=await fetch('/auth/google',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({credential:response.credential})}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Google sign-in failed.');location.href=d.redirect||'/'}catch(e){message(e.message)}}<% if (googleClientId) { %>window.addEventListener('load',()=>{if(!window.google)return;google.accounts.id.initialize({client_id:<%- JSON.stringify(googleClientId) %>,callback:googleCredential});google.accounts.id.renderButton(document.getElementById('googleButton'),{type:'standard',theme:'outline',size:'large',text:'continue_with',shape:'rectangular',width:350})});<% } else { %><% } %></script></body></html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title><%= pageTitle %></title>
+
+  <link rel="icon" href="/images/vip-logo.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="/css/auth.css">
+
+  <% if (googleClientId) { %>
+    <script
+      src="https://accounts.google.com/gsi/client"
+      async
+      defer
+    ></script>
+  <% } %>
+</head>
+
+<body class="auth-body">
+
+  <main class="auth-shell">
+
+    <!-- LEFT SIDE -->
+    <aside class="auth-story">
+
+      <a class="auth-brand" href="/">
+        <img src="/images/vip-logo.svg" alt="VIP">
+        <span>VIKASSHEEL INSAAN PARTY</span>
+      </a>
+
+      <div class="auth-story-copy">
+        <span class="auth-eyebrow">
+          People first. Progress together.
+        </span>
+
+        <h1>A stronger voice begins with you.</h1>
+
+        <p>
+          Connect with your community, stay close to the
+          movement and help shape a more hopeful future.
+        </p>
+      </div>
+
+      <div class="auth-quote">
+        जनता की आवाज़ · जनता का सम्मान
+      </div>
+
+    </aside>
+
+    <!-- RIGHT SIDE -->
+    <section class="auth-content">
+
+      <a class="auth-back" href="/">
+        ← Back to website
+      </a>
+
+      <div class="auth-card">
+
+        <a class="auth-brand auth-mobile-brand" href="/">
+          <img src="/images/vip-logo.svg" alt="VIP">
+          <span style="color:#10253f">VIP PARTY</span>
+        </a>
+
+        <div class="auth-kicker">Welcome back</div>
+
+        <h2>Sign in to your account</h2>
+
+        <p class="auth-subtitle">
+          Pick up where you left off. Your community is waiting.
+        </p>
+
+        <div
+          id="loginAlert"
+          class="auth-alert"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+        <!-- MOBILE / PASSWORD LOGIN -->
+        <form id="loginForm">
+
+          <div class="auth-fields">
+
+            <div class="auth-field">
+              <label for="loginPhone">Mobile number</label>
+
+              <input
+                id="loginPhone"
+                name="phone"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel-national"
+                maxlength="10"
+                placeholder="10-digit mobile number"
+                required
+              >
+            </div>
+
+            <div class="auth-field">
+
+              <div class="auth-password-row">
+                <label for="loginPassword">Password</label>
+
+                <a href="/forgot-password">
+                  Forgot password?
+                </a>
+              </div>
+
+              <input
+                id="loginPassword"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                required
+              >
+
+            </div>
+
+          </div>
+
+          <button
+            id="loginSubmitBtn"
+            class="auth-primary"
+            type="submit"
+          >
+            Sign in <span aria-hidden="true">→</span>
+          </button>
+
+        </form>
+
+        <div class="auth-divider">
+          OR CONTINUE WITH
+        </div>
+
+        <!-- GOOGLE LOGIN -->
+        <div
+          id="googleButton"
+          class="google-button<%= googleClientId ? '' : ' is-disabled' %>"
+          role="group"
+          aria-label="Sign in with Google"
+        >
+          <% if (googleClientId) { %>
+            <!-- Google Identity Services renders the button here -->
+          <% } else { %>
+            <p class="google-hint">
+              Google sign-in is not configured yet.
+              Please contact the site administrator.
+            </p>
+          <% } %>
+        </div>
+
+        <% if (!googleClientId) { %>
+          <p class="google-hint">
+            Google sign-in needs a Google OAuth client ID.
+            Follow the
+            <a
+              href="/google-login-setup"
+              target="_blank"
+              rel="noopener noreferrer"
+            >setup steps</a>
+            to enable it.
+          </p>
+        <% } %>
+
+        <div class="auth-switch">
+          New to the community?
+          <a href="/signup">Create an account</a>
+        </div>
+
+        <p class="auth-legal">
+          By continuing, you agree to our community guidelines
+          and applicable <a href="/">terms</a>.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const alertBox = document.getElementById('loginAlert');
+    const submit = document.getElementById('loginSubmitBtn');
+    const googleButton = document.getElementById('googleButton');
+
+    function message(text, type = 'error') {
+      alertBox.textContent = text;
+      alertBox.className = 'auth-alert show ' + type;
+    }
+
+    async function readResponse(response) {
+      const raw = await response.text();
+
+      try {
+        return JSON.parse(raw);
+      } catch {
+        console.error(
+          'Authentication endpoint returned a non-JSON response:',
+          response.status
+        );
+
+        throw new Error(
+          'Server response invalid hai. Please try again later.'
+        );
+      }
+    }
+
+    // MOBILE / PASSWORD LOGIN
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      alertBox.className = 'auth-alert';
+      submit.disabled = true;
+      submit.textContent = 'Signing you in...';
+
+      try {
+        const response = await fetch('/auth/login', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            phone: document.getElementById('loginPhone').value.trim(),
+            password: document.getElementById('loginPassword').value
+          })
+        });
+
+        const data = await readResponse(response);
+
+        if (!response.ok || !data.success) {
+          throw new Error(
+            data.message || 'Could not sign in.'
+          );
+        }
+
+        message(
+          'You are signed in. Redirecting...',
+          'success'
+        );
+
+        window.location.assign(data.redirect || '/');
+
+      } catch (error) {
+        message(
+          error.message || 'Login failed. Please try again.'
+        );
+
+      } finally {
+        submit.disabled = false;
+        submit.innerHTML =
+          'Sign in <span aria-hidden="true">→</span>';
+      }
+    });
+
+    // GOOGLE LOGIN CALLBACK
+    async function googleCredential(response) {
+      try {
+        if (!response || !response.credential) {
+          throw new Error(
+            'Google credential nahi mila. Please try again.'
+          );
+        }
+
+        alertBox.className = 'auth-alert';
+
+        googleButton.style.pointerEvents = 'none';
+        googleButton.style.opacity = '0.65';
+
+        const result = await fetch('/auth/google', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            credential: response.credential
+          })
+        });
+
+        const data = await readResponse(result);
+
+        console.log(
+          'Google login HTTP status:',
+          result.status
+        );
+
+        if (!result.ok || data.success !== true) {
+          console.error(
+            'Google login failed:',
+            result.status,
+            data.message || 'Unknown server error'
+          );
+
+          throw new Error(
+            data.message ||
+            `Google login failed (HTTP ${result.status}).`
+          );
+        }
+
+        message(
+          'Google login successful. Redirecting...',
+          'success'
+        );
+
+        window.location.assign(data.redirect || '/');
+
+      } catch (error) {
+        console.error('Google login error:', error);
+
+        message(
+          error.message ||
+          'Google sign-in could not be completed.'
+        );
+
+      } finally {
+        googleButton.style.pointerEvents = '';
+        googleButton.style.opacity = '';
+      }
+    }
+
+    // INITIALIZE GOOGLE IDENTITY SERVICES
+    <% if (googleClientId) { %>
+      window.addEventListener('load', () => {
+        if (!window.google || !window.google.accounts) {
+          message(
+            'Google sign-in load nahi hua. Page reload karke try karein.'
+          );
+          return;
+        }
+
+        try {
+          window.google.accounts.id.initialize({
+            client_id: <%- JSON.stringify(googleClientId) %>,
+            callback: googleCredential
+          });
+
+          window.google.accounts.id.renderButton(
+            googleButton,
+            {
+              type: 'standard',
+              theme: 'outline',
+              size: 'large',
+              text: 'continue_with',
+              shape: 'rectangular',
+              width: 350,
+              logo_alignment: 'left'
+            }
+          );
+
+        } catch (error) {
+          console.error(
+            'Google initialization error:',
+            error
+          );
+
+          message(
+            'Google sign-in initialize nahi ho saka.'
+          );
+        }
+      });
+    <% } %>
+  </script>
+
+</body>
+</html>
