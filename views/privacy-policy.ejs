@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="hi-IN" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VIP Party App Privacy Policy">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Privacy Policy | VIP Party' %></title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="/images/vip-logo.svg">
+  <link rel="apple-touch-icon" href="/images/vip-logo.svg">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN Configured with VIP Party Branding -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426',
+            },
+            secondary: {
+              DEFAULT: '#004b87',
+              hover: '#003a6c',
+            },
+            accent: '#f0f7ff',
+            dark: '#0f172a'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom VIP Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    :root {
+      --text: #202124;
+      --body: #3c4043;
+      --muted: #5f6368;
+      --line: #e5e7eb;
+      --page: #f7f8fa;
+      --white: #fff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .legal-container {
+      width: min(1120px, calc(100% - 48px));
+      margin: 28px auto 48px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .legal-container a {
+      color: #174ea6;
+      overflow-wrap: anywhere;
+      text-underline-offset: 2px;
+    }
+
+    .legal-container a:hover {
+      color: #123b7a;
+    }
+
+    .legal-container .page-heading {
+      padding-bottom: 20px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .legal-container h1 {
+      font-size: clamp(27px, 3vw, 32px);
+      line-height: 1.3;
+      font-weight: 700;
+      margin-bottom: 5px;
+      letter-spacing: -0.45px;
+    }
+
+    .legal-container .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .legal-container .effective-date {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legal-container .policy {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: clamp(22px, 3.2vw, 38px);
+    }
+
+    .legal-container .intro {
+      color: var(--muted);
+      font-size: 14px;
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .legal-container .section {
+      padding: 21px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 20px;
+    }
+
+    .legal-container .section:first-of-type {
+      padding-top: 0;
+    }
+
+    .legal-container .section:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .legal-container h2 {
+      font-size: 19px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .legal-container p {
+      color: var(--body);
+      margin-bottom: 11px;
+    }
+
+    .legal-container p:last-child {
+      margin-bottom: 0;
+    }
+
+    .legal-container ul {
+      color: var(--body);
+      padding-left: 22px;
+      margin: 9px 0 13px;
+      list-style-type: disc;
+    }
+
+    .legal-container li {
+      margin-bottom: 7px;
+      padding-left: 2px;
+    }
+
+    .legal-container strong {
+      color: var(--text);
+    }
+
+    .legal-container .notice,
+    .legal-container .contact {
+      background: #fafafa;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+
+    .legal-container .notice {
+      font-size: 14px;
+    }
+
+    .legal-container .contact p {
+      margin-bottom: 7px;
+    }
+
+    @media (min-width: 1500px) {
+      .legal-container {
+        width: min(1160px, calc(100% - 64px));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .legal-container {
+        width: calc(100% - 24px);
+        margin: 22px auto 30px;
+      }
+
+      .legal-container .page-heading {
+        padding-bottom: 17px;
+        margin-bottom: 17px;
+      }
+
+      .legal-container h1 {
+        font-size: 28px;
+      }
+
+      .legal-container h2 {
+        font-size: 18px;
+      }
+
+      .legal-container .policy {
+        padding: 20px 16px;
+      }
+
+      .legal-container .section {
+        padding: 19px 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans text-gray-700 bg-[#f7f8fa] antialiased">
+
+  <!-- 1. Header & Navigation (Shared Component) -->
+  <%- include('common/navbar') %>
+
+  <!-- Main Content -->
+  <main class="legal-container">
+
+    <div class="page-heading">
+      <h1>Privacy Policy</h1>
+      <p class="subtitle">
+        Learn how we handle information and protect your privacy while using VIP Party.
+      </p>
+      <span class="effective-date">
+        Effective Date: 11 October 2026
+      </span>
+    </div>
+
+    <article class="policy">
+
+      <p class="intro">
+        Please read this Privacy Policy carefully. It explains how information
+        may be collected, used, stored, and shared when you use the VIP Party app.
+      </p>
+
+      <section class="section">
+        <h2>1. Introduction</h2>
+        <p>
+          Welcome to the VIP Party mobile application. This Privacy Policy explains
+          how information is accessed, collected, used, stored, and shared when
+          you use the VIP Party app.
+        </p>
+        <p>
+          The application is developed with technical support from RID Tech.
+          Responsibility for the app and user data should be identified according
+          to the actual arrangement between VIP Party and RID Tech.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>2. Information We Handle</h2>
+        <p>
+          Depending on the features you use, the app may process the following information:
+        </p>
+        <ul>
+          <li>
+            <strong>Google Sign-In:</strong> Your name, email address, profile picture,
+            and authentication information made available through Google Sign-In.
+          </li>
+          <li>
+            <strong>App usage:</strong> Information necessary to display news, events,
+            videos, announcements, and other app features.
+          </li>
+          <li>
+            <strong>Technical information:</strong> Diagnostic logs and device or app
+            information processed by the app or its third-party services, where applicable.
+          </li>
+        </ul>
+        <p>
+          The app is stated not to intentionally collect device location.
+          This statement should be verified against the released app and its integrated services.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>3. How We Use Information</h2>
+        <p>Information may be used to:</p>
+        <ul>
+          <li>Authenticate users and provide account access.</li>
+          <li>Display app content and features.</li>
+          <li>Maintain app security and troubleshoot technical problems.</li>
+          <li>Respond to user requests and improve app functionality.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>4. Google Sign-In and Third-Party Services</h2>
+        <p>
+          The app uses Google Sign-In for authentication. Google may process
+          information according to its own privacy policy.
+        </p>
+        <p>
+          The app may use Firebase or other third-party services for authentication,
+          hosting, analytics, notifications, or technical support, depending on
+          the services enabled in the released app.
+        </p>
+        <p>
+          Google's Privacy Policy:
+          <a href="https://policies.google.com/privacy"
+             target="_blank" rel="noopener noreferrer">
+            https://policies.google.com/privacy
+          </a>
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>5. Data Sharing</h2>
+        <p>
+          Personal information is not shared with third parties except as necessary
+          to operate the app, provide enabled services, comply with applicable law,
+          or as otherwise disclosed to users.
+        </p>
+        <p>
+          The final policy should identify the service providers involved and
+          describe the information shared with them.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>6. Data Security</h2>
+        <p>
+          Reasonable technical and organizational measures are used to protect
+          information against unauthorized access, loss, misuse, or disclosure.
+          Data transmitted over networks should be protected using HTTPS and
+          appropriate security controls.
+        </p>
+        <p>
+          No method of electronic transmission or storage can guarantee absolute security.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>7. Data Retention and Deletion</h2>
+        <p>
+          Information is retained only for as long as necessary for the purposes
+          described in this policy, subject to applicable legal requirements.
+        </p>
+        <p>
+          Users should have a clear way to request deletion of their app account
+          and associated data. Where account creation is available, the app should
+          provide an appropriate account-deletion process and explain any applicable exceptions.
+        </p>
+        <div class="notice">
+          <strong>Before publishing:</strong>
+          Add the verified in-app account-deletion steps and a working account-deletion request URL.
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>8. Children's Privacy</h2>
+        <p>
+          The app is not specifically directed at children unless otherwise stated.
+          If children are included in the target audience, the app must follow
+          applicable child privacy laws and Google Play Families requirements.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>9. Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy when app features, services, or
+          applicable requirements change. The latest version and effective date
+          will be published on this page.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>10. Contact Us</h2>
+        <p>
+          For questions about this Privacy Policy or requests relating to personal
+          information, contact:
+        </p>
+
+        <div class="contact">
+          <p><strong>App:</strong> VIP Party</p>
+          <p><strong>Technical development:</strong> RID Tech</p>
+          <p><strong>Privacy contact email:</strong>nishadaarakshansankalp@gmail.com</p>
+          <p>
+            <strong>Website:</strong>
+            <a href="https://vipparty.in/" target="_blank" rel="noopener noreferrer">
+              https://vipparty.in/
+            </a>
+          </p>
+          <p>
+            <strong>Developer website:</strong>
+            <a href="https://www.ridtech.in/" target="_blank" rel="noopener noreferrer">
+              https://www.ridtech.in/
+            </a>
+          </p>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- Footer (Shared Component) -->
+  <%- include('common/footer') %>
+
+  <!-- Bilingual Translation & VIP Interactions Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/main.js"></script>
+
+</body>
+</html>
