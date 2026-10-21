@@ -357,17 +357,27 @@ body {
   display: block;
 }
 
-/* Ensure clean, zero-black-bar full-coverage across all screen sizes */
+/* Mobile Hero (max-width: 639px): Full coverage across entire container with zero empty space and zero cropping */
 @media (max-width: 639px) {
   .hero-carousel-slides {
-    aspect-ratio: 2.08 / 1 !important;
-    height: auto !important;
-    min-height: unset !important;
-    max-height: unset !important;
+    aspect-ratio: unset !important;
+    height: 48vh !important;
+    height: 48dvh !important;
+    min-height: 320px !important;
+    max-height: 460px !important;
+  }
+  .hero-carousel-slides .hero-slide {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   .hero-carousel-slides .hero-slide img.main-hero-img {
-    object-fit: cover !important;
+    object-fit: fill !important;
     object-position: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    filter: none !important;
   }
 }
 
@@ -406,5 +416,30 @@ body {
   .hero-carousel-slides .hero-slide img.main-hero-img {
     object-fit: cover !important;
     object-position: center !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile Horizontal Carousel & Touch Utilities
+   ========================================================================== */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile horizontal carousels scroll snap padding */
+@media (max-width: 639px) {
+  #home-video-grid,
+  #home-news-list,
+  #home-vision-pillars {
+    scroll-padding-left: 1rem;
+    scroll-padding-right: 1rem;
   }
 }
