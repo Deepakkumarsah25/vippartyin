@@ -90,10 +90,11 @@
         <% if (typeof heroBanners !== 'undefined' && heroBanners && heroBanners.length > 0) { %>
           <% heroBanners.forEach((banner, idx) => { %>
             <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out <%= idx === 0 ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0' %>" data-slide-index="<%= idx %>">
+              
               <img
                 src="<%= banner.imageUrl %>"
                 alt="<%= banner.title || 'विकासशील इंसान पार्टी - VIP Party' %>"
-                class="w-full h-full object-contain object-center block"
+                class="main-hero-img relative z-10 w-full h-full object-cover object-center block"
                 loading="<%= idx === 0 ? 'eager' : 'lazy' %>"
               />
             </div>
@@ -118,7 +119,7 @@
           type="button"
           id="heroPrevBtn"
           aria-label="Previous Banner"
-          class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/75 text-white shadow-xl backdrop-blur-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:scale-110 z-20 border border-white/20 focus:outline-none"
+          class="absolute left-2.5 sm:left-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/75 text-white shadow-xl backdrop-blur-md flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 z-20 border border-white/20 focus:outline-none"
         >
           <i class="fa-solid fa-chevron-left text-sm sm:text-base"></i>
         </button>
@@ -128,13 +129,13 @@
           type="button"
           id="heroNextBtn"
           aria-label="Next Banner"
-          class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/75 text-white shadow-xl backdrop-blur-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:scale-110 z-20 border border-white/20 focus:outline-none"
+          class="absolute right-2.5 sm:right-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/75 text-white shadow-xl backdrop-blur-md flex items-center justify-center transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 z-20 border border-white/20 focus:outline-none"
         >
           <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
         </button>
 
         <!-- Slide Indicators / Dots -->
-        <div class="absolute bottom-4 sm:bottom-6 inset-x-0 flex items-center justify-center gap-2.5 z-20" id="heroDots">
+        <div class="absolute bottom-3 sm:bottom-6 inset-x-0 flex items-center justify-center gap-2 sm:gap-2.5 z-20" id="heroDots">
           <% heroBanners.forEach((_, idx) => { %>
             <button
               type="button"
@@ -147,7 +148,7 @@
       <% } %>
 
       <!-- Live Sync Indicator Badge -->
-      <div class="absolute top-4 right-4 z-20 bg-primary/90 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white/25 pointer-events-none">
+      <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 bg-primary/90 backdrop-blur-md text-white text-[9px] sm:text-xs font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white/25 pointer-events-none">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         <span>LIVE UPDATES</span>
       </div>
@@ -181,6 +182,7 @@
         </div>
       </a>
 
+      
       <!-- 2. सक्रिय सदस्य बनें -->
       <a href="/active-member" class="group relative bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
         <div class="absolute inset-0 bg-gradient-to-r from-sky-600 to-primary-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
