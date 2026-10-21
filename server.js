@@ -1263,6 +1263,34 @@ const handleContactSubmission = async (req, res) => {
 app.post('/contact', handleContactSubmission);
 app.post('/api/contact', handleContactSubmission);
 
+// Dedicated Privacy Policy Page
+app.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy', {
+    pageTitle: 'Privacy Policy | VIP Party (विकासशील इंसान पार्टी)',
+    activeNav: 'privacy'
+  });
+});
+app.get('/privacy', (req, res) => {
+  res.render('privacy-policy', {
+    pageTitle: 'Privacy Policy | VIP Party (विकासशील इंसान पार्टी)',
+    activeNav: 'privacy'
+  });
+});
+
+// Dedicated Terms & Conditions Page
+app.get('/terms-and-conditions', (req, res) => {
+  res.render('terms-and-conditions', {
+    pageTitle: 'Terms & Conditions | VIP Party (विकासशील इंसान पार्टी)',
+    activeNav: 'terms'
+  });
+});
+app.get('/terms', (req, res) => {
+  res.render('terms-and-conditions', {
+    pageTitle: 'Terms & Conditions | VIP Party (विकासशील इंसान पार्टी)',
+    activeNav: 'terms'
+  });
+});
+
 // ------------------------------------
 // 4. 404 & Error Handling
 // ------------------------------------
