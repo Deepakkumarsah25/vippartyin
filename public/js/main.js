@@ -418,9 +418,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const subject = document.getElementById('contactSubject')?.value.trim();
       const message = document.getElementById('contactMessage')?.value.trim();
 
-      if (!name || !phone || !message) {
+      if (!name || !phone || !email || !message) {
         if (contactErrorAlert) {
-          if (contactErrorMsg) contactErrorMsg.textContent = 'कृपया पूरा नाम, मोबाइल नंबर और संदेश अनिवार्य रूप से भरें।';
+          if (contactErrorMsg) contactErrorMsg.textContent = 'कृपया पूरा नाम, मोबाइल नंबर, ईमेल और संदेश अनिवार्य रूप से भरें।';
           contactErrorAlert.classList.remove('hidden');
         }
         return;

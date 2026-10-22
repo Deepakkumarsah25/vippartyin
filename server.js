@@ -1226,25 +1226,58 @@ const handleContactSubmission = async (req, res) => {
     const { name, phone, email, subject, message } = req.body;
     const senderName = (name || '').trim();
     const senderPhone = (phone || '').trim();
+    const senderEmail = (email || '').trim().toLowerCase();
+    const senderSubject = (subject || 'सामान्य पूछताछ (General Inquiry)').trim();
     const senderMsg = (message || '').trim();
 
-    if (!senderName || !senderPhone || !senderMsg) {
+    if (!senderName || !senderPhone || !senderEmail || !senderMsg) {
       return res.status(400).json({
         success: false,
-        message: 'कृपया पूरा नाम, मोबाइल नंबर और संदेश अनिवार्य रूप से दर्ज करें।'
+        message: 'कृपया पूरा नाम, मोबाइल नंबर, ईमेल और संदेश अनिवार्य रूप से दर्ज करें।'
       });
     }
 
+    let savedDirectly = false;
     if (mongoose.connection.readyState === 1) {
-      await Contact.create({
-        name: senderName,
+      // Duplicate prevention: avoid inserting duplicate if submitted within last 30 seconds
+      const recentDup = await Contact.findOne({
         phone: senderPhone,
-        email: (email || '').trim(),
-        subject: (subject || 'General Inquiry').trim(),
         message: senderMsg,
-        status: 'New'
+        createdAt: { $gte: new Date(Date.now() - 30 * 1000) }
       });
-      console.log(`📩 New VIP Contact Message from: ${senderName} (${senderPhone})`);
+      if (!recentDup) {
+        await Contact.create({
+          name: senderName,
+          phone: senderPhone,
+          email: senderEmail,
+          subject: senderSubject,
+          message: senderMsg,
+          status: 'New',
+          source: 'website'
+        });
+        console.log(`📩 New VIP Website Contact Message from: ${senderName} (${senderPhone})`);
+      }
+      savedDirectly = true;
+    }
+
+    // Only fallback to Admin API if direct MongoDB connection was not available
+    if (!savedDirectly) {
+      try {
+        const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+        await fetch(`${adminUrl}/api/website-feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: senderName,
+            phone: senderPhone,
+            email: senderEmail,
+            subject: senderSubject,
+            message: senderMsg,
+            source: 'website'
+          }),
+          signal: AbortSignal.timeout(3000)
+        });
+      } catch (_) {}
     }
 
     return res.json({
