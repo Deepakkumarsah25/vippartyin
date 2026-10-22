@@ -304,17 +304,39 @@ document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------------
   // 4. Video Click to Play Embed Handler
   // ------------------------------------------------------------------------
+  const videoSection = document.getElementById('video-showcase-section');
   const videoThumb = document.getElementById('videoThumbnail');
   const videoCont = document.getElementById('videoContainer');
   const youtubeVideo = document.getElementById('youtubeVideo');
 
   if (videoThumb && videoCont && youtubeVideo) {
-    videoThumb.addEventListener('click', () => {
+    let videoStarted = false;
+    const startShowcaseVideo = () => {
+      if (videoStarted) return;
+      videoStarted = true;
       videoThumb.style.display = 'none';
       videoCont.classList.remove('hidden');
-      // Embed an inspiring speech video of VIP Party / Mukesh Sahani
-      youtubeVideo.src = 'https://www.youtube.com/embed/videoseries?list=PLB31B1BD65DC5BC4D&autoplay=1';
-    });
+      youtubeVideo.src = 'https://www.youtube.com/embed/AETFvQonfV8?autoplay=1&mute=1&playsinline=1';
+    };
+    const stopShowcaseVideo = () => {
+      if (!videoStarted) return;
+      videoStarted = false;
+      youtubeVideo.src = '';
+      videoCont.classList.add('hidden');
+      videoThumb.style.display = '';
+    };
+
+    videoThumb.addEventListener('click', startShowcaseVideo);
+
+    if (videoSection && 'IntersectionObserver' in window) {
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) startShowcaseVideo();
+          else stopShowcaseVideo();
+        });
+      }, { threshold: 0.1 });
+      videoObserver.observe(videoSection);
+    }
   }
 
   // ------------------------------------------------------------------------
