@@ -558,11 +558,20 @@ app.get('/announcements/:slug', async (req, res) => {
 });
 
 // About VIP Group
-app.get('/about', renderRoute('पार्टी के बारे में | विकासशील इंसान पार्टी', 'about'));
-app.get('/journey-of-mukesh-sahani', renderRoute('श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party', 'journey'));
+app.get('/about', (req, res) => res.render('about', {
+  pageTitle: 'पार्टी के बारे में | विकासशील इंसान पार्टी',
+  activeNav: 'about'
+}));
+app.get('/journey-of-mukesh-sahani', (req, res) => res.render('journey', {
+  pageTitle: 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
+  activeNav: 'journey'
+}));
 app.get('/jubba-sahani', renderRoute('अमर शहीद जुब्बा सहनी | जीवन एवं बलिदान | VIP Party', 'jubba'));
 app.get('/history', renderRoute('हमारा इतिहास | विकासशील इंसान पार्टी', 'history'));
-app.get('/ideology', renderRoute('पार्टी की विचारधारा एवं विज़न | VIP Party', 'ideology'));
+app.get('/ideology', (req, res) => res.render('ideology', {
+  pageTitle: 'हमारी विचारधारा एवं सिद्धांत | विकासशील इंसान पार्टी (VIP)',
+  activeNav: 'ideology'
+}));
 app.get('/constitution', renderRoute('संविधान और नियम | विकासशील इंसान पार्टी', 'constitution'));
 app.get('/prerna', renderRoute('हमारी प्रेरणा पुंज | VIP Party', 'prerna'));
 app.get('/office', renderRoute('केन्द्रीय व प्रदेश कार्यालय | VIP Party', 'office'));
@@ -791,9 +800,18 @@ app.get('/events', renderRoute('आगामी कार्यक्रम व 
 app.get('/media', renderRoute('मीडिया एवं प्रेस कॉन्फ्रेंस | VIP Party', 'media'));
 
 // Menu 1: About Sub-Items
-app.get('/mission-vision', renderRoute('मिशन एवं विज़न | विकासशील इंसान पार्टी', 'mission'));
-app.get('/major-issues', renderRoute('प्रमुख मुद्दे | विकासशील इंसान पार्टी', 'issues'));
-app.get('/nvs', renderRoute('निषाद विकास संघ (NVS) | VIP Party', 'nvs'));
+app.get('/mission-vision', (req, res) => res.render('mission-vision', {
+  pageTitle: 'मिशन एवं विज़न | विकासशील इंसान पार्टी',
+  activeNav: 'mission'
+}));
+app.get('/major-issues', (req, res) => res.render('major-issues', {
+  pageTitle: 'प्रमुख मुद्दे | विकासशील इंसान पार्टी',
+  activeNav: 'issues'
+}));
+app.get('/nvs', (req, res) => res.render('nvs', {
+  pageTitle: 'निषाद विकास संघ (NVS) | VIP Party',
+  activeNav: 'nvs'
+}));
 
 // Menu 1: Gallery
 app.use('/gallery', galleryRoutes);
@@ -960,6 +978,9 @@ app.post('/api/download/track/:id', async (req, res) => {
 });
 
 // Menu 1: Forms Dedicated Pages
+app.get('/forms', (req, res) => res.render('forms/index', { pageTitle: 'सभी फॉर्म | VIP Party', activeNav: 'forms' }));
+app.get('/forms/success', (req, res) => res.render('forms/success', { pageTitle: 'आवेदन सफलतापूर्वक दर्ज | VIP Party', activeNav: 'forms' }));
+
 app.get('/volunteer', (req, res) => res.render('forms/volunteer', { pageTitle: 'वालंटियर के रूप में जुड़ें | VIP Party', activeNav: 'forms' }));
 app.get('/forms/volunteer', (req, res) => res.render('forms/volunteer', { pageTitle: 'वालंटियर के रूप में जुड़ें | VIP Party', activeNav: 'forms' }));
 
@@ -1235,8 +1256,9 @@ const handleContactSubmission = async (req, res) => {
       });
     }
 
+    let referenceId = `VIP-CON-${Date.now().toString().slice(-8)}`;
     if (mongoose.connection.readyState === 1) {
-      await Contact.create({
+      const contactRecord = await Contact.create({
         name: senderName,
         phone: senderPhone,
         email: (email || '').trim(),
@@ -1244,11 +1266,13 @@ const handleContactSubmission = async (req, res) => {
         message: senderMsg,
         status: 'New'
       });
+      referenceId = `VIP-CON-${String(contactRecord._id).slice(-8).toUpperCase()}`;
       console.log(`📩 New VIP Contact Message from: ${senderName} (${senderPhone})`);
     }
 
     return res.json({
       success: true,
+      referenceId,
       message: 'धन्यवाद! आपका संदेश सफलतापूर्वक भेज दिया गया है। हमारी टीम जल्द ही आपसे संपर्क करेगी।'
     });
   } catch (err) {
@@ -1289,6 +1313,60 @@ app.get('/terms', (req, res) => {
     pageTitle: 'Terms & Conditions | VIP Party (विकासशील इंसान पार्टी)',
     activeNav: 'terms'
   });
+});
+
+// XML sitemap for public website pages
+app.get('/sitemap.xml', (req, res) => {
+  const siteUrl = (process.env.SITE_URL || process.env.WEBSITE_URL || 'https://vipparty.in').replace(/\/$/, '');
+  const publicPaths = [
+    '/',
+    '/about',
+    '/journey-of-mukesh-sahani',
+    '/jubba-sahani',
+    '/history',
+    '/ideology',
+    '/constitution',
+    '/prerna',
+    '/office',
+    '/leaders',
+    '/organization',
+    '/officials',
+    '/president',
+    '/pravakta',
+    '/youth',
+    '/women-wing',
+    '/vidhansabha',
+    '/vidhan-parishad',
+    '/loksabha',
+    '/parliament',
+    '/candidate-declaration',
+    '/vidhansabha-ticket',
+    '/member',
+    '/donate',
+    '/events',
+    '/media',
+    '/mission-vision',
+    '/major-issues',
+    '/nvs',
+    '/gallery',
+    '/press',
+    '/download',
+    '/volunteer',
+    '/scholarship',
+    '/candidature-up-2027',
+    '/contact',
+    '/privacy-policy',
+    '/terms-and-conditions'
+  ];
+
+  const urls = publicPaths
+    .map((route) => `  <url><loc>${siteUrl}${route}</loc></url>`)
+    .join('\n');
+
+  res
+    .status(200)
+    .type('application/xml')
+    .send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`);
 });
 
 // ------------------------------------

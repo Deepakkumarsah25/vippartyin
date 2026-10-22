@@ -602,13 +602,7 @@
           } catch (e) {}
 
           form.reset();
-          window.location.href = '/forms/success?type=member' +
-            '&id=' + encodeURIComponent(successPayload.id) +
-            '&name=' + encodeURIComponent(successPayload.name) +
-            '&mobile=' + encodeURIComponent(successPayload.phone) +
-            '&district=' + encodeURIComponent(cleanDistrict) +
-            '&loksabha=' + encodeURIComponent(cleanLoksabha) +
-            '&from=/member';
+          window.location.replace('/forms/success');
           return;
         } else {
           throw new Error(data.message || 'पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।');

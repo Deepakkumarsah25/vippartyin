@@ -444,9 +444,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
 
         if (response.ok && data.success) {
-          contactForm.reset();
-          if (contactSuccessAlert) contactSuccessAlert.classList.remove('hidden');
-          contactSuccessAlert?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          const success = {
+            formType: 'contact',
+            id: data.referenceId || `VIP-CON-${Date.now().toString().slice(-8)}`,
+            name,
+            phone,
+            from: '/contact',
+            date: new Date().toISOString()
+          };
+          try { sessionStorage.setItem('vip_form_success', JSON.stringify(success)); } catch (err) {}
+          window.location.replace('/forms/success');
+          return;
         } else {
           if (contactErrorAlert) {
             if (contactErrorMsg) contactErrorMsg.textContent = data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।';

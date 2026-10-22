@@ -255,12 +255,7 @@
           } catch (e) {}
 
           scholarshipForm.reset();
-          window.location.href = '/forms/success?type=scholarship' +
-            '&id=' + encodeURIComponent(successPayload.id) +
-            '&name=' + encodeURIComponent(studentName) +
-            '&mobile=' + encodeURIComponent(mobile) +
-            '&district=' + encodeURIComponent(district) +
-            '&from=/scholarship';
+          window.location.replace('/forms/success');
           return;
         } else {
           alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');
