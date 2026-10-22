@@ -88,6 +88,12 @@ const VIP_TRANSLATIONS = {
     'quick.register_now': 'रजिस्टर करें',
     'quick.donate_now': 'दान दें',
 
+    // Mission Call to Action (Between Hero and Quick Cards)
+    'mission_cta.title': 'विकासशील इंसान पार्टी',
+    'mission_cta.desc': 'हमारा लक्ष्य एक समतामूलक, प्रगतिशील और खुशहाल बिहार का निर्माण है, जहाँ हर व्यक्ति को सम्मान और अवसर मिले।',
+    'mission_cta.btn_ideology': 'हमारे विचार',
+    'mission_cta.btn_join': 'हमसे जुड़ें',
+
     // Vision Section
     'vision.badge': 'हमारा संकल्प',
     'vision.title': 'बिहार के नवनिर्माण का दृष्टिकोण',
@@ -251,6 +257,12 @@ const VIP_TRANSLATIONS = {
     'quick.join_now': 'Join Now',
     'quick.register_now': 'Register Now',
     'quick.donate_now': 'Donate Now',
+
+    // Mission Call to Action (Between Hero and Quick Cards)
+    'mission_cta.title': 'Vikassheel Insaan Party',
+    'mission_cta.desc': 'Our goal is to build an equitable, progressive, and prosperous Bihar where every individual receives dignity, respect, and opportunity.',
+    'mission_cta.btn_ideology': 'Our Ideology',
+    'mission_cta.btn_join': 'Join VIP Party',
 
     // Vision Section
     'vision.badge': 'Our Resolve',
