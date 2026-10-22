@@ -472,21 +472,10 @@
 
       search.addEventListener('input', drawItems);
 
-      // Fetch Albums from API
-      fetch('/api/gallery/albums?limit=30')
-        .then(response => {
-          if (!response.ok) throw new Error('Gallery request failed');
-          return response.json();
-        })
-        .then(result => {
-          albums = Array.isArray(result) ? result : (result.data || result.media || []);
-          albums = albums.filter(item => item && (item.cover || item.image || item.imageUrl || item.mediaUrl || (item.photos && item.photos.length)));
-          drawChips();
-          drawItems();
-        })
-        .catch(() => {
-          grid.innerHTML = '<div class="col-span-full rounded-2xl bg-white p-12 text-center text-slate-500 shadow-sm">तस्वीरें अभी लोड नहीं हो सकीं। कृपया थोड़ी देर बाद फिर प्रयास करें।</div>';
-        });
+            albums = <%- JSON.stringify(initialAlbums || []).replace(/</g, '\\u003c') %>;
+      albums = albums.filter(item => item && (item.cover || item.image || item.imageUrl || item.mediaUrl || (item.photos && item.photos.length)));
+      drawChips();
+      drawItems();
     })();
   </script>
 </body>
