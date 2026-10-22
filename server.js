@@ -354,35 +354,44 @@ async function getDownloadItems(category = 'all', searchQuery = '') {
           { tags: { $in: [new RegExp(q, 'i')] } },
         ];
       }
-      return await DownloadItem.find(filter)
+      const dbItems = await DownloadItem.find(filter)
         .sort({ displayOrder: 1, createdAt: -1 })
         .lean();
+      if (dbItems.length > 0) return dbItems;
     }
   } catch (err) {
     console.warn('DB download fetch note:', err.message);
   }
 
-  // API Fallback
-  try {
-    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
-    const url = category && category !== 'all'
-      ? `${adminUrl}/api/downloads/api/list/${category}`
-      : `${adminUrl}/api/downloads/api/list`;
-    const res = await fetch(url);
-    const json = await res.json();
-    if (json.success && json.data) {
+  // The admin app may use a separate database connection. Try local admin first,
+  // then the configured remote admin API when the local service is unavailable.
+  const adminUrls = [...new Set([
+    'http://localhost:9191',
+    process.env.ADMIN_API_URL
+  ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
+  for (const adminUrl of adminUrls) {
+    try {
+      const endpoint = category && category !== 'all'
+        ? `${adminUrl}/api/downloads/api/list/${encodeURIComponent(category)}`
+        : `${adminUrl}/api/downloads/api/list`;
+      const response = await fetch(endpoint, { signal: AbortSignal.timeout(5000) });
+      if (!response.ok) continue;
+
+      const payload = await response.json();
+      if (!payload.success || !Array.isArray(payload.data)) continue;
+
+      let items = payload.data;
       if (searchQuery && searchQuery.trim()) {
         const q = searchQuery.trim().toLowerCase();
-        return json.data.filter(item =>
-          (item.title && item.title.toLowerCase().includes(q)) ||
-          (item.caption && item.caption.toLowerCase().includes(q)) ||
-          (item.author && item.author.toLowerCase().includes(q))
+        items = items.filter((item) =>
+          [item.title, item.caption, item.author, ...(item.tags || [])]
+            .some((value) => String(value || '').toLowerCase().includes(q))
         );
       }
-      return json.data;
+      if (items.length > 0) return items;
+    } catch (apiErr) {
+      console.warn('Download API fallback note:', apiErr.message);
     }
-  } catch (apiErr) {
-    console.warn('API fallback note:', apiErr.message);
   }
 
   return [];
@@ -393,19 +402,27 @@ async function getDownloadStats() {
   try {
     if (mongoose.connection.readyState === 1) {
       const totalDownloads = await DownloadItem.countDocuments({ isPublished: true });
-      const leadersPhotoCount = await DownloadItem.countDocuments({ category: 'leaders-photo', isPublished: true });
-      const infographicsCount = await DownloadItem.countDocuments({ category: 'infographics-banner', isPublished: true });
-      const quotesCount = await DownloadItem.countDocuments({ category: 'quotes', isPublished: true });
-      const wallpaperCount = await DownloadItem.countDocuments({ category: 'mobile-wallpaper', isPublished: true });
-      return {
-        totalDownloads,
-        leadersPhotoCount,
-        infographicsCount,
-        quotesCount,
-        wallpaperCount,
-      };
+      if (totalDownloads > 0) {
+        const leadersPhotoCount = await DownloadItem.countDocuments({ category: 'leaders-photo', isPublished: true });
+        const infographicsCount = await DownloadItem.countDocuments({ category: 'infographics-banner', isPublished: true });
+        const quotesCount = await DownloadItem.countDocuments({ category: 'quotes', isPublished: true });
+        const wallpaperCount = await DownloadItem.countDocuments({ category: 'mobile-wallpaper', isPublished: true });
+        return { totalDownloads, leadersPhotoCount, infographicsCount, quotesCount, wallpaperCount };
+      }
     }
   } catch (err) { }
+
+  const items = await getDownloadItems('all');
+  if (items.length > 0) {
+    return {
+      totalDownloads: items.length,
+      leadersPhotoCount: items.filter((item) => item.category === 'leaders-photo').length,
+      infographicsCount: items.filter((item) => item.category === 'infographics-banner').length,
+      quotesCount: items.filter((item) => item.category === 'quotes').length,
+      wallpaperCount: items.filter((item) => item.category === 'mobile-wallpaper').length,
+    };
+  }
+
   return {
     totalDownloads: 0,
     leadersPhotoCount: 0,
@@ -1257,28 +1274,73 @@ const handleContactSubmission = async (req, res) => {
   try {
     const { name, phone, email, subject, message } = req.body;
     const senderName = (name || '').trim();
-    const senderPhone = (phone || '').trim();
+    const senderPhone = String(phone || '').replace(/\D/g, '');
+    const senderEmail = (email || '').trim().toLowerCase();
+    const senderSubject = (subject || 'सामान्य पूछताछ (General Inquiry)').trim();
     const senderMsg = (message || '').trim();
 
-    if (!senderName || !senderPhone || !senderMsg) {
+    if (!senderName || !senderPhone || !senderEmail || !senderMsg) {
       return res.status(400).json({
         success: false,
-        message: 'कृपया पूरा नाम, मोबाइल नंबर और संदेश अनिवार्य रूप से दर्ज करें।'
+        message: 'कृपया पूरा नाम, मोबाइल नंबर, ईमेल और संदेश अनिवार्य रूप से दर्ज करें।'
+      });
+    }
+
+    if (!/^[6-9]\d{9}$/.test(senderPhone)) {
+      return res.status(400).json({
+        success: false,
+        field: 'phone',
+        message: 'कृपया 6 से 9 से शुरू होने वाला सही 10 अंकों का मोबाइल नंबर दर्ज करें।'
       });
     }
 
     let referenceId = `VIP-CON-${Date.now().toString().slice(-8)}`;
+    let savedDirectly = false;
+
     if (mongoose.connection.readyState === 1) {
-      const contactRecord = await Contact.create({
-        name: senderName,
+      // Duplicate prevention: avoid inserting duplicate if submitted within last 30 seconds
+      const recentDup = await Contact.findOne({
         phone: senderPhone,
-        email: (email || '').trim(),
-        subject: (subject || 'General Inquiry').trim(),
         message: senderMsg,
-        status: 'New'
+        createdAt: { $gte: new Date(Date.now() - 30 * 1000) }
       });
-      referenceId = `VIP-CON-${String(contactRecord._id).slice(-8).toUpperCase()}`;
-      console.log(`📩 New VIP Contact Message from: ${senderName} (${senderPhone})`);
+
+      if (!recentDup) {
+        const contactRecord = await Contact.create({
+          name: senderName,
+          phone: senderPhone,
+          email: senderEmail,
+          subject: senderSubject,
+          message: senderMsg,
+          status: 'New',
+          source: 'website'
+        });
+        referenceId = `VIP-CON-${String(contactRecord._id).slice(-8).toUpperCase()}`;
+        console.log(`📩 New VIP Website Contact Message from: ${senderName} (${senderPhone}) [${referenceId}]`);
+      } else {
+        referenceId = `VIP-CON-${String(recentDup._id).slice(-8).toUpperCase()}`;
+      }
+      savedDirectly = true;
+    }
+
+    // Only fallback to Admin API if direct MongoDB connection was not available
+    if (!savedDirectly) {
+      try {
+        const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+        await fetch(`${adminUrl}/api/website-feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: senderName,
+            phone: senderPhone,
+            email: senderEmail,
+            subject: senderSubject,
+            message: senderMsg,
+            source: 'website'
+          }),
+          signal: AbortSignal.timeout(3000)
+        });
+      } catch (_) {}
     }
 
     return res.json({
@@ -1401,7 +1463,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`\n======================================================`);
   console.log(`🚀 VIP Party Website running on: http://localhost:${PORT}`);
-  console.log(`📁 Static Directory: ${path.join(__dirname, 'public')}`);
-  console.log(`🖼️  Views Directory:  ${path.join(__dirname, 'views')}`);
-  console.log(`======================================================\n`);
+ 
 });

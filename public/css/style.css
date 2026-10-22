@@ -97,6 +97,10 @@ body {
   overscroll-behavior: contain;
 }
 
+@media (min-width: 1500px) {
+  #vipNavbar .desktop-primary-nav { white-space: nowrap; }
+}
+
 @media (max-width: 360px) {
   #vipNavbar > div:first-child { padding-left: 8px; padding-right: 8px; }
   #vipNavbar > div:first-child > div > a { min-width: 0; }
@@ -441,5 +445,36 @@ body {
   #home-vision-pillars {
     scroll-padding-left: 1rem;
     scroll-padding-right: 1rem;
+  }
+}
+
+/* ==========================================================================
+   NAVBAR BREAKPOINT FIX
+   Desktop navigation starts at 1280px; original button sizing is unchanged.
+   ========================================================================== */
+@media (min-width: 1280px) {
+  #vipNavbar .desktop-primary-nav,
+  #vipNavbar .desktop-nav-actions {
+    display: flex !important;
+  }
+
+  #vipNavbar .mobile-top-actions,
+  #vipNavbar #mobile-menu {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1279.98px) {
+  #vipNavbar .desktop-primary-nav,
+  #vipNavbar .desktop-nav-actions {
+    display: none !important;
+  }
+
+  #vipNavbar .mobile-top-actions {
+    display: flex !important;
+  }
+
+  #vipNavbar #mobile-menu:not(.hidden) {
+    display: block;
   }
 }

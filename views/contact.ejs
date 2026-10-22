@@ -250,9 +250,6 @@
         <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-gray-100 relative">
           
           <div class="mb-8">
-            <span class="inline-block bg-blue-50 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
-              सीधा संवाद
-            </span>
             <h3 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight" data-i18n="contact.form_title">
               हमें संदेश भेजें
             </h3>
@@ -314,6 +311,10 @@
                     name="phone"
                     id="contactPhone"
                     required
+                    inputmode="numeric"
+                    autocomplete="tel-national"
+                    pattern="[6-9][0-9]{9}"
+                    minlength="10"
                     maxlength="10"
                     placeholder="10 अंकों का मोबाइल नंबर"
                     data-i18n-ph="contact.phone_ph"
@@ -327,7 +328,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1.5" data-i18n="contact.email">
-                  ईमेल आईडी (वैकल्पिक)
+                  ईमेल आईडी <span class="text-red-500">*</span>
                 </label>
                 <div class="relative">
                   <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
@@ -335,6 +336,7 @@
                     type="email"
                     name="email"
                     id="contactEmail"
+                    required
                     placeholder="email@example.com"
                     data-i18n-ph="contact.email_ph"
                     class="w-full pl-10 pr-4 py-3 bg-gray-50/70 border border-gray-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white text-sm font-medium transition-all"
