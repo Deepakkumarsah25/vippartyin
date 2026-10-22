@@ -450,26 +450,37 @@ async function getHeroBanners() {
     console.warn('⚠️ Error querying hero banners from MongoDB:', dbErr.message);
   }
 
-  // 3. HTTP API Fallback to vip-a admin server
-  try {
-    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
-    const response = await fetch(`${adminUrl}/api/scroller?t=${Date.now()}`);
-    if (response.ok) {
-      const data = await response.json();
-      if (Array.isArray(data) && data.length > 0) {
-        return data
-          .filter((i) => i.type === 'image' && i.active !== false && i.mediaUrl)
-          .map((i) => ({
-            _id: String(i._id),
-            imageUrl: i.mediaUrl,
-            title: i.originalName || 'VIP Party Hero Banner',
-            type: 'image',
-            source: 'scroller'
-          }));
-      }
+  // 3. Fetch from the local admin API first, then try the configured remote API.
+  const adminUrls = [...new Set([
+    'http://localhost:9191',
+    process.env.ADMIN_API_URL
+  ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
+
+  for (const adminUrl of adminUrls) {
+    try {
+      const response = await fetch(`${adminUrl}/api/scroller?t=${Date.now()}`);
+      if (!response.ok) continue;
+
+      const payload = await response.json();
+      const items = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.banners)
+          ? payload.banners
+          : [];
+      const banners = items
+        .filter((item) => item.type === 'image' && item.active !== false && (item.mediaUrl || item.imageUrl))
+        .map((item) => ({
+          _id: String(item._id),
+          imageUrl: item.mediaUrl || item.imageUrl,
+          title: item.originalName || item.title || 'VIP Party Hero Banner',
+          type: 'image',
+          source: 'scroller'
+        }));
+
+      if (banners.length > 0) return banners;
+    } catch (apiErr) {
+      // Try the next configured admin API.
     }
-  } catch (apiErr) {
-    // silent fallback
   }
 
   return [];
