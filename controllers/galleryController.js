@@ -1,4 +1,10 @@
 const adminBaseUrl = () => (process.env.ADMIN_API_URL || 'http://localhost:9191').replace(/\/$/, '');
+const { Album, Video } = require('../models/publicContent');
+
+const loadAlbums = async () => Album.find({ isPublished: true })
+  .sort({ createdAt: -1, _id: -1 }).limit(30).lean();
+const loadVideos = async () => Video.find({ isPublished: true })
+  .sort({ createdAt: -1, _id: -1 }).limit(30).lean();
 
 const forwardGalleryRequest = (backendPath) => async (req, res) => {
   const adminUrl = adminBaseUrl();
@@ -21,17 +27,25 @@ const forwardGalleryRequest = (backendPath) => async (req, res) => {
   }
 };
 
-exports.renderPhotoGallery = (req, res) => {
+exports.renderPhotoGallery = async (req, res) => {
+  let initialAlbums = [];
+  try { initialAlbums = await loadAlbums(); }
+  catch (error) { console.error('Photo gallery MongoDB query failed:', error.message); }
   res.render('media_resources/photo', {
     pageTitle: 'फोटो गैलरी | विकासशील इंसान पार्टी',
-    activeNav: 'gallery'
+    activeNav: 'gallery',
+    initialAlbums
   });
 };
 
-exports.renderVideoGallery = (req, res) => {
+exports.renderVideoGallery = async (req, res) => {
+  let initialVideos = [];
+  try { initialVideos = await loadVideos(); }
+  catch (error) { console.error('Video gallery MongoDB query failed:', error.message); }
   res.render('media_resources/video', {
     pageTitle: 'वीडियो गैलरी | विकासशील इंसान पार्टी',
-    activeNav: 'gallery'
+    activeNav: 'gallery',
+    initialVideos
   });
 };
 
