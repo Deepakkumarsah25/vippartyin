@@ -1,3 +1,5 @@
+const { News, Video, MediaGallery } = require('../models/publicContent');
+
 const backendRequest = (backendPath) => async (req, res) => {
   const backendUrl = (process.env.ADMIN_API_URL || 'http://localhost:9191').replace(/\/$/, '');
   const query = new URLSearchParams(req.query).toString();
@@ -14,9 +16,34 @@ const backendRequest = (backendPath) => async (req, res) => {
   }
 };
 
-exports.renderNewsPage = (req, res) => res.render('press/news', { activeNav: 'press' });
-exports.renderInterviewPage = (req, res) => res.render('press/interview', { activeNav: 'press' });
-exports.renderPressReleasePage = (req, res) => res.render('press/press-release', { activeNav: 'press' });
+const renderWithMongoData = (model, filter, sort, view) => async (req, res) => {
+  let initialItems = [];
+  try {
+    initialItems = await model.find(filter).sort(sort).limit(30).lean();
+  } catch (error) {
+    console.error(`${view} MongoDB query failed:`, error.message);
+  }
+  res.render(view, { activeNav: 'press', initialItems });
+};
+
+exports.renderNewsPage = renderWithMongoData(
+  News,
+  { active: true },
+  { featured: -1, displayOrder: 1, date: -1, createdAt: -1 },
+  'press/news'
+);
+exports.renderInterviewPage = renderWithMongoData(
+  Video,
+  { isPublished: true, category: /^interview$/i },
+  { createdAt: -1, _id: -1 },
+  'press/interview'
+);
+exports.renderPressReleasePage = renderWithMongoData(
+  MediaGallery,
+  { isPublished: true, category: 'pressrelease' },
+  { date: -1, createdAt: -1 },
+  'press/press-release'
+);
 
 exports.getNews = backendRequest('/api/news');
 exports.getPressReleases = backendRequest('/api/media/pressrelease');
