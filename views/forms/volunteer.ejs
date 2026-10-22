@@ -281,13 +281,7 @@
           } catch (e) {}
 
           volunteerForm.reset();
-          window.location.href = '/forms/success?type=volunteer' +
-            '&id=' + encodeURIComponent(successPayload.id) +
-            '&name=' + encodeURIComponent(fullName) +
-            '&mobile=' + encodeURIComponent(mobile) +
-            '&district=' + encodeURIComponent(district) +
-            '&assembly=' + encodeURIComponent(assemblyConstituency) +
-            '&from=/volunteer';
+          window.location.replace('/forms/success');
           return;
         } else {
           alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');

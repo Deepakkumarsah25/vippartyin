@@ -257,13 +257,7 @@
           } catch (e) {}
 
           candidatureForm.reset();
-          window.location.href = '/forms/success?type=candidature' +
-            '&id=' + encodeURIComponent(successPayload.id) +
-            '&name=' + encodeURIComponent(applicantName) +
-            '&mobile=' + encodeURIComponent(mobile) +
-            '&district=' + encodeURIComponent(district) +
-            '&assembly=' + encodeURIComponent(assemblyConstituency) +
-            '&from=/candidature-up-2027';
+          window.location.replace('/forms/success');
           return;
         } else {
           alert(data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।');

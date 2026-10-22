@@ -419,17 +419,7 @@
     let returnUrl = '/forms';
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Read Query Parameters
-      const urlParams = new URLSearchParams(window.location.search);
-      const queryType = urlParams.get('type') || '';
-      const queryId = urlParams.get('id') || '';
-      const queryName = urlParams.get('name') || '';
-      const queryPhone = urlParams.get('mobile') || urlParams.get('phone') || '';
-      const queryDistrict = urlParams.get('district') || '';
-      const queryAssembly = urlParams.get('assembly') || '';
-      const queryFrom = urlParams.get('from') || '';
-
-      // 2. Read Session Storage Data (if available)
+      // Read submission details from this browser tab; keep personal data out of the URL.
       let sessionData = {};
       try {
         const stored = sessionStorage.getItem('vip_form_success');
@@ -440,19 +430,18 @@
         console.warn('Session storage read error:', e);
       }
 
-      // Combine Data (prefer sessionData, fallback to queryParams, then defaults)
-      const formType = (sessionData.formType || queryType || 'member').toLowerCase();
-      const refId = sessionData.id || queryId || 'VIP-REG-' + Math.floor(10000 + Math.random() * 90000);
-      const applicantName = sessionData.name || queryName || 'सम्मानित आवेदक';
-      const applicantMobile = sessionData.phone || queryPhone || '-';
-      const district = sessionData.district || queryDistrict || 'बिहार';
-      const loksabha = sessionData.loksabha || queryAssembly || district || '-';
+      const formType = (sessionData.formType || 'member').toLowerCase();
+      const refId = sessionData.id || 'VIP-REG-' + Math.floor(10000 + Math.random() * 90000);
+      const applicantName = sessionData.name || 'सम्मानित आवेदक';
+      const applicantMobile = sessionData.phone || '-';
+      const district = sessionData.district || 'बिहार';
+      const loksabha = sessionData.loksabha || district || '-';
       const photo = sessionData.photo || '/images/vip-logo.svg';
       const dateStr = sessionData.date || new Date().toLocaleDateString('en-GB');
 
       // Determine Return URL
       const config = formConfig[formType] || formConfig.member;
-      returnUrl = sessionData.from || queryFrom || config.defaultReturn || '/forms';
+      returnUrl = sessionData.from || config.defaultReturn || '/forms';
 
       // Update Breadcrumbs
       document.getElementById('breadcrumbFormName').textContent = config.badge;

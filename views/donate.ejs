@@ -512,18 +512,19 @@
 
                 const data = await res.json();
                 if (data.success) {
-                    alertBox.textContent = data.message;
-                    alertBox.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200';
-                    alertBox.classList.remove('hidden');
-
-                    document.getElementById('recNo').textContent = data.receiptNumber;
-                    document.getElementById('recAmt').textContent = '₹' + Number(data.amount).toLocaleString('en-IN');
-                    document.getElementById('recName').textContent = data.donorName;
-                    document.getElementById('recDate').textContent = new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-                    receiptBox.classList.remove('hidden');
-                    receiptBox.scrollIntoView({ behavior: 'smooth' });
-
-                    form.reset();
+                    const success = {
+                        formType: 'donate',
+                        id: data.receiptNumber,
+                        name: data.donorName || donorName,
+                        phone: donorPhone,
+                        district: district || state,
+                        amount: data.amount || amount,
+                        from: '/donate',
+                        date: new Date().toISOString()
+                    };
+                    try { sessionStorage.setItem('vip_form_success', JSON.stringify(success)); } catch (err) {}
+                    window.location.replace('/forms/success');
+                    return;
                 } else {
                     alertBox.textContent = data.message || 'त्रुटि हुई। कृपया पुनः प्रयास करें।';
                     alertBox.className = 'mb-6 p-4 rounded-2xl text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
