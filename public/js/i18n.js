@@ -65,7 +65,7 @@ const VIP_TRANSLATIONS = {
     'download.btn_download': 'डाउनलोड करें (Download HD)',
     'download.guide_title': 'आधिकारिक उपयोग मार्गदर्शिका (Usage Guidelines)',
     'download.guide_subtitle': 'पार्टी कार्यकर्ताओं, मीडिया एवं समर्थकों हेतु महत्वपूर्ण निर्देश',
-    'nav.forms': 'फॉर्म',
+    'nav.forms': 'हमसे जुड़ें',
     'nav.join_party': 'वीआईपी पार्टी से जुड़ें',
     'nav.join_volunteer': 'वालंटियर के रूप में जुड़ें',
     'nav.scholarship': 'जुब्बा सहनी छात्रवृत्ति योजना',
@@ -87,6 +87,12 @@ const VIP_TRANSLATIONS = {
     'quick.join_now': 'अभी जुड़ें',
     'quick.register_now': 'रजिस्टर करें',
     'quick.donate_now': 'दान दें',
+
+    // Mission Call to Action (Between Hero and Quick Cards)
+    'mission_cta.title': 'विकासशील इंसान पार्टी',
+    'mission_cta.desc': 'हमारा लक्ष्य एक समतामूलक, प्रगतिशील और खुशहाल बिहार का निर्माण है, जहाँ हर व्यक्ति को सम्मान और अवसर मिले।',
+    'mission_cta.btn_ideology': 'हमारे विचार',
+    'mission_cta.btn_join': 'हमसे जुड़ें',
 
     // Vision Section
     'vision.badge': 'हमारा संकल्प',
@@ -122,7 +128,7 @@ const VIP_TRANSLATIONS = {
     'contact.name_ph': 'आपका नाम दर्ज करें',
     'contact.phone': 'फ़ोन नंबर',
     'contact.phone_ph': '10 अंकों का मोबाइल नंबर',
-    'contact.email': 'ईमेल आईडी (वैकल्पिक)',
+    'contact.email': 'ईमेल आईडी',
     'contact.email_ph': 'email@example.com',
     'contact.subject': 'विषय / श्रेणी',
     'contact.subject_default': 'सामान्य पूछताछ',
@@ -229,7 +235,7 @@ const VIP_TRANSLATIONS = {
     'download.btn_download': 'Download HD',
     'download.guide_title': 'Official Usage Guidelines',
     'download.guide_subtitle': 'Essential instructions for party karyakartas, media, and supporters',
-    'nav.forms': 'Forms',
+    'nav.forms': 'Join Us',
     'nav.join_party': 'Join VIP Party',
     'nav.join_volunteer': 'Join as a Volunteer',
     'nav.scholarship': 'Jubba Sahani Scholarship Scheme',
@@ -251,6 +257,12 @@ const VIP_TRANSLATIONS = {
     'quick.join_now': 'Join Now',
     'quick.register_now': 'Register Now',
     'quick.donate_now': 'Donate Now',
+
+    // Mission Call to Action (Between Hero and Quick Cards)
+    'mission_cta.title': 'Vikassheel Insaan Party',
+    'mission_cta.desc': 'Our goal is to build an equitable, progressive, and prosperous Bihar where every individual receives dignity, respect, and opportunity.',
+    'mission_cta.btn_ideology': 'Our Ideology',
+    'mission_cta.btn_join': 'Join VIP Party',
 
     // Vision Section
     'vision.badge': 'Our Resolve',
@@ -286,7 +298,7 @@ const VIP_TRANSLATIONS = {
     'contact.name_ph': 'Enter your full name',
     'contact.phone': 'Phone Number',
     'contact.phone_ph': '10-digit mobile number',
-    'contact.email': 'Email Address (Optional)',
+    'contact.email': 'Email Address',
     'contact.email_ph': 'email@example.com',
     'contact.subject': 'Subject / Category',
     'contact.subject_default': 'General Inquiry',

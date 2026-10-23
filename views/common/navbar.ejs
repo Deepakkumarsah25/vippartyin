@@ -3,18 +3,15 @@
      Structured Exactly as Requested (Menu 1 + Menu 2)
      With Bilingual Language Switcher (Hindi & English)
      ============================================== -->
-
 <!-- 1. Top News / Announcement Ticker (Sticky Ticker) -->
 <div
   class="sticky-ticker bg-primary-900 text-white text-xs sm:text-sm font-semibold flex items-center h-10 overflow-hidden shadow-sm select-none border-b border-primary-700">
-
   <!-- Left Announcement Badge -->
   <div
     class="bg-primary-950 text-white font-bold px-3 sm:px-4 h-full flex items-center z-20 shadow-[4px_0_12px_rgba(0,0,0,0.25)] whitespace-nowrap relative select-none">
     <i class="fa-solid fa-bullhorn mr-2 text-amber-400 animate-pulse"></i>
     <span data-i18n="ticker.upcoming">आगामी कार्यक्रम</span>
   </div>
-
   <!-- Marquee Scroll -->
   <div class="flex-grow overflow-hidden relative h-full flex items-center bg-primary-800">
     <div class="animate-marquee-custom whitespace-nowrap flex items-center gap-16 pl-4">
@@ -47,15 +44,13 @@
               <% } %>
     </div>
   </div>
-
   <!-- Right Actions: Helpline & Language Switcher -->
   <div
-    class="hidden 2xl:flex items-center gap-3 px-3 sm:px-4 h-full bg-primary-950 text-xs font-medium text-blue-200 whitespace-nowrap border-l border-primary-700">
+    class="hidden xl:flex items-center gap-3 px-3 sm:px-4 h-full bg-primary-950 text-xs font-medium text-blue-200 whitespace-nowrap border-l border-primary-700">
     <a href="tel:06122506830" class="hover:text-white flex items-center gap-1.5 transition-colors">
       <i class="fa-solid fa-phone-volume text-amber-400"></i>
       <span data-i18n="ticker.helpline">हेल्पलाइन: 0612-2506830</span>
     </a>
-
     <!-- Top Language Switcher Toggle -->
     <div class="flex items-center bg-white/10 rounded-full p-0.5 border border-white/20 shadow-inner">
       <button type="button" class="lang-btn active text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all bg-primary text-white shadow-sm"
@@ -69,14 +64,12 @@
     </div>
   </div>
 </div>
-
 <!-- 2. Main Navigation Bar (Sticky Nav) -->
 <nav
   class="sticky z-50 bg-white shadow-sm border-b border-gray-100 transition-all duration-300 hover:shadow-md sticky-nav-offset"
   id="vipNavbar">
   <div class="max-w-[1850px] mx-auto px-3 sm:px-6 xl:px-8">
-    <div class="flex justify-between items-center h-20">
-
+      <div class="flex justify-between items-center min-h-20">
       <!-- Brand Logo & Name -->
       <a href="/"
         class="flex-shrink-0 flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group whitespace-nowrap">
@@ -92,24 +85,21 @@
             data-i18n="brand.tagline">विकासशील इंसान पार्टी</p>
         </div>
       </a>
-
       <!-- ==============================================
            MENU 1: PRIMARY DESKTOP NAVIGATION
-           Exact Structure: Home, About Us, Gallery, Press, Download, Forms, Contact Us
+           Main navigation: Home, About Us, Gallery, Press, Download, Join Us, Contact Us
            ============================================== -->
       <div
-        class="desktop-primary-nav hidden 2xl:flex flex-1 flex-nowrap items-center justify-center gap-1 2xl:gap-2.5 mx-2 2xl:mx-4 text-[14px] xl:text-[15px] 2xl:text-[17px] font-bold">
-
+        class="desktop-primary-nav hidden xl:flex flex-1 min-w-0 flex-nowrap items-center justify-center gap-1 2xl:gap-2.5 mx-2 2xl:mx-4 text-[14px] xl:text-[15px] 2xl:text-[17px] font-bold">
         <!-- 1. Home -->
         <a href="/"
           class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition <%= typeof activeNav !== 'undefined' && activeNav === 'home' ? 'text-primary font-black' : '' %>">
           <span data-i18n="nav.home">होम</span>
         </a>
-
         <!-- 2. About Us Dropdown -->
         <div class="relative group">
           <a href="/about"
-            class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'about' ? 'text-primary' : '' %>">
+          class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'about' ? 'text-primary' : '' %>">
             <span data-i18n="nav.about">हमारे बारे में</span>
             <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
           </a>
@@ -146,11 +136,10 @@
             </div>
           </div>
         </div>
-
         <!-- 3. Gallery Dropdown -->
         <div class="relative group">
           <a href="/gallery"
-            class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'gallery' ? 'text-primary' : '' %>">
+          class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'gallery' ? 'text-primary' : '' %>">
             <span data-i18n="nav.gallery">गैलरी</span>
             <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
           </a>
@@ -171,11 +160,10 @@
             </div>
           </div>
         </div>
-
         <!-- 4. Press Dropdown -->
         <div class="relative group">
           <a href="/press"
-            class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'press' ? 'text-primary' : '' %>">
+          class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'press' ? 'text-primary' : '' %>">
             <span data-i18n="nav.press">प्रेस</span>
             <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
           </a>
@@ -200,11 +188,10 @@
             </div>
           </div>
         </div>
-
         <!-- 5. Download Dropdown -->
         <div class="relative group">
           <a href="/download"
-            class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'download' ? 'text-primary' : '' %>">
+          class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center <%= typeof activeNav !== 'undefined' && activeNav === 'download' ? 'text-primary' : '' %>">
             <span data-i18n="nav.download">डाउनलोड</span>
             <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
           </a>
@@ -233,12 +220,11 @@
             </div>
           </div>
         </div>
-
         <!-- 6. Forms Dropdown -->
         <div class="relative group">
           <button type="button" aria-haspopup="true"
             class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition flex items-center">
-            <span data-i18n="nav.forms">फॉर्म</span>
+            <span data-i18n="nav.forms">हमसे जुड़ें</span>
             <i class="fa-solid fa-chevron-down text-[10px] ml-1.5 transition-transform group-hover:rotate-180"></i>
           </button>
           <div
@@ -270,22 +256,18 @@
             </div>
           </div>
         </div>
-
         <!-- 7. Contact Us (Direct Link) -->
         <a href="/contact"
           class="nav-link px-2 2xl:px-3 py-2 text-gray-700 hover:text-primary transition <%= typeof activeNav !== 'undefined' && activeNav === 'contact' ? 'text-primary font-black border-b-2 border-primary' : '' %>">
           <span data-i18n="nav.contact">संपर्क करें</span>
         </a>
-
       </div>
-
       <!-- ==============================================
            MENU 2 & ACTIONS: DESKTOP RIGHT
            Login / SignUp | Support Us | Join VIP
            + Language Switcher
            ============================================== -->
-      <div class="hidden 2xl:flex flex-shrink-0 items-center space-x-2.5 2xl:space-x-3">
-
+      <div class="desktop-nav-actions hidden xl:flex flex-shrink-0 items-center space-x-2.5 2xl:space-x-3">
         <!-- Language Switcher Pill (Bilingual) -->
         <!-- <div class="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 mr-1 shadow-inner">
           <button type="button"
@@ -299,7 +281,6 @@
             English
           </button>
         </div> -->
-
         <!-- Account menu -->
         <% if (currentUser) { %>
           <div class="relative group">
@@ -345,7 +326,6 @@
           <i class="fa-regular fa-heart mr-1.5 text-amber-500 hover:text-white"></i>
           <span data-i18n="nav.support_us">सहयोग करें</span>
         </a>
-
               <!-- Menu 2: Join VIP (सदस्य बनें) -->
               <a href="/member"
                 class="bg-primary hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap">
@@ -353,10 +333,8 @@
                 <span data-i18n="nav.join_vip">सदस्य बनें</span>
               </a>
       </div>
-
       <!-- Mobile Top Actions: Language Pill + Hamburger -->
-      <div class="2xl:hidden flex items-center gap-2">
-
+      <div class="mobile-top-actions xl:hidden flex items-center gap-2">
         <!-- Mobile Compact Language Switcher -->
         <div class="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 text-xs">
           <button type="button" class="lang-btn active text-[10px] font-bold px-2 py-0.5 rounded-full" data-lang="hi">
@@ -366,7 +344,6 @@
             EN
           </button>
         </div>
-
         <!-- Hamburger Button -->
         <button id="mobile-menu-btn" type="button" aria-label="मुख्य मेनू खोलें" aria-controls="mobile-menu"
           aria-expanded="false"
@@ -378,17 +355,14 @@
           </svg>
         </button>
       </div>
-
     </div>
   </div>
-
   <!-- ==============================================
        MOBILE DRAWER MENU (FULL RESPONSIVE ACCORDION)
        ============================================== -->
   <div id="mobile-menu"
-    class="hidden 2xl:hidden bg-white border-t border-gray-100 animate-slide-up origin-top max-h-[calc(100vh-120px)] overflow-y-auto">
+    class="hidden xl:hidden bg-white border-t border-gray-100 animate-slide-up origin-top max-h-[calc(100vh-120px)] overflow-y-auto">
     <div class="px-4 pt-3 pb-8 space-y-1">
-
       <!-- Mobile Language Switcher Full Banner -->
       <div class="bg-blue-50/70 p-3 rounded-xl border border-blue-100 flex items-center justify-between mb-3">
         <span class="text-xs font-bold text-gray-700 flex items-center gap-1.5">
@@ -404,13 +378,11 @@
           </button>
         </div>
       </div>
-
       <!-- 1. Home -->
       <a href="/" class="block px-3 py-2.5 font-bold rounded-lg transition-colors text-primary bg-blue-50/60">
         <i class="fa-solid fa-house mr-2 text-primary"></i>
         <span data-i18n="nav.home">होम</span>
       </a>
-
       <!-- 2. About Us (Accordion) -->
       <div class="space-y-1">
         <button type="button"
@@ -439,7 +411,6 @@
             data-i18n="nav.nvs">(NVS) निषाद विकास संघ</a>
         </div>
       </div>
-
       <!-- 3. Gallery (Accordion) -->
       <div class="space-y-1">
         <button type="button"
@@ -457,7 +428,6 @@
             data-i18n="nav.video">वीडियो</a>
         </div>
       </div>
-
       <!-- 4. Press (Accordion) -->
       <div class="space-y-1">
         <button type="button"
@@ -477,7 +447,6 @@
             data-i18n="nav.press_release">प्रेस विज्ञप्ति</a>
         </div>
       </div>
-
       <!-- 5. Download (Accordion) -->
       <div class="space-y-1">
         <button type="button"
@@ -502,14 +471,13 @@
             data-i18n="nav.mobile_wallpaper">मोबाइल वॉलपेपर</a>
         </div>
       </div>
-
       <!-- 6. Forms (Accordion) -->
       <div class="space-y-1">
         <button type="button"
           onclick="document.getElementById('mobile-forms-menu').classList.toggle('hidden'); document.getElementById('mobile-forms-icon').classList.toggle('rotate-180')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-file-waveform mr-2 text-primary"></i> <span
-              data-i18n="nav.forms">फॉर्म</span></span>
+              data-i18n="nav.forms">हमसे जुड़ें</span></span>
           <i id="mobile-forms-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
         </button>
         <div id="mobile-forms-menu" class="hidden pl-4 space-y-1 mt-1 border-l-2 border-blue-200 ml-4">
@@ -529,14 +497,12 @@
             data-i18n="nav.candidature_up">यूपी 2027 उम्मीदवारी आवेदन</a>
         </div>
       </div>
-
       <!-- 7. Contact Us -->
       <a href="/contact"
         class="block px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
         <i class="fa-solid fa-phone mr-2 text-primary"></i>
         <span data-i18n="nav.contact">संपर्क करें</span>
       </a>
-
       <!-- ==============================================
            MENU 2: MOBILE BUTTONS (Login, Support, Join)
            ============================================== -->
@@ -576,7 +542,6 @@
                 <i class="fa-regular fa-heart mr-2 text-amber-500"></i>
                 <span data-i18n="nav.support_us">सहयोग करें</span>
               </a>
-
               <!-- Join VIP -->
               <a href="/member"
                 class="w-full bg-primary hover:bg-primary-700 text-white px-5 py-3 rounded-xl font-bold flex items-center justify-center transition-colors shadow-md">
@@ -584,29 +549,24 @@
                 <span data-i18n="nav.join_vip">सदस्य बनें (Join VIP)</span>
               </a>
       </div>
-
     </div>
   </div>
 </nav>
-
 <!-- ==============================================
      MODAL: LOGIN / SIGNUP MODAL (MENU 2)
      ============================================== -->
 <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[220] hidden items-center justify-center p-4">
   <div
     class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-gray-100 transform transition-all animate-fade-in-up relative">
-
     <!-- Close Button -->
     <button id="closeAuthModalBtn"
       class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
-
     <!-- Header -->
     <div class="text-center mb-6">
       <img src="/images/vip-logo.svg" alt="VIP Logo" class="h-14 w-14 mx-auto mb-3 object-contain">
       <h3 class="text-2xl font-black text-gray-900" data-i18n="auth.title">वीआईपी डिजिटल पोर्टल</h3>
       <p class="text-xs text-gray-500 mt-1" data-i18n="auth.subtitle">लॉगिन करें या नया सदस्य खाता बनाएं</p>
     </div>
-
     <!-- Tabs: Login vs Signup -->
     <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
       <button type="button" id="authTabLogin"
@@ -620,7 +580,6 @@
         नया खाता बनाएं
       </button>
     </div>
-
     <!-- Form Content -->
     <form id="authForm" onsubmit="event.preventDefault(); alert('ओटीपी आपके नंबर पर भेज दिया गया है!');">
       <!-- Full Name (Only for signup) -->
@@ -632,7 +591,6 @@
             class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-medium">
         </div>
       </div>
-
       <!-- Mobile Number -->
       <div class="mb-5">
         <label class="block text-xs font-bold text-gray-700 mb-1" data-i18n="auth.mobile_label">मोबाइल नंबर दर्ज
@@ -643,14 +601,12 @@
             class="w-full pl-14 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary text-sm font-semibold tracking-wider">
         </div>
       </div>
-
       <!-- Action Button -->
       <button type="submit"
         class="w-full bg-primary hover:bg-primary-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
         <i class="fa-solid fa-paper-plane text-xs"></i>
         <span id="authSubmitText" data-i18n="auth.send_otp">ओटीपी प्राप्त करें</span>
       </button>
-
       <!-- Terms Note -->
       <p class="text-[11px] text-gray-400 text-center mt-4">
         आगे बढ़कर आप विकासशील इंसान पार्टी के नियमों व गोपनीयता नीति को स्वीकार करते हैं।
@@ -658,6 +614,5 @@
     </form>
   </div>
 </div>
-
 <!-- Hidden Google Translate Element -->
 <div id="google_translate_element" style="display:none !important;"></div>
