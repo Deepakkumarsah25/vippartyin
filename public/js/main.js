@@ -427,6 +427,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const contactErrorMsg = document.getElementById('contactErrorMsg');
   const contactSubmitBtn = document.getElementById('contactSubmitBtn');
   const contactBtnText = document.getElementById('contactBtnText');
+  const contactPhoneInput = document.getElementById('contactPhone');
+
+  contactPhoneInput?.addEventListener('input', () => {
+    contactPhoneInput.value = contactPhoneInput.value.replace(/\D/g, '').slice(0, 10);
+  });
 
   if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
@@ -440,11 +445,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const subject = document.getElementById('contactSubject')?.value.trim();
       const message = document.getElementById('contactMessage')?.value.trim();
 
-      if (!name || !phone || !message) {
+      if (!name || !phone || !email || !message) {
         if (contactErrorAlert) {
-          if (contactErrorMsg) contactErrorMsg.textContent = 'कृपया पूरा नाम, मोबाइल नंबर और संदेश अनिवार्य रूप से भरें।';
+          if (contactErrorMsg) contactErrorMsg.textContent = 'कृपया पूरा नाम, मोबाइल नंबर, ईमेल और संदेश अनिवार्य रूप से भरें।';
           contactErrorAlert.classList.remove('hidden');
         }
+        return;
+      }
+
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        if (contactErrorAlert) {
+          if (contactErrorMsg) contactErrorMsg.textContent = 'कृपया 6 से 9 से शुरू होने वाला सही 10 अंकों का मोबाइल नंबर दर्ज करें।';
+          contactErrorAlert.classList.remove('hidden');
+        }
+        contactPhoneInput?.focus();
         return;
       }
 

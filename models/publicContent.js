@@ -7,5 +7,7 @@ module.exports = {
   Album: modelFor('albumsgallery'),
   Video: modelFor('videosgallery'),
   News: modelFor('News'),
-  MediaGallery: modelFor('MediaGallery')
+  MediaGallery: modelFor('MediaGallery'),
+  CmsPage: mongoose.models.CmsPage || mongoose.model('CmsPage', new mongoose.Schema({}, { strict: false }), 'cmspages'),
+  MajorIssue: mongoose.models.MajorIssue || mongoose.model('MajorIssue', new mongoose.Schema({}, { strict: false }), 'majorissues')
 };

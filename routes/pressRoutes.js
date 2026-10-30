@@ -10,6 +10,7 @@ const {
 
 const router = express.Router();
 
+router.get('/press', (req, res) => res.redirect('/news'));
 router.get('/news', renderNewsPage);
 router.get('/interview', renderInterviewPage);
 router.get('/press-release', renderPressReleasePage);

@@ -5,6 +5,7 @@ const crypto = require('crypto');
 
 const galleryRoutes = require('./routes/galleryRoutes');
 const pressRoutes = require('./routes/pressRoutes');
+const { CmsPage, MajorIssue } = require('./models/publicContent');
 require('dotenv').config();
 
 const app = express();
@@ -354,35 +355,44 @@ async function getDownloadItems(category = 'all', searchQuery = '') {
           { tags: { $in: [new RegExp(q, 'i')] } },
         ];
       }
-      return await DownloadItem.find(filter)
+      const dbItems = await DownloadItem.find(filter)
         .sort({ displayOrder: 1, createdAt: -1 })
         .lean();
+      if (dbItems.length > 0) return dbItems;
     }
   } catch (err) {
     console.warn('DB download fetch note:', err.message);
   }
 
-  // API Fallback
-  try {
-    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
-    const url = category && category !== 'all'
-      ? `${adminUrl}/api/downloads/api/list/${category}`
-      : `${adminUrl}/api/downloads/api/list`;
-    const res = await fetch(url);
-    const json = await res.json();
-    if (json.success && json.data) {
+  // The admin app may use a separate database connection. Try local admin first,
+  // then the configured remote admin API when the local service is unavailable.
+  const adminUrls = [...new Set([
+    'http://localhost:9191',
+    process.env.ADMIN_API_URL
+  ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
+  for (const adminUrl of adminUrls) {
+    try {
+      const endpoint = category && category !== 'all'
+        ? `${adminUrl}/api/downloads/api/list/${encodeURIComponent(category)}`
+        : `${adminUrl}/api/downloads/api/list`;
+      const response = await fetch(endpoint, { signal: AbortSignal.timeout(5000) });
+      if (!response.ok) continue;
+
+      const payload = await response.json();
+      if (!payload.success || !Array.isArray(payload.data)) continue;
+
+      let items = payload.data;
       if (searchQuery && searchQuery.trim()) {
         const q = searchQuery.trim().toLowerCase();
-        return json.data.filter(item =>
-          (item.title && item.title.toLowerCase().includes(q)) ||
-          (item.caption && item.caption.toLowerCase().includes(q)) ||
-          (item.author && item.author.toLowerCase().includes(q))
+        items = items.filter((item) =>
+          [item.title, item.caption, item.author, ...(item.tags || [])]
+            .some((value) => String(value || '').toLowerCase().includes(q))
         );
       }
-      return json.data;
+      if (items.length > 0) return items;
+    } catch (apiErr) {
+      console.warn('Download API fallback note:', apiErr.message);
     }
-  } catch (apiErr) {
-    console.warn('API fallback note:', apiErr.message);
   }
 
   return [];
@@ -393,19 +403,27 @@ async function getDownloadStats() {
   try {
     if (mongoose.connection.readyState === 1) {
       const totalDownloads = await DownloadItem.countDocuments({ isPublished: true });
-      const leadersPhotoCount = await DownloadItem.countDocuments({ category: 'leaders-photo', isPublished: true });
-      const infographicsCount = await DownloadItem.countDocuments({ category: 'infographics-banner', isPublished: true });
-      const quotesCount = await DownloadItem.countDocuments({ category: 'quotes', isPublished: true });
-      const wallpaperCount = await DownloadItem.countDocuments({ category: 'mobile-wallpaper', isPublished: true });
-      return {
-        totalDownloads,
-        leadersPhotoCount,
-        infographicsCount,
-        quotesCount,
-        wallpaperCount,
-      };
+      if (totalDownloads > 0) {
+        const leadersPhotoCount = await DownloadItem.countDocuments({ category: 'leaders-photo', isPublished: true });
+        const infographicsCount = await DownloadItem.countDocuments({ category: 'infographics-banner', isPublished: true });
+        const quotesCount = await DownloadItem.countDocuments({ category: 'quotes', isPublished: true });
+        const wallpaperCount = await DownloadItem.countDocuments({ category: 'mobile-wallpaper', isPublished: true });
+        return { totalDownloads, leadersPhotoCount, infographicsCount, quotesCount, wallpaperCount };
+      }
     }
   } catch (err) { }
+
+  const items = await getDownloadItems('all');
+  if (items.length > 0) {
+    return {
+      totalDownloads: items.length,
+      leadersPhotoCount: items.filter((item) => item.category === 'leaders-photo').length,
+      infographicsCount: items.filter((item) => item.category === 'infographics-banner').length,
+      quotesCount: items.filter((item) => item.category === 'quotes').length,
+      wallpaperCount: items.filter((item) => item.category === 'mobile-wallpaper').length,
+    };
+  }
+
   return {
     totalDownloads: 0,
     leadersPhotoCount: 0,
@@ -450,26 +468,37 @@ async function getHeroBanners() {
     console.warn('⚠️ Error querying hero banners from MongoDB:', dbErr.message);
   }
 
-  // 3. HTTP API Fallback to vip-a admin server
-  try {
-    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
-    const response = await fetch(`${adminUrl}/api/scroller?t=${Date.now()}`);
-    if (response.ok) {
-      const data = await response.json();
-      if (Array.isArray(data) && data.length > 0) {
-        return data
-          .filter((i) => i.type === 'image' && i.active !== false && i.mediaUrl)
-          .map((i) => ({
-            _id: String(i._id),
-            imageUrl: i.mediaUrl,
-            title: i.originalName || 'VIP Party Hero Banner',
-            type: 'image',
-            source: 'scroller'
-          }));
-      }
+  // 3. Fetch from the local admin API first, then try the configured remote API.
+  const adminUrls = [...new Set([
+    'http://localhost:9191',
+    process.env.ADMIN_API_URL
+  ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
+
+  for (const adminUrl of adminUrls) {
+    try {
+      const response = await fetch(`${adminUrl}/api/scroller?t=${Date.now()}`);
+      if (!response.ok) continue;
+
+      const payload = await response.json();
+      const items = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.banners)
+          ? payload.banners
+          : [];
+      const banners = items
+        .filter((item) => item.type === 'image' && item.active !== false && (item.mediaUrl || item.imageUrl))
+        .map((item) => ({
+          _id: String(item._id),
+          imageUrl: item.mediaUrl || item.imageUrl,
+          title: item.originalName || item.title || 'VIP Party Hero Banner',
+          type: 'image',
+          source: 'scroller'
+        }));
+
+      if (banners.length > 0) return banners;
+    } catch (apiErr) {
+      // Try the next configured admin API.
     }
-  } catch (apiErr) {
-    // silent fallback
   }
 
   return [];
@@ -558,20 +587,62 @@ app.get('/announcements/:slug', async (req, res) => {
 });
 
 // About VIP Group
-app.get('/about', (req, res) => res.render('about', {
-  pageTitle: 'पार्टी के बारे में | विकासशील इंसान पार्टी',
-  activeNav: 'about'
-}));
-app.get('/journey-of-mukesh-sahani', (req, res) => res.render('journey', {
-  pageTitle: 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
-  activeNav: 'journey'
-}));
+app.get('/about', async (req, res) => {
+  try {
+    const page = await CmsPage.findOne({ pageKey: 'history-vip' }).lean();
+    res.render('about', {
+      pageTitle: page?.title || 'पार्टी के बारे में | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: page || null
+    });
+  } catch (err) {
+    console.error('Error fetching /about CMS page:', err.message);
+    res.render('about', {
+      pageTitle: 'पार्टी के बारे में | विकासशील इंसान पार्टी',
+      activeNav: 'about',
+      page: null
+    });
+  }
+});
+
+app.get('/journey-of-mukesh-sahani', async (req, res) => {
+  try {
+    const page = await CmsPage.findOne({ pageKey: 'journey-mukesh-sahani' }).lean();
+    res.render('journey', {
+      pageTitle: page?.title || 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
+      activeNav: 'journey',
+      page: page || null
+    });
+  } catch (err) {
+    console.error('Error fetching journey CMS page:', err.message);
+    res.render('journey', {
+      pageTitle: 'श्री मुकेश सहनी (सन ऑफ मल्लाह) का जीवन संघर्ष | VIP Party',
+      activeNav: 'journey',
+      page: null
+    });
+  }
+});
+
 app.get('/jubba-sahani', renderRoute('अमर शहीद जुब्बा सहनी | जीवन एवं बलिदान | VIP Party', 'jubba'));
 app.get('/history', renderRoute('हमारा इतिहास | विकासशील इंसान पार्टी', 'history'));
-app.get('/ideology', (req, res) => res.render('ideology', {
-  pageTitle: 'हमारी विचारधारा एवं सिद्धांत | विकासशील इंसान पार्टी (VIP)',
-  activeNav: 'ideology'
-}));
+
+app.get('/ideology', async (req, res) => {
+  try {
+    const page = await CmsPage.findOne({ pageKey: 'our-philosophy' }).lean();
+    res.render('ideology', {
+      pageTitle: page?.title || 'हमारी विचारधारा एवं सिद्धांत | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'ideology',
+      page: page || null
+    });
+  } catch (err) {
+    console.error('Error fetching ideology CMS page:', err.message);
+    res.render('ideology', {
+      pageTitle: 'हमारी विचारधारा एवं सिद्धांत | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'ideology',
+      page: null
+    });
+  }
+});
 app.get('/constitution', renderRoute('संविधान और नियम | विकासशील इंसान पार्टी', 'constitution'));
 app.get('/prerna', renderRoute('हमारी प्रेरणा पुंज | VIP Party', 'prerna'));
 app.get('/office', renderRoute('केन्द्रीय व प्रदेश कार्यालय | VIP Party', 'office'));
@@ -800,18 +871,59 @@ app.get('/events', renderRoute('आगामी कार्यक्रम व 
 app.get('/media', renderRoute('मीडिया एवं प्रेस कॉन्फ्रेंस | VIP Party', 'media'));
 
 // Menu 1: About Sub-Items
-app.get('/mission-vision', (req, res) => res.render('mission-vision', {
-  pageTitle: 'मिशन एवं विज़न | विकासशील इंसान पार्टी',
-  activeNav: 'mission'
-}));
-app.get('/major-issues', (req, res) => res.render('major-issues', {
-  pageTitle: 'प्रमुख मुद्दे | विकासशील इंसान पार्टी',
-  activeNav: 'issues'
-}));
-app.get('/nvs', (req, res) => res.render('nvs', {
-  pageTitle: 'निषाद विकास संघ (NVS) | VIP Party',
-  activeNav: 'nvs'
-}));
+app.get('/mission-vision', async (req, res) => {
+  try {
+    const page = await CmsPage.findOne({ pageKey: 'mission-vision' }).lean();
+    res.render('mission-vision', {
+      pageTitle: page?.title || 'मिशन एवं विज़न | विकासशील इंसान पार्टी',
+      activeNav: 'mission',
+      page: page || null
+    });
+  } catch (err) {
+    console.error('Error fetching mission-vision CMS page:', err.message);
+    res.render('mission-vision', {
+      pageTitle: 'मिशन एवं विज़न | विकासशील इंसान पार्टी',
+      activeNav: 'mission',
+      page: null
+    });
+  }
+});
+
+app.get('/major-issues', async (req, res) => {
+  try {
+    const issues = await MajorIssue.find({ isPublished: { $ne: false } }).sort({ order: 1 }).lean();
+    res.render('major-issues', {
+      pageTitle: 'प्रमुख मुद्दे | विकासशील इंसान पार्टी',
+      activeNav: 'issues',
+      issues: issues || []
+    });
+  } catch (err) {
+    console.error('Error fetching major-issues:', err.message);
+    res.render('major-issues', {
+      pageTitle: 'प्रमुख मुद्दे | विकासशील इंसान पार्टी',
+      activeNav: 'issues',
+      issues: []
+    });
+  }
+});
+
+app.get('/nvs', async (req, res) => {
+  try {
+    const page = await CmsPage.findOne({ pageKey: 'nishad-vikas-sangh' }).lean();
+    res.render('nvs', {
+      pageTitle: page?.title || 'निषाद विकास संघ (NVS) | VIP Party',
+      activeNav: 'nvs',
+      page: page || null
+    });
+  } catch (err) {
+    console.error('Error fetching nvs CMS page:', err.message);
+    res.render('nvs', {
+      pageTitle: 'निषाद विकास संघ (NVS) | VIP Party',
+      activeNav: 'nvs',
+      page: null
+    });
+  }
+});
 
 // Menu 1: Gallery
 app.use('/gallery', galleryRoutes);
@@ -1246,28 +1358,73 @@ const handleContactSubmission = async (req, res) => {
   try {
     const { name, phone, email, subject, message } = req.body;
     const senderName = (name || '').trim();
-    const senderPhone = (phone || '').trim();
+    const senderPhone = String(phone || '').replace(/\D/g, '');
+    const senderEmail = (email || '').trim().toLowerCase();
+    const senderSubject = (subject || 'सामान्य पूछताछ (General Inquiry)').trim();
     const senderMsg = (message || '').trim();
 
-    if (!senderName || !senderPhone || !senderMsg) {
+    if (!senderName || !senderPhone || !senderEmail || !senderMsg) {
       return res.status(400).json({
         success: false,
-        message: 'कृपया पूरा नाम, मोबाइल नंबर और संदेश अनिवार्य रूप से दर्ज करें।'
+        message: 'कृपया पूरा नाम, मोबाइल नंबर, ईमेल और संदेश अनिवार्य रूप से दर्ज करें।'
+      });
+    }
+
+    if (!/^[6-9]\d{9}$/.test(senderPhone)) {
+      return res.status(400).json({
+        success: false,
+        field: 'phone',
+        message: 'कृपया 6 से 9 से शुरू होने वाला सही 10 अंकों का मोबाइल नंबर दर्ज करें।'
       });
     }
 
     let referenceId = `VIP-CON-${Date.now().toString().slice(-8)}`;
+    let savedDirectly = false;
+
     if (mongoose.connection.readyState === 1) {
-      const contactRecord = await Contact.create({
-        name: senderName,
+      // Duplicate prevention: avoid inserting duplicate if submitted within last 30 seconds
+      const recentDup = await Contact.findOne({
         phone: senderPhone,
-        email: (email || '').trim(),
-        subject: (subject || 'General Inquiry').trim(),
         message: senderMsg,
-        status: 'New'
+        createdAt: { $gte: new Date(Date.now() - 30 * 1000) }
       });
-      referenceId = `VIP-CON-${String(contactRecord._id).slice(-8).toUpperCase()}`;
-      console.log(`📩 New VIP Contact Message from: ${senderName} (${senderPhone})`);
+
+      if (!recentDup) {
+        const contactRecord = await Contact.create({
+          name: senderName,
+          phone: senderPhone,
+          email: senderEmail,
+          subject: senderSubject,
+          message: senderMsg,
+          status: 'New',
+          source: 'website'
+        });
+        referenceId = `VIP-CON-${String(contactRecord._id).slice(-8).toUpperCase()}`;
+        console.log(`📩 New VIP Website Contact Message from: ${senderName} (${senderPhone}) [${referenceId}]`);
+      } else {
+        referenceId = `VIP-CON-${String(recentDup._id).slice(-8).toUpperCase()}`;
+      }
+      savedDirectly = true;
+    }
+
+    // Only fallback to Admin API if direct MongoDB connection was not available
+    if (!savedDirectly) {
+      try {
+        const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+        await fetch(`${adminUrl}/api/website-feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: senderName,
+            phone: senderPhone,
+            email: senderEmail,
+            subject: senderSubject,
+            message: senderMsg,
+            source: 'website'
+          }),
+          signal: AbortSignal.timeout(3000)
+        });
+      } catch (_) {}
     }
 
     return res.json({
@@ -1390,7 +1547,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`\n======================================================`);
   console.log(`🚀 VIP Party Website running on: http://localhost:${PORT}`);
-  console.log(`📁 Static Directory: ${path.join(__dirname, 'public')}`);
-  console.log(`🖼️  Views Directory:  ${path.join(__dirname, 'views')}`);
-  console.log(`======================================================\n`);
+ 
 });
