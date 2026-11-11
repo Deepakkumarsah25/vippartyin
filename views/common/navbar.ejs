@@ -386,7 +386,7 @@
       <!-- 2. About Us (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-about-menu').classList.toggle('hidden'); document.getElementById('mobile-about-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-about-menu', 'mobile-about-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-flag mr-2 text-primary"></i> <span data-i18n="nav.about">हमारे बारे
               में</span></span>
@@ -414,7 +414,7 @@
       <!-- 3. Gallery (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-gallery-menu').classList.toggle('hidden'); document.getElementById('mobile-gallery-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-gallery-menu', 'mobile-gallery-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-images mr-2 text-primary"></i> <span data-i18n="nav.gallery">गैलरी</span></span>
           <i id="mobile-gallery-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
@@ -431,7 +431,7 @@
       <!-- 4. Press (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-press-menu').classList.toggle('hidden'); document.getElementById('mobile-press-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-press-menu', 'mobile-press-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-newspaper mr-2 text-primary"></i> <span data-i18n="nav.press">प्रेस</span></span>
           <i id="mobile-press-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
@@ -450,7 +450,7 @@
       <!-- 5. Download (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-download-menu').classList.toggle('hidden'); document.getElementById('mobile-download-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-download-menu', 'mobile-download-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-cloud-arrow-down mr-2 text-primary"></i> <span
               data-i18n="nav.download">डाउनलोड</span></span>
@@ -474,7 +474,7 @@
       <!-- 6. Forms (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-forms-menu').classList.toggle('hidden'); document.getElementById('mobile-forms-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-forms-menu', 'mobile-forms-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-file-waveform mr-2 text-primary"></i> <span
               data-i18n="nav.forms">हमसे जुड़ें</span></span>
@@ -616,3 +616,36 @@
 </div>
 <!-- Hidden Google Translate Element -->
 <div id="google_translate_element" style="display:none !important;"></div>
+
+<!-- Mobile Submenu Accordion Script (Mutually Exclusive Dropdowns) -->
+<script>
+  function toggleMobileSubmenu(menuId, iconId) {
+    var submenus = [
+      { menu: 'mobile-about-menu', icon: 'mobile-about-icon' },
+      { menu: 'mobile-gallery-menu', icon: 'mobile-gallery-icon' },
+      { menu: 'mobile-press-menu', icon: 'mobile-press-icon' },
+      { menu: 'mobile-download-menu', icon: 'mobile-download-icon' },
+      { menu: 'mobile-forms-menu', icon: 'mobile-forms-icon' }
+    ];
+    var targetMenu = document.getElementById(menuId);
+    var targetIcon = document.getElementById(iconId);
+    if (!targetMenu) return;
+
+    var isCurrentlyOpen = !targetMenu.classList.contains('hidden');
+
+    // Close all accordion submenus and reset chevron rotation
+    submenus.forEach(function(item) {
+      var m = document.getElementById(item.menu);
+      var ic = document.getElementById(item.icon);
+      if (m) m.classList.add('hidden');
+      if (ic) ic.classList.remove('rotate-180');
+    });
+
+    // Toggle selected submenu open if it was previously closed
+    if (!isCurrentlyOpen) {
+      targetMenu.classList.remove('hidden');
+      if (targetIcon) targetIcon.classList.add('rotate-180');
+    }
+  }
+  window.toggleMobileSubmenu = toggleMobileSubmenu;
+</script>

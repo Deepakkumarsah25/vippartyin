@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const { promisify } = require('util');
 
 const galleryRoutes = require('./routes/galleryRoutes');
 const pressRoutes = require('./routes/pressRoutes');
@@ -12,6 +13,33 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/vip_website';
 const AUTH_COOKIE_SECRET = process.env.AUTH_COOKIE_SECRET || process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+const scrypt = promisify(crypto.scrypt);
+
+async function hashPassword(password) {
+  const salt = crypto.randomBytes(16);
+  const derived = await scrypt(password, salt, 64);
+  return `scrypt$${salt.toString('base64url')}$${derived.toString('base64url')}`;
+}
+
+async function verifyPassword(password, storedPassword) {
+  if (typeof storedPassword !== 'string' || !storedPassword) return false;
+  const [algorithm, saltText, hashText] = storedPassword.split('$');
+  if (algorithm === 'scrypt' && saltText && hashText) {
+    try {
+      const salt = Buffer.from(saltText, 'base64url');
+      const expected = Buffer.from(hashText, 'base64url');
+      const actual = await scrypt(password, salt, expected.length);
+      return expected.length > 0 && crypto.timingSafeEqual(expected, actual);
+    } catch {
+      return false;
+    }
+  }
+
+  // Existing accounts used plain-text passwords; upgrade them after a successful login.
+  const supplied = Buffer.from(password);
+  const legacy = Buffer.from(storedPassword);
+  return supplied.length === legacy.length && crypto.timingSafeEqual(supplied, legacy);
+}
 
 function createAuthToken(uid) {
   const encodedUid = Buffer.from(String(uid)).toString('base64url');
@@ -42,7 +70,8 @@ let isDbConnected = false;
 
 mongoose
   .connect(MONGODB_URI)
-  .then(() => {
+  .then(async () => {
+    await ensureUserMembershipIdIndex();
     isDbConnected = true;
     console.log('✅ MongoDB connected successfully to:', MONGODB_URI);
   })
@@ -172,12 +201,37 @@ const userSchema = new mongoose.Schema(
     password: { type: String, default: '' },
     district: { type: String, default: '' },
     state: { type: String, default: 'Bihar' },
-    membershipId: { type: String, default: null },
+    // The shared users collection has a unique membershipId index. Omit this
+    // field until a real membership ID is assigned; repeated nulls collide.
+    membershipId: { type: String, default: undefined },
     photoURL: { type: String, default: '' }
   },
   { timestamps: true }
 );
 const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+async function ensureUserMembershipIdIndex() {
+  const indexes = await User.collection.indexes();
+  const current = indexes.find((index) => index.name === 'membershipId_1');
+  const isCorrectPartialIndex =
+    current?.unique === true &&
+    current.partialFilterExpression?.membershipId?.$type === 'string';
+
+  if (current && !isCorrectPartialIndex) {
+    await User.collection.dropIndex(current.name);
+  }
+
+  if (!isCorrectPartialIndex) {
+    await User.collection.createIndex(
+      { membershipId: 1 },
+      {
+        name: 'membershipId_1',
+        unique: true,
+        partialFilterExpression: { membershipId: { $type: 'string' } }
+      }
+    );
+  }
+}
 
 // Volunteer Schema
 const volunteerSchema = new mongoose.Schema(
@@ -364,10 +418,9 @@ async function getDownloadItems(category = 'all', searchQuery = '') {
     console.warn('DB download fetch note:', err.message);
   }
 
-  // The admin app may use a separate database connection. Try local admin first,
-  // then the configured remote admin API when the local service is unavailable.
+  // The admin app may use a separate database connection; use its configured API
+  // only when the website database has no matching records.
   const adminUrls = [...new Set([
-    'http://localhost:9191',
     process.env.ADMIN_API_URL
   ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
   for (const adminUrl of adminUrls) {
@@ -468,9 +521,8 @@ async function getHeroBanners() {
     console.warn('⚠️ Error querying hero banners from MongoDB:', dbErr.message);
   }
 
-  // 3. Fetch from the local admin API first, then try the configured remote API.
+  // 3. Fetch from the configured admin API when local banner data is unavailable.
   const adminUrls = [...new Set([
-    'http://localhost:9191',
     process.env.ADMIN_API_URL
   ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
 
@@ -554,13 +606,40 @@ const renderRoute = (pageTitle, activeNav) => (req, res) => {
   res.render('index', { pageTitle, activeNav, heroBanners: [] });
 };
 
-// Home (Loads dynamic hero section images from vip-a)
+// Home (Loads dynamic hero section images from vip-a, major issues, and mission)
 app.get('/', async (req, res) => {
-  const heroBanners = await getHeroBanners();
+  let heroBanners = [];
+  let issues = [];
+  let missionPage = null;
+
+  try {
+    heroBanners = await getHeroBanners();
+  } catch (err) {
+    console.error('Error fetching hero banners for home:', err.message);
+  }
+
+  try {
+    if (mongoose.connection.readyState === 1) {
+      issues = await MajorIssue.find({ isPublished: { $ne: false } }).sort({ order: 1 }).lean();
+    }
+  } catch (err) {
+    console.error('Error fetching major issues for home:', err.message);
+  }
+
+  try {
+    if (mongoose.connection.readyState === 1) {
+      missionPage = await CmsPage.findOne({ pageKey: 'mission-vision' }).lean();
+    }
+  } catch (err) {
+    console.error('Error fetching mission CMS page for home:', err.message);
+  }
+
   res.render('index', {
     pageTitle: 'विकासशील इंसान पार्टी (VIP) – आधिकारिक वेबसाइट',
     activeNav: 'home',
-    heroBanners
+    heroBanners,
+    issues: issues || [],
+    missionPage: missionPage || null
   });
 });
 
@@ -573,7 +652,10 @@ app.get('/api/hero-banners', async (req, res) => {
 app.use('/api/gallery', galleryRoutes);
 app.get('/announcements/:slug', async (req, res) => {
   try {
-    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
+    const adminUrl = process.env.ADMIN_API_URL;
+    if (!adminUrl) {
+      return res.status(503).send('Announcement service is not configured.');
+    }
     const response = await fetch(`${adminUrl}/admin/website/ticker-announcements/api/${encodeURIComponent(req.params.slug)}`, { signal: AbortSignal.timeout(3500) });
     if (response.status === 404) return res.status(404).render('index', { pageTitle: 'पेज नहीं मिला | VIP Party', activeNav: 'news', heroBanners: [] });
     if (!response.ok) return res.status(503).send('Announcement abhi load nahi ho pa raha. Kripya kuch der baad try karein.');
@@ -1109,28 +1191,35 @@ app.get('/forms/join-vip', (req, res) => res.redirect('/member'));
 app.get('/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
 app.get('/auth/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
 
-app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup' }));
-app.get('/auth/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup' }));
+app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
+app.get('/auth/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
 
 // Auth Form Handlers (Connecting to same MongoDB 'users' collection)
 app.post('/auth/signup', async (req, res) => {
   try {
-    const { name, phone, email, district, password } = req.body;
-    const cleanName = String(name || '').trim();
-    const cleanPhone = String(phone || '').replace(/\D/g, '');
-    const cleanEmail = String(email || '').trim().toLowerCase();
-    const cleanDistrict = String(district || '').trim();
+    const { name, phone, email, district, password } = req.body || {};
+    const cleanName = typeof name === 'string' ? name.trim() : '';
+    const cleanPhone = typeof phone === 'string' ? phone.trim() : '';
+    const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    const cleanDistrict = typeof district === 'string' ? district.trim() : '';
+    const cleanPassword = typeof password === 'string' ? password : '';
 
-    if (!cleanName || !cleanPhone || !cleanEmail || !cleanDistrict || !password) {
-      return res.status(400).json({ success: false, message: 'Name, mobile, email, district and password are required.' });
+    if (!cleanName || !cleanPhone || !cleanEmail || !cleanDistrict || !cleanPassword) {
+      return res.status(400).json({ success: false, message: 'Please complete all required fields.' });
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
+    if (cleanName.length > 100 || cleanDistrict.length > 100) {
+      return res.status(400).json({ success: false, message: 'Name and district must be 100 characters or fewer.' });
+    }
+    if (cleanEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
       return res.status(400).json({ success: false, message: 'Enter a valid email address.' });
     }
     if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       return res.status(400).json({ success: false, message: 'Enter a valid 10-digit Indian mobile number.' });
     }
-    if (mongoose.connection.readyState !== 1) {
+    if (cleanPassword.length < 8 || cleanPassword.length > 128) {
+      return res.status(400).json({ success: false, message: 'Password must be between 8 and 128 characters.' });
+    }
+    if (!isDbConnected || mongoose.connection.readyState !== 1) {
       return res.status(503).json({ success: false, message: 'Account service is temporarily unavailable. Please try again shortly.' });
     }
 
@@ -1148,7 +1237,7 @@ app.post('/auth/signup', async (req, res) => {
       phone: cleanPhone,
       email: cleanEmail,
       district: cleanDistrict,
-      password: String(password),
+      password: await hashPassword(cleanPassword),
       uid: `VIP-USR-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`
     });
     console.log(`New VIP User registered: ${newUser.name} (${newUser.phone})`);
@@ -1162,15 +1251,15 @@ app.post('/auth/signup', async (req, res) => {
       if (err.keyPattern?.email || err.keyValue?.email) {
         return res.status(409).json({ success: false, field: 'email', message: 'This email address is already registered. Please sign in.' });
       }
-      return res.status(500).json({ success: false, message: 'Could not create your account because of a database conflict. Please try again.' });
+      return res.status(500).json({ success: false, message: 'We could not create your account right now. Please check your details and try again.' });
     }
     return res.status(500).json({ success: false, message: 'Could not create your account. Please try again.' });
   }
 });
 app.post('/auth/login', async (req, res) => {
   try {
-    const phone = String(req.body?.phone || '').replace(/\D/g, '');
-    const password = String(req.body?.password || '');
+    const phone = typeof req.body?.phone === 'string' ? req.body.phone.trim() : '';
+    const password = typeof req.body?.password === 'string' ? req.body.password : '';
     if (!/^[6-9]\d{9}$/.test(phone) || !password) {
       return res.status(400).json({ success: false, message: 'Enter your valid 10-digit mobile number and password.' });
     }
@@ -1179,8 +1268,12 @@ app.post('/auth/login', async (req, res) => {
     }
 
     const user = await User.findOne({ phone });
-    if (!user || user.password !== password) {
+    if (!user || !(await verifyPassword(password, user.password))) {
       return res.status(401).json({ success: false, message: 'Mobile number or password is incorrect.' });
+    }
+    if (!user.password.startsWith('scrypt$')) {
+      user.password = await hashPassword(password);
+      await user.save();
     }
     setAuthCookie(res, user.uid);
     return res.json({ success: true, message: 'Signed in successfully.', redirect: '/' });
@@ -1203,7 +1296,7 @@ app.post('/auth/google', async (req, res) => {
     if (!clientId || !credential) {
       return res.status(400).json({ success: false, message: 'Google sign-in is not configured.' });
     }
-    if (mongoose.connection.readyState !== 1) {
+    if (!isDbConnected || mongoose.connection.readyState !== 1) {
       return res.status(503).json({ success: false, message: 'Login service is temporarily unavailable.' });
     }
 
@@ -1410,20 +1503,22 @@ const handleContactSubmission = async (req, res) => {
     // Only fallback to Admin API if direct MongoDB connection was not available
     if (!savedDirectly) {
       try {
-        const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
-        await fetch(`${adminUrl}/api/website-feedback`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: senderName,
-            phone: senderPhone,
-            email: senderEmail,
-            subject: senderSubject,
-            message: senderMsg,
-            source: 'website'
-          }),
-          signal: AbortSignal.timeout(3000)
-        });
+        const adminUrl = process.env.ADMIN_API_URL;
+        if (adminUrl) {
+          await fetch(`${adminUrl.replace(/\/+$/, '')}/api/website-feedback`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: senderName,
+              phone: senderPhone,
+              email: senderEmail,
+              subject: senderSubject,
+              message: senderMsg,
+              source: 'website'
+            }),
+            signal: AbortSignal.timeout(3000)
+          });
+        }
       } catch (_) {}
     }
 
@@ -1532,7 +1627,9 @@ app.get('/sitemap.xml', (req, res) => {
 app.use((req, res) => {
   res.status(404).render('index', {
     pageTitle: '404 - पेज नहीं मिला | VIP Party',
-    activeNav: '404'
+    activeNav: '404',
+    heroBanners: [],
+    issues: []
   });
 });
 
@@ -1549,3 +1646,5 @@ app.listen(PORT, () => {
   console.log(`🚀 VIP Party Website running on: http://localhost:${PORT}`);
  
 });
+
+

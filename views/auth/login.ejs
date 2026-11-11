@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,10 +62,6 @@
     <!-- RIGHT SIDE -->
     <section class="auth-content">
 
-      <a class="auth-back" href="/">
-        ← Back to website
-      </a>
-
       <div class="auth-card">
 
         <a class="auth-brand auth-mobile-brand" href="/">
@@ -73,7 +69,10 @@
           <span style="color:#10253f">VIP PARTY</span>
         </a>
 
-        <div class="auth-kicker">Welcome back</div>
+        <div class="auth-heading-row">
+          <div class="auth-kicker">Welcome back</div>
+          <a class="auth-back" href="/">Back to website</a>
+        </div>
 
         <h2>Sign in to your account</h2>
 
@@ -103,6 +102,7 @@
                 inputmode="numeric"
                 autocomplete="tel-national"
                 maxlength="10"
+                pattern="[6-9][0-9]{9}"
                 placeholder="10-digit mobile number"
                 required
               >
@@ -131,13 +131,15 @@
 
           </div>
 
-          <button
-            id="loginSubmitBtn"
-            class="auth-primary"
-            type="submit"
-          >
-            Sign in <span aria-hidden="true">→</span>
-          </button>
+          <div class="auth-submit-row">
+            <button
+              id="loginSubmitBtn"
+              class="auth-primary"
+              type="submit"
+            >
+              Sign in <span aria-hidden="true">→</span>
+            </button>
+          </div>
 
         </form>
 
@@ -208,7 +210,7 @@
         );
 
         throw new Error(
-          'Server response invalid hai. Please try again later.'
+          'Something went wrong. Please try again.'
         );
       }
     }
@@ -384,3 +386,5 @@
 
 </body>
 </html>
+
+

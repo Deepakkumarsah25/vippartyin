@@ -6,10 +6,41 @@
 document.addEventListener('DOMContentLoaded', () => {
   
   // ------------------------------------------------------------------------
-  // 1. Mobile Menu Toggle
+  // 1. Mobile Menu Toggle & Accordion Submenus
   // ------------------------------------------------------------------------
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
+
+  const mobileSubmenuIds = [
+    { menu: 'mobile-about-menu', icon: 'mobile-about-icon' },
+    { menu: 'mobile-gallery-menu', icon: 'mobile-gallery-icon' },
+    { menu: 'mobile-press-menu', icon: 'mobile-press-icon' },
+    { menu: 'mobile-download-menu', icon: 'mobile-download-icon' },
+    { menu: 'mobile-forms-menu', icon: 'mobile-forms-icon' }
+  ];
+
+  function resetAllMobileSubmenus() {
+    mobileSubmenuIds.forEach((item) => {
+      const m = document.getElementById(item.menu);
+      const ic = document.getElementById(item.icon);
+      if (m) m.classList.add('hidden');
+      if (ic) ic.classList.remove('rotate-180');
+    });
+  }
+
+  window.toggleMobileSubmenu = function(menuId, iconId) {
+    const targetMenu = document.getElementById(menuId);
+    const targetIcon = document.getElementById(iconId);
+    if (!targetMenu) return;
+
+    const isCurrentlyOpen = !targetMenu.classList.contains('hidden');
+    resetAllMobileSubmenus();
+
+    if (!isCurrentlyOpen) {
+      targetMenu.classList.remove('hidden');
+      if (targetIcon) targetIcon.classList.add('rotate-180');
+    }
+  };
 
   if (mobileMenuBtn && mobileMenu) {
     mobileMenuBtn.addEventListener('click', () => {
@@ -19,11 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
       mobileMenuBtn.setAttribute('aria-label', isHidden ? 'मुख्य मेनू बंद करें' : 'मुख्य मेनू खोलें');
       const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
       if (icon) icon.classList.toggle('is-open', isHidden);
+      if (!isHidden) {
+        resetAllMobileSubmenus();
+      }
     });
 
     mobileMenu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
+        resetAllMobileSubmenus();
         mobileMenuBtn.setAttribute('aria-expanded', 'false');
         mobileMenuBtn.setAttribute('aria-label', 'मुख्य मेनू खोलें');
         const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
@@ -34,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
         mobileMenu.classList.add('hidden');
+        resetAllMobileSubmenus();
         mobileMenuBtn.setAttribute('aria-expanded', 'false');
         mobileMenuBtn.setAttribute('aria-label', 'मुख्य मेनू खोलें');
         const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
@@ -45,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
       if (window.matchMedia('(min-width: 1536px)').matches) {
         mobileMenu.classList.add('hidden');
+        resetAllMobileSubmenus();
         mobileMenuBtn.setAttribute('aria-expanded', 'false');
         const icon = mobileMenuBtn.querySelector('[data-mobile-menu-icon]');
         if (icon) icon.classList.remove('is-open');

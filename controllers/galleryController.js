@@ -1,5 +1,4 @@
 const adminBaseUrls = () => [...new Set([
-  'http://localhost:9191',
   process.env.ADMIN_API_URL
 ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
 const { Album, Video } = require('../models/publicContent');
