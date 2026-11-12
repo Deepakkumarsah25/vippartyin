@@ -479,6 +479,11 @@ body {
   }
 }
 
+@media (max-width: 767.98px) {
+  #vipNavbar .desktop-nav-actions { display: none !important; }
+  #vipNavbar .mobile-top-actions { display: flex !important; }
+}
+
 /* ==========================================================================
    Popping Up Animation for Social Issues & Cards
    ========================================================================== */
@@ -702,7 +707,7 @@ body {
 
 .why-features {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px 24px;
 }
 
@@ -738,12 +743,21 @@ body {
     }
 }
 
-.why-feature:nth-child(1) { animation-delay: 0.1s; }
-.why-feature:nth-child(2) { animation-delay: 0.2s; }
-.why-feature:nth-child(3) { animation-delay: 0.3s; }
-.why-feature:nth-child(4) { animation-delay: 0.4s; }
-.why-feature:nth-child(5) { animation-delay: 0.5s; }
-.why-feature:nth-child(6) { animation-delay: 0.6s; }
+.why-feature.in-view {
+    visibility: visible !important;
+    animation: visionSlideFromRight 0.58s var(--vision-delay, 0s) cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes visionSlideFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(34px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
 
 .why-icon {
     width: 38px;
@@ -838,7 +852,7 @@ body {
 
 @media (max-width: 576px) {
     .why-section-card {
-        padding: 28px 18px;
+        padding: 26px 16px 30px;
         border-radius: 22px;
     }
 
@@ -853,7 +867,44 @@ body {
 
     .why-features {
         grid-template-columns: 1fr;
-        gap: 18px;
+        gap: 16px;
+    }
+
+    .why-feature {
+        gap: 12px;
+    }
+
+    .why-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 9px;
+        font-size: 14px;
+    }
+
+    .why-feature-text h4 {
+        font-size: 15px;
+    }
+
+    .why-feature-text p {
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+    .why-title-desc {
+        font-size: 13.5px;
+        margin-bottom: 20px;
+    }
+
+    .why-action {
+        margin-top: 22px;
+    }
+
+    .why-btn {
+        max-width: 100%;
+        justify-content: center;
+        padding: 11px 20px;
+        font-size: 13px;
     }
 
     .why-stat-card {

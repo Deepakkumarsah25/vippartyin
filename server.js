@@ -63,6 +63,16 @@ function setAuthCookie(res, uid) {
   res.setHeader('Set-Cookie', `vip_session=${createAuthToken(uid)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800${secure}`);
 }
 
+function safeReturnPath(value, fallback = '/profile') {
+  if (typeof value !== 'string' || !value.startsWith('/') || value.startsWith('//') || value.includes('\\')) return fallback;
+  try {
+    const parsed = new URL(value, 'http://localhost');
+    return parsed.origin === 'http://localhost' ? `${parsed.pathname}${parsed.search}${parsed.hash}` : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 // ------------------------------------
 // 1. Database Connection & Models
 // ------------------------------------
@@ -115,7 +125,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = new Set(['image/jpeg', 'image/png', 'image/webp']);
+    cb(allowed.has(file.mimetype) ? null : new Error('Profile photo must be JPG, PNG, or WebP.'), allowed.has(file.mimetype));
+  }
 });
 
 // Join Schema (Synchronized with vip-a MongoDB collections)
@@ -1187,25 +1201,90 @@ app.get('/up-2027-candidature', (req, res) => res.redirect('/forms/candidature-u
 
 app.get('/forms/join-vip', (req, res) => res.redirect('/member'));
 
-// Menu 2: Dedicated Auth Pages (Login & SignUp in separate views/auth/ folder)
-app.get('/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
-app.get('/auth/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
+app.get('/profile', (req, res) => {
+  if (!req.currentUser) return res.redirect(`/login?returnTo=${encodeURIComponent('/profile')}`);
+  return res.render('profile', {
+    pageTitle: 'My Profile | VIP Party',
+    activeNav: 'profile',
+    profileUser: req.currentUser
+  });
+});
 
-app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
-app.get('/auth/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
+app.get('/forgot-password', (req, res) => {
+  res.render('auth/forgot-password', {
+    pageTitle: 'Forgot password | VIP Party',
+    activeNav: 'login'
+  });
+});
+
+app.post('/api/profile', upload.single('photo'), async (req, res) => {
+  try {
+    if (!req.currentUser) return res.status(401).json({ success: false, message: 'Please sign in to update your profile.' });
+    const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
+    const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+    const phone = typeof req.body?.phone === 'string' ? req.body.phone.trim() : '';
+    const address = typeof req.body?.address === 'string' ? req.body.address.trim() : '';
+    const district = typeof req.body?.district === 'string' ? req.body.district.trim() : '';
+    const state = typeof req.body?.state === 'string' ? req.body.state.trim() : '';
+
+    if (!name || name.length > 100) return res.status(400).json({ success: false, message: 'Enter a name up to 100 characters.' });
+    if (email && (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))) {
+      return res.status(400).json({ success: false, message: 'Enter a valid email address.' });
+    }
+    if (phone && !/^[6-9]\d{9}$/.test(phone)) return res.status(400).json({ success: false, message: 'Enter a valid 10-digit Indian mobile number.' });
+    if ([address, district, state].some(value => value.length > 400)) return res.status(400).json({ success: false, message: 'Profile details are too long.' });
+
+    const duplicateConditions = [];
+    if (email) duplicateConditions.push({ email, _id: { $ne: req.currentUser._id } });
+    if (phone) duplicateConditions.push({ phone, _id: { $ne: req.currentUser._id } });
+    if (duplicateConditions.length && await User.findOne({ $or: duplicateConditions }).select('_id')) {
+      return res.status(409).json({ success: false, message: 'That email or mobile number is already used by another account.' });
+    }
+
+    const updates = { name, email, phone: phone || req.currentUser.phone, address, district, state };
+    if (req.file) updates.photoURL = `/uploads/members/${req.file.filename}`;
+    const user = await User.findByIdAndUpdate(req.currentUser._id, { $set: updates }, { new: true, runValidators: true }).select('-password').lean();
+    if (!user) return res.status(404).json({ success: false, message: 'Account was not found.' });
+    return res.json({ success: true, message: 'Profile updated successfully.', user });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ success: false, message: 'Profile photo must be 5 MB or smaller.' });
+    }
+    if (error.message === 'Profile photo must be JPG, PNG, or WebP.') {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+    return res.status(500).json({ success: false, message: 'Could not update your profile. Please try again.' });
+  }
+});
+
+// Menu 2: Dedicated Auth Pages (Login & SignUp in separate views/auth/ folder)
+app.get('/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '', returnTo: safeReturnPath(req.query.returnTo) }));
+app.get('/auth/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '', returnTo: safeReturnPath(req.query.returnTo) }));
+
+app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', googleClientId: process.env.GOOGLE_CLIENT_ID || '', returnTo: safeReturnPath(req.query.returnTo) }));
+app.get('/auth/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', googleClientId: process.env.GOOGLE_CLIENT_ID || '', returnTo: safeReturnPath(req.query.returnTo) }));
 
 // Auth Form Handlers (Connecting to same MongoDB 'users' collection)
 app.post('/auth/signup', async (req, res) => {
   try {
-    const { name, phone, email, district, password } = req.body || {};
+    const { name, phone, email, district, state, password } = req.body || {};
     const cleanName = typeof name === 'string' ? name.trim() : '';
     const cleanPhone = typeof phone === 'string' ? phone.trim() : '';
     const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
     const cleanDistrict = typeof district === 'string' ? district.trim() : '';
+    const cleanState = typeof state === 'string' ? state.trim() : '';
     const cleanPassword = typeof password === 'string' ? password : '';
 
     if (!cleanName || !cleanPhone || !cleanEmail || !cleanDistrict || !cleanPassword) {
       return res.status(400).json({ success: false, message: 'Please complete all required fields.' });
+    }
+    const signupDistricts = {
+      'Bihar': ['Araria','Arwal','Aurangabad','Banka','Begusarai','Bhagalpur','Bhojpur','Buxar','Darbhanga','East Champaran','Gaya','Gopalganj','Jamui','Jehanabad','Kaimur','Katihar','Khagaria','Kishanganj','Lakhisarai','Madhepura','Madhubani','Munger','Muzaffarpur','Nalanda','Nawada','Patna','Purnia','Rohtas','Saharsa','Samastipur','Saran','Sheikhpura','Sheohar','Sitamarhi','Siwan','Supaul','Vaishali','West Champaran'],
+      'Uttar Pradesh': ['Agra','Aligarh','Ambedkar Nagar','Amethi','Amroha','Auraiya','Ayodhya','Azamgarh','Baghpat','Bahraich','Ballia','Balrampur','Banda','Barabanki','Bareilly','Basti','Bhadohi','Bijnor','Budaun','Bulandshahr','Chandauli','Chitrakoot','Deoria','Etah','Etawah','Farrukhabad','Fatehpur','Firozabad','Gautam Buddha Nagar','Ghaziabad','Ghazipur','Gonda','Gorakhpur','Hamirpur','Hapur','Hardoi','Hathras','Jalaun','Jaunpur','Jhansi','Kannauj','Kanpur Dehat','Kanpur Nagar','Kasganj','Kaushambi','Kushinagar','Lakhimpur Kheri','Lalitpur','Lucknow','Maharajganj','Mahoba','Mainpuri','Mathura','Mau','Meerut','Mirzapur','Moradabad','Muzaffarnagar','Pilibhit','Pratapgarh','Prayagraj','Rae Bareli','Rampur','Sambhal','Sant Kabir Nagar','Shahjahanpur','Shamli','Shravasti','Siddharthnagar','Sitapur','Sonbhadra','Sultanpur','Unnao','Varanasi']
+    };
+    if (!signupDistricts[cleanState]?.includes(cleanDistrict)) {
+      return res.status(400).json({ success: false, message: 'Choose a valid state and district.' });
     }
     if (cleanName.length > 100 || cleanDistrict.length > 100) {
       return res.status(400).json({ success: false, message: 'Name and district must be 100 characters or fewer.' });
@@ -1216,8 +1295,8 @@ app.post('/auth/signup', async (req, res) => {
     if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       return res.status(400).json({ success: false, message: 'Enter a valid 10-digit Indian mobile number.' });
     }
-    if (cleanPassword.length < 8 || cleanPassword.length > 128) {
-      return res.status(400).json({ success: false, message: 'Password must be between 8 and 128 characters.' });
+    if (cleanPassword.length < 6 || cleanPassword.length > 128) {
+      return res.status(400).json({ success: false, message: 'Password must be between 6 and 128 characters.' });
     }
     if (!isDbConnected || mongoose.connection.readyState !== 1) {
       return res.status(503).json({ success: false, message: 'Account service is temporarily unavailable. Please try again shortly.' });
@@ -1237,6 +1316,7 @@ app.post('/auth/signup', async (req, res) => {
       phone: cleanPhone,
       email: cleanEmail,
       district: cleanDistrict,
+      state: cleanState,
       password: await hashPassword(cleanPassword),
       uid: `VIP-USR-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`
     });
@@ -1258,25 +1338,28 @@ app.post('/auth/signup', async (req, res) => {
 });
 app.post('/auth/login', async (req, res) => {
   try {
-    const phone = typeof req.body?.phone === 'string' ? req.body.phone.trim() : '';
+    const rawIdentifier = req.body?.identifier ?? req.body?.email ?? req.body?.phone;
+    const identifier = typeof rawIdentifier === 'string' ? rawIdentifier.trim() : '';
     const password = typeof req.body?.password === 'string' ? req.body.password : '';
-    if (!/^[6-9]\d{9}$/.test(phone) || !password) {
-      return res.status(400).json({ success: false, message: 'Enter your valid 10-digit mobile number and password.' });
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(identifier);
+    const isPhone = /^[6-9]\d{9}$/.test(identifier);
+    if ((!isEmail && !isPhone) || !password) {
+      return res.status(400).json({ success: false, message: 'Enter your email address or 10-digit mobile number and password.' });
     }
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ success: false, message: 'Login service is temporarily unavailable. Please try again shortly.' });
     }
 
-    const user = await User.findOne({ phone });
+    const user = await User.findOne(isEmail ? { email: identifier.toLowerCase() } : { phone: identifier });
     if (!user || !(await verifyPassword(password, user.password))) {
-      return res.status(401).json({ success: false, message: 'Mobile number or password is incorrect.' });
+      return res.status(401).json({ success: false, message: 'Email/mobile number or password is incorrect.' });
     }
     if (!user.password.startsWith('scrypt$')) {
       user.password = await hashPassword(password);
       await user.save();
     }
     setAuthCookie(res, user.uid);
-    return res.json({ success: true, message: 'Signed in successfully.', redirect: '/' });
+    return res.json({ success: true, message: 'Signed in successfully.', redirect: safeReturnPath(req.body?.returnTo) });
   } catch (err) {
     console.error('Login error:', err);
     return res.status(500).json({ success: false, message: 'Could not sign in. Please try again.' });
@@ -1322,7 +1405,7 @@ app.post('/auth/google', async (req, res) => {
       });
     }
     setAuthCookie(res, user.uid);
-    return res.json({ success: true, redirect: '/' });
+    return res.json({ success: true, redirect: safeReturnPath(req.body?.returnTo) });
   } catch (err) {
     console.error('Google login error:', err);
     return res.status(500).json({ success: false, message: 'Google sign-in could not be completed.' });

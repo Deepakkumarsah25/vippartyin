@@ -492,7 +492,7 @@
             <% staticVisionPoints.forEach((point, pIndex) => { 
                 const delaySec = (0.1 + (pIndex * 0.1)).toFixed(1);
             %>
-              <div class="why-feature wow fadeInUp" data-wow-delay="<%= delaySec %>s">
+              <div class="why-feature wow fadeInUp" data-vision-order="<%= pIndex %>" style="--vision-delay: <%= Math.floor(pIndex / 2) * 0.32 %>s">
                 <div class="why-icon">
                   <i class="fa-solid <%= point.icon %>"></i>
                 </div>
@@ -505,7 +505,7 @@
           </div>
 
           <!-- Action Button After All Points -->
-          <div class="why-action wow fadeInUp" data-wow-delay=".7s">
+          <div class="why-action wow fadeInUp" data-vision-action>
             <a href="/mission-vision" class="why-btn">
               <span>पूरा विज़न एवं मिशन पढ़ें</span>
               <i class="fa-solid fa-arrow-right"></i>
@@ -1451,6 +1451,32 @@
 
     // WOW.js Initialization & Viewport Animation Trigger (Only runs when scrolled into view)
     document.addEventListener('DOMContentLoaded', function () {
+      // The vision points use their own observer so their order and timing are
+      // consistent regardless of whether WOW.js loads before or after this script.
+      const visionSection = document.querySelector('.why-section-card');
+      if (visionSection) {
+        const visionItems = visionSection.querySelectorAll('.why-title, .why-title-desc, [data-vision-action]');
+        const visionFeatures = Array.from(visionSection.querySelectorAll('.why-feature'));
+        visionItems.forEach((item, index) => {
+          item.classList.remove('wow', 'fadeInUp', 'animated', 'in-view');
+          item.style.animationDelay = `${Math.max(0, index - 1) * 0.12}s`;
+        });
+        const visionObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            if (entry.target === visionSection) {
+              visionFeatures.forEach(feature => feature.classList.add('in-view'));
+              observer.unobserve(entry.target);
+              return;
+            }
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          });
+        }, { rootMargin: '0px 0px -60px 0px', threshold: 0.08 });
+        visionItems.forEach(item => visionObserver.observe(item));
+        visionObserver.observe(visionSection);
+      }
+
       if (typeof WOW !== 'undefined') {
         new WOW({
           boxClass: 'wow',

@@ -286,10 +286,12 @@
           <div class="relative group">
             <a href="/profile"
               class="text-gray-700 hover:text-primary px-3 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold flex items-center gap-2 hover:bg-gray-100 whitespace-nowrap">
-              <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
-                  class="w-8 h-8 rounded-full object-cover navbar-profile-avatar">
-                <% } else { %><i class="fa-solid fa-circle-user text-primary text-xl"></i>
-                  <% } %>
+              <span class="navbar-avatar-wrap w-8 h-8 shrink-0 relative inline-flex items-center justify-center">
+                <i class="fa-solid fa-circle-user text-primary text-2xl navbar-avatar-fallback"<%= currentUser.photoURL ? ' hidden' : '' %>></i>
+                <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
+                  class="w-8 h-8 rounded-full object-cover navbar-profile-avatar" onerror="this.hidden=true;this.previousElementSibling.hidden=false">
+                <% } %>
+              </span>
                     <span class="navbar-profile-name">
                       <%= currentUser.name %>
                     </span><i class="fa-solid fa-chevron-down text-[10px]"></i>
@@ -308,7 +310,6 @@
               </div>
             </div>
           </div>
-        </div>
         <% } else { %>
         <div class="relative group">
           <a href="/login" class="text-gray-700 hover:text-primary px-3 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold transition-all duration-200 flex items-center hover:bg-gray-100 whitespace-nowrap">
@@ -509,23 +510,22 @@
       <div class="mt-5 pt-5 border-t border-gray-100 flex flex-col space-y-3">
         <!-- Account actions -->
         <% if (currentUser) { %>
-          <a href="/profile"
-            class="w-full bg-blue-50 text-primary px-3 py-3 rounded-xl font-bold flex items-center gap-3 text-sm">
-            <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
-                class="w-10 h-10 rounded-full object-cover navbar-profile-avatar">
-              <% } else { %><i class="fa-solid fa-circle-user text-2xl"></i>
-                <% } %>
-                  <span class="min-w-0"><span class="block truncate navbar-profile-name">
+          <div class="mobile-account-row w-full bg-blue-50 text-primary px-3 py-3 rounded-xl font-bold flex items-center gap-3 text-sm">
+            <span class="navbar-avatar-wrap w-10 h-10 shrink-0 relative inline-flex items-center justify-center">
+              <i class="fa-solid fa-circle-user text-primary text-3xl navbar-avatar-fallback"<%= currentUser.photoURL ? ' hidden' : '' %>></i>
+              <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
+                class="w-10 h-10 rounded-full object-cover navbar-profile-avatar" onerror="this.hidden=true;this.previousElementSibling.hidden=false">
+              <% } %>
+            </span>
+            <a href="/profile" class="min-w-0 flex-1 text-inherit no-underline"><span class="block truncate navbar-profile-name">
                       <%= currentUser.name %>
                     </span><span class="block text-xs font-medium text-gray-500 truncate navbar-profile-email">
                       <%= currentUser.email || currentUser.phone %>
-                    </span></span>
-          </a>
-          <a href="/profile"
-            class="w-full border border-gray-200 text-gray-700 px-4 py-3 rounded-xl font-bold flex items-center justify-center">My
-            profile</a>
-          <form action="/auth/logout" method="post"><button type="submit"
-              class="w-full bg-red-50 text-red-600 px-4 py-3 rounded-xl font-bold">Sign out</button></form>
+                    </span></a>
+            <form action="/auth/logout" method="post" class="shrink-0"><button type="submit"
+              class="mobile-account-logout rounded-lg bg-red-50 px-3 py-2 font-bold text-red-600">Sign out</button></form>
+          </div>
+          <a href="/profile" class="mobile-account-manage w-full border border-gray-200 text-gray-700 px-4 py-3 rounded-xl font-bold flex items-center justify-center">Manage profile</a>
           <% } else { %>
             <div class="grid grid-cols-2 gap-2">
               <a href="/login"
