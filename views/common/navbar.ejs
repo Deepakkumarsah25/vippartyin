@@ -286,10 +286,12 @@
           <div class="relative group">
             <a href="/profile"
               class="text-gray-700 hover:text-primary px-3 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold flex items-center gap-2 hover:bg-gray-100 whitespace-nowrap">
-              <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
-                  class="w-8 h-8 rounded-full object-cover navbar-profile-avatar">
-                <% } else { %><i class="fa-solid fa-circle-user text-primary text-xl"></i>
-                  <% } %>
+              <span class="navbar-avatar-wrap w-8 h-8 shrink-0 relative inline-flex items-center justify-center">
+                <i class="fa-solid fa-circle-user text-primary text-2xl navbar-avatar-fallback"<%= currentUser.photoURL ? ' hidden' : '' %>></i>
+                <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
+                  class="w-8 h-8 rounded-full object-cover navbar-profile-avatar" onerror="this.hidden=true;this.previousElementSibling.hidden=false">
+                <% } %>
+              </span>
                     <span class="navbar-profile-name">
                       <%= currentUser.name %>
                     </span><i class="fa-solid fa-chevron-down text-[10px]"></i>
@@ -308,7 +310,6 @@
               </div>
             </div>
           </div>
-        </div>
         <% } else { %>
         <div class="relative group">
           <a href="/login" class="text-gray-700 hover:text-primary px-3 py-2 rounded-lg text-[13px] 2xl:text-[15px] font-bold transition-all duration-200 flex items-center hover:bg-gray-100 whitespace-nowrap">
@@ -386,7 +387,7 @@
       <!-- 2. About Us (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-about-menu').classList.toggle('hidden'); document.getElementById('mobile-about-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-about-menu', 'mobile-about-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-flag mr-2 text-primary"></i> <span data-i18n="nav.about">हमारे बारे
               में</span></span>
@@ -414,7 +415,7 @@
       <!-- 3. Gallery (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-gallery-menu').classList.toggle('hidden'); document.getElementById('mobile-gallery-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-gallery-menu', 'mobile-gallery-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-images mr-2 text-primary"></i> <span data-i18n="nav.gallery">गैलरी</span></span>
           <i id="mobile-gallery-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
@@ -431,7 +432,7 @@
       <!-- 4. Press (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-press-menu').classList.toggle('hidden'); document.getElementById('mobile-press-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-press-menu', 'mobile-press-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-newspaper mr-2 text-primary"></i> <span data-i18n="nav.press">प्रेस</span></span>
           <i id="mobile-press-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
@@ -450,7 +451,7 @@
       <!-- 5. Download (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-download-menu').classList.toggle('hidden'); document.getElementById('mobile-download-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-download-menu', 'mobile-download-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-cloud-arrow-down mr-2 text-primary"></i> <span
               data-i18n="nav.download">डाउनलोड</span></span>
@@ -474,7 +475,7 @@
       <!-- 6. Forms (Accordion) -->
       <div class="space-y-1">
         <button type="button"
-          onclick="document.getElementById('mobile-forms-menu').classList.toggle('hidden'); document.getElementById('mobile-forms-icon').classList.toggle('rotate-180')"
+          onclick="toggleMobileSubmenu('mobile-forms-menu', 'mobile-forms-icon')"
           class="w-full flex items-center justify-between px-3 py-2.5 font-bold rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
           <span><i class="fa-solid fa-file-waveform mr-2 text-primary"></i> <span
               data-i18n="nav.forms">हमसे जुड़ें</span></span>
@@ -509,23 +510,22 @@
       <div class="mt-5 pt-5 border-t border-gray-100 flex flex-col space-y-3">
         <!-- Account actions -->
         <% if (currentUser) { %>
-          <a href="/profile"
-            class="w-full bg-blue-50 text-primary px-3 py-3 rounded-xl font-bold flex items-center gap-3 text-sm">
-            <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
-                class="w-10 h-10 rounded-full object-cover navbar-profile-avatar">
-              <% } else { %><i class="fa-solid fa-circle-user text-2xl"></i>
-                <% } %>
-                  <span class="min-w-0"><span class="block truncate navbar-profile-name">
+          <div class="mobile-account-row w-full bg-blue-50 text-primary px-3 py-3 rounded-xl font-bold flex items-center gap-3 text-sm">
+            <span class="navbar-avatar-wrap w-10 h-10 shrink-0 relative inline-flex items-center justify-center">
+              <i class="fa-solid fa-circle-user text-primary text-3xl navbar-avatar-fallback"<%= currentUser.photoURL ? ' hidden' : '' %>></i>
+              <% if (currentUser.photoURL) { %><img src="<%= currentUser.photoURL %>" alt=""
+                class="w-10 h-10 rounded-full object-cover navbar-profile-avatar" onerror="this.hidden=true;this.previousElementSibling.hidden=false">
+              <% } %>
+            </span>
+            <a href="/profile" class="min-w-0 flex-1 text-inherit no-underline"><span class="block truncate navbar-profile-name">
                       <%= currentUser.name %>
                     </span><span class="block text-xs font-medium text-gray-500 truncate navbar-profile-email">
                       <%= currentUser.email || currentUser.phone %>
-                    </span></span>
-          </a>
-          <a href="/profile"
-            class="w-full border border-gray-200 text-gray-700 px-4 py-3 rounded-xl font-bold flex items-center justify-center">My
-            profile</a>
-          <form action="/auth/logout" method="post"><button type="submit"
-              class="w-full bg-red-50 text-red-600 px-4 py-3 rounded-xl font-bold">Sign out</button></form>
+                    </span></a>
+            <form action="/auth/logout" method="post" class="shrink-0"><button type="submit"
+              class="mobile-account-logout rounded-lg bg-red-50 px-3 py-2 font-bold text-red-600">Sign out</button></form>
+          </div>
+          <a href="/profile" class="mobile-account-manage w-full border border-gray-200 text-gray-700 px-4 py-3 rounded-xl font-bold flex items-center justify-center">Manage profile</a>
           <% } else { %>
             <div class="grid grid-cols-2 gap-2">
               <a href="/login"
@@ -616,3 +616,36 @@
 </div>
 <!-- Hidden Google Translate Element -->
 <div id="google_translate_element" style="display:none !important;"></div>
+
+<!-- Mobile Submenu Accordion Script (Mutually Exclusive Dropdowns) -->
+<script>
+  function toggleMobileSubmenu(menuId, iconId) {
+    var submenus = [
+      { menu: 'mobile-about-menu', icon: 'mobile-about-icon' },
+      { menu: 'mobile-gallery-menu', icon: 'mobile-gallery-icon' },
+      { menu: 'mobile-press-menu', icon: 'mobile-press-icon' },
+      { menu: 'mobile-download-menu', icon: 'mobile-download-icon' },
+      { menu: 'mobile-forms-menu', icon: 'mobile-forms-icon' }
+    ];
+    var targetMenu = document.getElementById(menuId);
+    var targetIcon = document.getElementById(iconId);
+    if (!targetMenu) return;
+
+    var isCurrentlyOpen = !targetMenu.classList.contains('hidden');
+
+    // Close all accordion submenus and reset chevron rotation
+    submenus.forEach(function(item) {
+      var m = document.getElementById(item.menu);
+      var ic = document.getElementById(item.icon);
+      if (m) m.classList.add('hidden');
+      if (ic) ic.classList.remove('rotate-180');
+    });
+
+    // Toggle selected submenu open if it was previously closed
+    if (!isCurrentlyOpen) {
+      targetMenu.classList.remove('hidden');
+      if (targetIcon) targetIcon.classList.add('rotate-180');
+    }
+  }
+  window.toggleMobileSubmenu = toggleMobileSubmenu;
+</script>

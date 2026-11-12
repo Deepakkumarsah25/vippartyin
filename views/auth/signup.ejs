@@ -1,1 +1,97 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><%= pageTitle %></title><link rel="icon" href="/images/vip-logo.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/auth.css"></head><body class="auth-body"><main class="auth-shell"><aside class="auth-story"><a class="auth-brand" href="/"><img src="/images/vip-logo.svg" alt="VIP"><span>VIKASSHEEL INSAAN PARTY</span></a><div class="auth-story-copy"><span class="auth-eyebrow">Be part of the change</span><h1>Your voice can move us forward.</h1><p>Join a growing community that believes every person deserves dignity, opportunity and a seat at the table.</p></div><div class="auth-quote">साथ चलें · बेहतर कल बनाएं</div></aside><section class="auth-content"><a class="auth-back" href="/">← Back to website</a><div class="auth-card"><a class="auth-brand auth-mobile-brand" href="/"><img src="/images/vip-logo.svg" alt="VIP"><span style="color:#10253f">VIP PARTY</span></a><div class="auth-kicker">Join the movement</div><h2>Create your account</h2><p class="auth-subtitle">A few details and you’re ready to get involved.</p><div id="signupAlert" class="auth-alert" role="status"></div><form id="signupForm"><div class="auth-fields"><div class="auth-field"><label for="signupName">Full name</label><input id="signupName" name="name" autocomplete="name" placeholder="Your name" required></div><div class="auth-fields two"><div class="auth-field"><label for="signupPhone">Mobile number</label><input id="signupPhone" name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="10-digit number" required></div><div class="auth-field"><label for="signupEmail">Email address <span aria-hidden="true" style="color:#c24135">*</span></label><input id="signupEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254" required></div></div><div class="auth-field"><label for="signupDistrict">District</label><input id="signupDistrict" name="district" autocomplete="address-level2" placeholder="e.g. Patna" required></div><div class="auth-field"><label for="signupPassword">Create password</label><input id="signupPassword" name="password" type="password" autocomplete="new-password" placeholder="Choose a password" required></div></div><button id="signupSubmitBtn" class="auth-primary" type="submit">Create my account <span aria-hidden="true">→</span></button></form><div class="auth-switch">Already have an account? <a href="/login">Sign in</a></div><p class="auth-legal">Your details help us connect you with local updates and opportunities.</p></div></section></main><script>const form=document.getElementById('signupForm'),alertBox=document.getElementById('signupAlert'),submit=document.getElementById('signupSubmitBtn');function message(text,type='error'){alertBox.textContent=text;alertBox.className='auth-alert show '+type}form.addEventListener('submit',async e=>{e.preventDefault();alertBox.className='auth-alert';submit.disabled=true;submit.textContent='Creating your account…';const fields=['name','phone','email','district','password'],body={};fields.forEach(k=>{const value=document.getElementById('signup'+k[0].toUpperCase()+k.slice(1)).value;body[k]=k==='password'?value:value.trim()});if(body.phone.length!==10){message('Please enter a valid 10-digit mobile number.');submit.disabled=false;submit.innerHTML='Create my account <span aria-hidden="true">→</span>';return}try{const r=await fetch('/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Could not create your account.');message('Your account is ready. Sign in to continue.','success');setTimeout(()=>location.href='/login',900)}catch(e){message(e.message)}finally{submit.disabled=false;submit.innerHTML='Create my account <span aria-hidden="true">→</span>'}})</script></body></html>
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+        <%= pageTitle %>
+    </title>
+    <link rel="icon" href="/images/vip-logo.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/auth.css">
+    <% if (googleClientId) { %>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <% } %>
+</head>
+
+<body class="auth-body signup-page">
+    <main class="auth-shell">
+        <aside class="auth-story"><a class="auth-brand" href="/"><img src="/images/vip-logo.svg"
+                    alt="VIP"><span>VIKASSHEEL INSAAN PARTY</span></a>
+            <div class="auth-story-copy"><span class="auth-eyebrow">Be part of the change</span>
+                <h1>Your voice can move us forward.</h1>
+                <p>Join a growing community that believes every person deserves dignity, opportunity and a seat at the
+                    table.</p>
+            </div>
+            <div class="auth-quote">साथ चलें · बेहतर कल बनाएं</div>
+        </aside>
+        <section class="auth-content">
+            <div class="auth-card"><a class="auth-brand auth-mobile-brand" href="/"><img src="/images/vip-logo.svg"
+                        alt="VIP"><span style="color:#10253f">VIP PARTY</span></a>
+                <div class="auth-heading-row signup-heading-row"></div>
+                <h2>Create account</h2>
+                <p class="auth-subtitle">A few details and you’re ready to get involved.</p>
+                <div id="signupAlert" class="auth-alert" role="status"></div>
+                <form id="signupForm" data-return-to="<%= returnTo %>">
+                <div class="auth-fields">
+                        <div class="auth-field"><label for="signupName">Full name</label><input id="signupName"
+                                name="name" autocomplete="name" maxlength="100" placeholder="Your name" required></div>
+                        <div class="auth-fields two">
+                            <div class="auth-field"><label for="signupPhone">Mobile number</label><input
+                                    id="signupPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national"
+                                    maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit number" required></div>
+                            <div class="auth-field"><label for="signupEmail">Email address <span aria-hidden="true"
+                                        style="color:#c24135">*</span></label><input id="signupEmail" name="email"
+                                    type="email" autocomplete="email" placeholder="you@example.com" maxlength="254"
+                                    required></div>
+                        </div>
+                        <div class="auth-fields two signup-location-fields">
+                            <div class="auth-field"><label for="signupState">State</label><select id="signupState" name="state" required><option value="Bihar" selected>Bihar</option><option value="Uttar Pradesh">Uttar Pradesh (UP)</option></select></div>
+                            <div class="auth-field"><label for="signupDistrict">District</label><select id="signupDistrict" name="district" autocomplete="address-level2" required></select></div>
+                        </div>
+                        <div class="auth-field"><label for="signupPassword">Create password</label><input
+                                id="signupPassword" name="password" type="password" autocomplete="new-password" minlength="6" maxlength="128" placeholder="Choose a password" required></div>
+                    </div><div class="auth-submit-row"><button id="signupSubmitBtn" class="auth-primary" type="submit">Create account <span
+                            aria-hidden="true">→</span></button></div>
+                </form>
+                <div class="auth-divider">OR CONTINUE WITH</div>
+                <div id="googleButton" class="google-button<%= googleClientId ? '' : ' is-disabled' %>" role="group"
+                    aria-label="Sign up with Google"></div>
+                <% if (!googleClientId) { %>
+                    <p class="google-hint">Google sign-in needs a Google OAuth client ID. <a href="/google-login-setup"
+                            target="_blank" rel="noopener noreferrer">Setup steps</a></p>
+                    <% } %>
+                        <div class="auth-switch">Already have an account? <a href="/login?returnTo=<%= encodeURIComponent(returnTo) %>">Sign in</a></div>
+                        <p class="auth-legal">Your details help us connect you with local updates and opportunities.</p>
+            </div>
+        </section>
+    </main>
+    <script>
+      const signupDistricts = {
+        'Bihar': ['Araria','Arwal','Aurangabad','Banka','Begusarai','Bhagalpur','Bhojpur','Buxar','Darbhanga','East Champaran','Gaya','Gopalganj','Jamui','Jehanabad','Kaimur','Katihar','Khagaria','Kishanganj','Lakhisarai','Madhepura','Madhubani','Munger','Muzaffarpur','Nalanda','Nawada','Patna','Purnia','Rohtas','Saharsa','Samastipur','Saran','Sheikhpura','Sheohar','Sitamarhi','Siwan','Supaul','Vaishali','West Champaran'],
+        'Uttar Pradesh': ['Agra','Aligarh','Ambedkar Nagar','Amethi','Amroha','Auraiya','Ayodhya','Azamgarh','Baghpat','Bahraich','Ballia','Balrampur','Banda','Barabanki','Bareilly','Basti','Bhadohi','Bijnor','Budaun','Bulandshahr','Chandauli','Chitrakoot','Deoria','Etah','Etawah','Farrukhabad','Fatehpur','Firozabad','Gautam Buddha Nagar','Ghaziabad','Ghazipur','Gonda','Gorakhpur','Hamirpur','Hapur','Hardoi','Hathras','Jalaun','Jaunpur','Jhansi','Kannauj','Kanpur Dehat','Kanpur Nagar','Kasganj','Kaushambi','Kushinagar','Lakhimpur Kheri','Lalitpur','Lucknow','Maharajganj','Mahoba','Mainpuri','Mathura','Mau','Meerut','Mirzapur','Moradabad','Muzaffarnagar','Pilibhit','Pratapgarh','Prayagraj','Rae Bareli','Rampur','Sambhal','Sant Kabir Nagar','Shahjahanpur','Shamli','Shravasti','Siddharthnagar','Sitapur','Sonbhadra','Sultanpur','Unnao','Varanasi']
+      };
+      const signupState = document.getElementById('signupState');
+      const signupDistrict = document.getElementById('signupDistrict');
+      function refreshSignupDistricts() {
+        signupDistrict.replaceChildren(...signupDistricts[signupState.value].map(name => new Option(name, name)));
+      }
+      signupState.addEventListener('change', refreshSignupDistricts);
+      refreshSignupDistricts();
+    </script>
+    <script>const form = document.getElementById('signupForm'), alertBox = document.getElementById('signupAlert'), submit = document.getElementById('signupSubmitBtn'), googleButton = document.getElementById('googleButton'); function message(text, type = 'error') { alertBox.textContent = text; alertBox.className = 'auth-alert show ' + type } form.addEventListener('submit', async e => { e.preventDefault(); alertBox.className = 'auth-alert'; submit.disabled = true; submit.textContent = 'Creating your account…'; const fields = ['name', 'phone', 'email', 'state', 'district', 'password'], body = { returnTo: <%- JSON.stringify(returnTo) %> }; fields.forEach(k => { const value = document.getElementById('signup' + k[0].toUpperCase() + k.slice(1)).value; body[k] = k === 'password' ? value : value.trim() }); if (!/^[6-9][0-9]{9}$/.test(body.phone)) { message('Please enter a valid Mobile number.'); submit.disabled = false; submit.innerHTML = 'Create account <span aria-hidden="true">→</span>'; return } if (body.password.length < 6) { message('Password must be at least 6 characters.'); submit.disabled = false; submit.innerHTML = 'Create account <span aria-hidden="true">→</span>'; return } try { const r = await fetch('/auth/signup', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(body) }), d = await readResponse(r); if (!r.ok || !d.success) throw Error(d.message || 'Could not create your account.'); message('Your account is ready. Sign in to continue.', 'success'); setTimeout(() => location.href = '/login?returnTo=' + encodeURIComponent(body.returnTo), 900) } catch (e) { message(e instanceof TypeError ? 'Could not reach the server. Please try again.' : e.message) } finally { submit.disabled = false; submit.innerHTML = 'Create account <span aria-hidden="true">→</span>' } }); async function readResponse(response) { const raw = await response.text(); try { return JSON.parse(raw) } catch { throw new Error('Something went wrong. Please try again.') } }
+        async function googleCredential(response) { try { if (!response || !response.credential) throw Error('Google credential nahi mila. Please try again.'); alertBox.className = 'auth-alert'; googleButton.style.pointerEvents = 'none'; googleButton.style.opacity = '.65'; const result = await fetch('/auth/google', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ credential: response.credential, returnTo: <%- JSON.stringify(returnTo) %> }) }), data = await readResponse(result); if (!result.ok || data.success !== true) throw Error(data.message || `Google sign-in failed (HTTP ${result.status}).`); message('Google sign-in successful. Redirecting...', 'success'); window.location.assign(data.redirect || '/profile') } catch (error) { message(error.message || 'Google sign-in could not be completed.') } finally { googleButton.style.pointerEvents = ''; googleButton.style.opacity = '' } }
+<% if (googleClientId) { %>
+            window.addEventListener('load', () => { if (!window.google || !window.google.accounts) { message('Google sign-in load nahi hua. Page reload karke try karein.'); return } try { window.google.accounts.id.initialize({ client_id: <%- JSON.stringify(googleClientId) %>, callback: googleCredential }); const renderGoogleButton = () => { const width = Math.floor(googleButton.getBoundingClientRect().width); if (!width) return; googleButton.replaceChildren(); window.google.accounts.id.renderButton(googleButton, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular', width: Math.min(400, width), logo_alignment: 'left' }) }; renderGoogleButton(); let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(renderGoogleButton, 150) }) } catch (error) { console.error('Google initialization error:', error); message('Google sign-in initialize nahi ho saka.') } });
+<% } %>
+    </script>
+</body>
+
+</html>
+
+

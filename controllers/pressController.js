@@ -1,7 +1,6 @@
 const { News, Video, MediaGallery } = require('../models/publicContent');
 
 const getBackendUrls = () => [...new Set([
-  'http://localhost:9191',
   process.env.ADMIN_API_URL
 ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
 

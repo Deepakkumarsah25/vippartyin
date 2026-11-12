@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,10 +62,6 @@
     <!-- RIGHT SIDE -->
     <section class="auth-content">
 
-      <a class="auth-back" href="/">
-        ← Back to website
-      </a>
-
       <div class="auth-card">
 
         <a class="auth-brand auth-mobile-brand" href="/">
@@ -73,9 +69,12 @@
           <span style="color:#10253f">VIP PARTY</span>
         </a>
 
-        <div class="auth-kicker">Welcome back</div>
+        <div class="auth-heading-row login-heading-row">
+          <div class="auth-kicker">Welcome back</div>
+        
+        </div>
 
-        <h2>Sign in to your account</h2>
+        <h2>Sign in account</h2>
 
         <p class="auth-subtitle">
           Pick up where you left off. Your community is waiting.
@@ -94,16 +93,16 @@
           <div class="auth-fields">
 
             <div class="auth-field">
-              <label for="loginPhone">Mobile number</label>
+              <label for="loginIdentifier">Email address or mobile number</label>
 
               <input
-                id="loginPhone"
-                name="phone"
-                type="tel"
-                inputmode="numeric"
-                autocomplete="tel-national"
-                maxlength="10"
-                placeholder="10-digit mobile number"
+                id="loginIdentifier"
+                name="identifier"
+                type="text"
+                inputmode="text"
+                autocomplete="username"
+                maxlength="254"
+                placeholder="Email address or Mobile number"
                 required
               >
             </div>
@@ -131,13 +130,15 @@
 
           </div>
 
-          <button
-            id="loginSubmitBtn"
-            class="auth-primary"
-            type="submit"
-          >
-            Sign in <span aria-hidden="true">→</span>
-          </button>
+          <div class="auth-submit-row">
+            <button
+              id="loginSubmitBtn"
+              class="auth-primary"
+              type="submit"
+            >
+              Sign in <span aria-hidden="true">→</span>
+            </button>
+          </div>
 
         </form>
 
@@ -172,7 +173,7 @@
 
         <div class="auth-switch">
           New to the community?
-          <a href="/signup">Create an account</a>
+          <a href="/signup?returnTo=<%= encodeURIComponent(returnTo) %>">Create account</a>
         </div>
 
         <p class="auth-legal">
@@ -208,7 +209,7 @@
         );
 
         throw new Error(
-          'Server response invalid hai. Please try again later.'
+          'Something went wrong. Please try again.'
         );
       }
     }
@@ -230,8 +231,9 @@
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            phone: document.getElementById('loginPhone').value.trim(),
-            password: document.getElementById('loginPassword').value
+            identifier: document.getElementById('loginIdentifier').value.trim(),
+            password: document.getElementById('loginPassword').value,
+            returnTo: <%- JSON.stringify(returnTo) %>
           })
         });
 
@@ -284,7 +286,8 @@
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            credential: response.credential
+            credential: response.credential,
+            returnTo: <%- JSON.stringify(returnTo) %>
           })
         });
 
@@ -384,3 +387,5 @@
 
 </body>
 </html>
+
+
