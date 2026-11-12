@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="hi-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= pageTitle %></title>
+  <meta name="description" content="विकासशील इंसान पार्टी (VIP) के आगामी कार्यक्रम, जनसंवाद, रैलियां एवं सामाजिक आयोजन।">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#0066b2',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#0066b2',
+              600: '#004b87',
+              700: '#003a6c',
+              800: '#002e54',
+              900: '#001e38',
+              950: '#001426'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .events-hero-bg {
+      background: linear-gradient(135deg, #001426 0%, #003a6c 45%, #0066b2 100%);
+    }
+    .event-card {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -15px rgba(0, 102, 178, 0.18);
+    }
+    .event-gallery-thumb:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-700 bg-slate-50 antialiased selection:bg-primary selection:text-white">
+  <%- include('common/navbar') %>
+
+  <main class="min-h-screen pb-20">
+    <!-- Hero Header -->
+    <section class="events-hero-bg text-white relative overflow-hidden py-12 sm:py-16 border-b border-primary-700/50">
+      <!-- Decorative background blurs -->
+      <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-blue-500/15 blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-amber-400/10 blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <!-- Breadcrumb & Badge -->
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-blue-100 backdrop-blur-sm">
+            <i class="fa-solid fa-calendar-days text-amber-400"></i> VIP आधिकारिक कार्यक्रम
+          </span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+          आगामी कार्यक्रम और रैलियां
+        </h1>
+        <p class="mx-auto mt-3.5 max-w-2xl text-sm sm:text-base leading-relaxed text-blue-100">
+          विकासशील इंसान पार्टी (VIP) के प्रमुख जनसंवाद, रैलियां, सामाजिक उत्सव एवं संगठनात्मक आयोजनों की आधिकारिक सूची।
+        </p>
+
+        <!-- Search & Quick Filter Bar -->
+        <div class="mt-8 max-w-xl mx-auto">
+          <div class="relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400 text-sm"></i>
+            <input type="text" id="eventSearchInput" onkeyup="filterEvents()" placeholder="कार्यक्रम का नाम या स्थान खोजें (उदा. Patna, Bhopal, Holi)..."
+              class="w-full pl-11 pr-4 py-3 bg-white/95 text-slate-900 rounded-2xl shadow-lg border border-white/30 text-sm font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
+      <!-- Section Title & Filter Tabs -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-widest text-primary flex items-center gap-1.5">
+            <i class="fa-solid fa-layer-group"></i> All Events
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            पार्टी के सभी कार्यक्रम
+          </h2>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex items-center gap-2 bg-slate-200/70 p-1 rounded-xl text-xs font-bold">
+          <button type="button" onclick="setEventFilter('all')" id="filter-all" class="filter-tab-btn active px-3.5 py-1.5 rounded-lg bg-white text-primary shadow-xs transition-all">
+            सभी (<span id="eventCountTotal"><%= events.length %></span>)
+          </button>
+          <button type="button" onclick="setEventFilter('upcoming')" id="filter-upcoming" class="filter-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+            आगामी
+          </button>
+          <button type="button" onclick="setEventFilter('past')" id="filter-past" class="filter-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+            सम्पन्न
+          </button>
+        </div>
+      </div>
+
+      <!-- Events Cards Grid -->
+      <% if (!events || events.length === 0) { %>
+        <div class="rounded-3xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
+          <span class="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-blue-50 text-3xl text-primary mb-4">
+            <i class="fa-regular fa-calendar-xmark"></i>
+          </span>
+          <h3 class="text-2xl font-black text-slate-900">अभी कोई प्रकाशित कार्यक्रम नहीं है</h3>
+          <p class="mt-2 text-sm text-slate-500 max-w-md mx-auto">नए कार्यक्रमों व रैलियों की तारीख तय होते ही यहां पूरा विवरण प्रकाशित किया जाएगा।</p>
+        </div>
+      <% } else { %>
+        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <% events.forEach((event, idx) => {
+            const eventDate = new Date(event.eventDate);
+            const isInvalidDate = isNaN(eventDate.getTime());
+            const isUpcoming = !isInvalidDate && (eventDate.getTime() >= new Date().setHours(0,0,0,0));
+            const eventImages = Array.isArray(event.images) ? event.images.filter(Boolean) : [];
+            const coverImage = eventImages[0] || '';
+            const day = isInvalidDate ? '--' : eventDate.getDate().toString().padStart(2, '0');
+            const month = isInvalidDate ? '---' : eventDate.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+            const year = isInvalidDate ? '----' : eventDate.getFullYear();
+            const dateStringFormatted = isInvalidDate ? '' : eventDate.toLocaleDateString('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+          %>
+            <article id="event-<%= event._id %>"
+              data-event-title="<%= (event.title || '').toLowerCase() %>"
+              data-event-location="<%= (event.location || '').toLowerCase() %>"
+              data-event-type="<%= isUpcoming ? 'upcoming' : 'past' %>"
+              class="event-card-item event-card bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden flex flex-col justify-between">
+              
+              <!-- Card Header / Image Section -->
+              <div>
+                <div class="relative aspect-[16/10] overflow-hidden bg-slate-900">
+                  <% if (coverImage) { %>
+                    <img src="<%= coverImage %>" alt="<%= event.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                  <% } else { %>
+                    <div class="w-full h-full bg-gradient-to-tr from-primary-900 to-primary-600 flex items-center justify-center text-5xl text-white/50">
+                      <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                  <% } %>
+
+                  <!-- Top Right: Photo Count Badge (Matching user screenshot) -->
+                  <% if (eventImages.length > 0) { %>
+                    <div class="absolute top-3.5 right-3.5 bg-black/65 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md">
+                      <i class="fa-solid fa-images text-[11px]"></i>
+                      <span><%= eventImages.length %></span>
+                    </div>
+                  <% } %>
+
+                  <!-- Top Left: Featured Badge -->
+                  <% if (event.featured) { %>
+                    <div class="absolute top-3.5 left-3.5 bg-amber-400 text-amber-950 font-black text-[11px] px-3 py-1 rounded-full shadow-md flex items-center gap-1">
+                      <i class="fa-solid fa-star text-[10px]"></i> FEATURED
+                    </div>
+                  <% } %>
+
+                  <!-- Bottom Left: Date Badge Overlay -->
+                  <div class="absolute bottom-3.5 left-3.5 bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-1.5 shadow-lg flex items-center gap-2.5 border border-white/60">
+                    <span class="text-2xl font-black text-primary leading-none"><%= day %></span>
+                    <div class="text-left leading-tight">
+                      <span class="block text-[11px] font-black uppercase tracking-wider text-slate-800"><%= month %></span>
+                      <span class="block text-[10px] font-bold text-slate-400"><%= year %></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-5 sm:p-6">
+                  <!-- Tag Pill -->
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-extrabold text-white shadow-xs" style="background: <%= event.tagColor || '#1d4ed8' %>;">
+                    <%= event.tag || 'Event' %>
+                  </span>
+
+                  <!-- Title -->
+                  <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-primary transition-colors mt-3 mb-2 leading-snug">
+                    <%= event.title %>
+                  </h3>
+
+                  <!-- Description (Short snippet) -->
+                  <% if (event.description) { %>
+                    <p class="text-sm text-slate-600 line-clamp-3 leading-relaxed mb-4 whitespace-pre-line">
+                      <%= event.description %>
+                    </p>
+                  <% } %>
+
+                  <!-- Meta Info (Stacked with icons matching screenshot) -->
+                  <div class="space-y-2 pt-2 border-t border-slate-100 text-sm text-slate-700 font-semibold">
+                    <!-- Location -->
+                    <div class="flex items-center gap-2.5">
+                      <i class="fa-solid fa-location-dot text-primary w-4 text-center"></i>
+                      <span class="capitalize"><%= event.location %></span>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="flex items-center gap-2.5">
+                      <i class="fa-regular fa-calendar text-primary w-4 text-center"></i>
+                      <span><%= dateStringFormatted %></span>
+                    </div>
+
+                    <!-- Time -->
+                    <% if (event.eventTime) { %>
+                      <div class="flex items-center gap-2.5">
+                        <i class="fa-regular fa-clock text-primary w-4 text-center"></i>
+                        <span><%= event.eventTime %></span>
+                      </div>
+                    <% } %>
+                  </div>
+
+                  <!-- Gallery Thumbnail Strip (If multiple images exist) -->
+                  <% if (eventImages.length > 1) { %>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                      <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">फोटो गैलरी (<%= eventImages.length %>):</p>
+                      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                        <% eventImages.slice(0, 5).forEach((img, i) => { %>
+                          <img src="<%= img %>" alt="thumb <%= i+1 %>"
+                            class="event-gallery-thumb w-12 h-12 rounded-xl object-cover cursor-pointer border border-slate-200 shrink-0 transition shadow-xs"
+                            onclick="showEventDetailModal(<%= JSON.stringify(event) %>, <%= i %>)">
+                        <% }) %>
+                        <% if (eventImages.length > 5) { %>
+                          <button type="button" onclick="showEventDetailModal(<%= JSON.stringify(event) %>, 0)"
+                            class="w-12 h-12 rounded-xl bg-blue-50 text-primary font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200 hover:bg-blue-100 transition">
+                            +<%= eventImages.length - 5 %>
+                          </button>
+                        <% } %>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+
+              <!-- Card Action Footer -->
+              <div class="p-5 sm:p-6 pt-0 mt-auto">
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="showEventDetailModal(<%= JSON.stringify(event) %>, 0)"
+                    class="flex-1 bg-primary hover:bg-primary-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition hover:shadow-md">
+                    <i class="fa-solid fa-circle-info"></i> पूरा विवरण देखें
+                  </button>
+                  <button type="button" title="शेयर करें" onclick="shareEvent('<%= event.title %>', '<%= dateStringFormatted %>', '<%= event.location %>')"
+                    class="w-10 h-10 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 flex items-center justify-center transition shrink-0">
+                    <i class="fa-solid fa-share-nodes"></i>
+                  </button>
+                </div>
+              </div>
+
+            </article>
+          <% }) %>
+        </div>
+
+        <!-- No search results placeholder -->
+        <div id="noSearchResults" class="hidden rounded-3xl border border-dashed border-slate-200 bg-white p-12 text-center my-6">
+          <i class="fa-solid fa-magnifying-glass text-3xl text-slate-300 mb-3"></i>
+          <h4 class="text-lg font-bold text-slate-800">कोई कार्यक्रम नहीं मिला</h4>
+          <p class="text-xs text-slate-500 mt-1">कृपया कोई दूसरा शब्द या स्थान लिखकर खोजें।</p>
+        </div>
+      <% } %>
+    </section>
+  </main>
+
+  <!-- ==============================================
+       DETAIL MODAL: Event Full Details & Gallery Viewer
+       ============================================== -->
+  <div id="eventDetailModal" class="fixed inset-0 z-[250] hidden items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-fade-in">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-100 flex flex-col relative animate-scale-up">
+      <!-- Close Button -->
+      <button type="button" onclick="closeEventDetailModal()"
+        class="absolute top-4 right-4 z-30 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center text-base transition shadow-md">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Gallery / Hero Image -->
+      <div class="relative bg-slate-900 aspect-[16/9] w-full overflow-hidden shrink-0">
+        <img id="modalMainImage" src="" alt="" class="w-full h-full object-contain">
+        
+        <!-- Image navigation buttons if multiple images -->
+        <button id="modalPrevImgBtn" onclick="prevModalImage()" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <button id="modalNextImgBtn" onclick="nextModalImage()" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+
+        <div id="modalImageCounter" class="absolute bottom-3 right-3 bg-black/65 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow">
+          1 / 1
+        </div>
+      </div>
+
+      <!-- Thumbnails Strip -->
+      <div id="modalThumbsStrip" class="bg-slate-100 px-4 py-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-slate-200">
+        <!-- Thumbnails populated by JS -->
+      </div>
+
+      <!-- Modal Content Body -->
+      <div class="p-6 sm:p-8 space-y-5">
+        <!-- Badge & Date Row -->
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span id="modalTagPill" class="px-3.5 py-1 rounded-full text-xs font-black text-white shadow-xs">
+            Event
+          </span>
+          <span id="modalDateBadge" class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+            --
+          </span>
+        </div>
+
+        <!-- Title -->
+        <h3 id="modalEventTitle" class="text-2xl sm:text-3xl font-black text-slate-900 leading-snug">
+          --
+        </h3>
+
+        <!-- Meta Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100 text-sm">
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-blue-100 text-primary flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-location-dot"></i>
+            </span>
+            <div>
+              <span class="block text-[10px] font-bold uppercase text-slate-400">स्थान (Location)</span>
+              <span id="modalLocation" class="font-extrabold text-slate-800 capitalize">--</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-blue-100 text-primary flex items-center justify-center shrink-0">
+              <i class="fa-regular fa-calendar"></i>
+            </span>
+            <div>
+              <span class="block text-[10px] font-bold uppercase text-slate-400">दिनांक (Date)</span>
+              <span id="modalDate" class="font-extrabold text-slate-800">--</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-blue-100 text-primary flex items-center justify-center shrink-0">
+              <i class="fa-regular fa-clock"></i>
+            </span>
+            <div>
+              <span class="block text-[10px] font-bold uppercase text-slate-400">समय (Time)</span>
+              <span id="modalTime" class="font-extrabold text-slate-800">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Description -->
+        <div>
+          <h4 class="text-sm font-black uppercase tracking-wider text-slate-900 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-align-left text-primary"></i> कार्यक्रम विवरण:
+          </h4>
+          <div id="modalDescription" class="text-sm sm:text-base text-slate-700 leading-relaxed whitespace-pre-line bg-slate-50/70 p-4 sm:p-5 rounded-2xl border border-slate-100">
+            --
+          </div>
+        </div>
+
+        <!-- Share & Actions Row -->
+        <div class="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <span class="text-xs font-bold text-slate-500">
+            साथियों के साथ शेयर करें:
+          </span>
+          <div class="flex items-center gap-2">
+            <button type="button" id="modalShareWhatsapp" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 transition">
+              <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+            </button>
+            <button type="button" id="modalShareTwitter" class="px-3.5 py-2 rounded-xl bg-black hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 transition">
+              <i class="fa-brands fa-x-twitter text-sm"></i> Share
+            </button>
+            <button type="button" onclick="copyEventLink()" class="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-link"></i> लिंक कॉपी करें
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('common/footer') %>
+
+  <!-- Page Interactivity Scripts -->
+  <script>
+    let currentEventModalData = null;
+    let currentImageIndex = 0;
+
+    function showEventDetailModal(event, imageIndex = 0) {
+      currentEventModalData = event;
+      currentImageIndex = imageIndex;
+
+      const modal = document.getElementById('eventDetailModal');
+      const mainImg = document.getElementById('modalMainImage');
+      const counter = document.getElementById('modalImageCounter');
+      const thumbsStrip = document.getElementById('modalThumbsStrip');
+      const prevBtn = document.getElementById('modalPrevImgBtn');
+      const nextBtn = document.getElementById('modalNextImgBtn');
+
+      const images = Array.isArray(event.images) ? event.images.filter(Boolean) : [];
+
+      // Set image
+      if (images.length > 0) {
+        mainImg.src = images[currentImageIndex] || images[0];
+        mainImg.style.display = 'block';
+        counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        prevBtn.style.display = images.length > 1 ? 'flex' : 'none';
+        nextBtn.style.display = images.length > 1 ? 'flex' : 'none';
+        counter.style.display = images.length > 1 ? 'block' : 'none';
+
+        // Populate thumbs
+        thumbsStrip.innerHTML = '';
+        if (images.length > 1) {
+          thumbsStrip.style.display = 'flex';
+          images.forEach((img, idx) => {
+            const thumb = document.createElement('img');
+            thumb.src = img;
+            thumb.className = `w-12 h-12 rounded-lg object-cover cursor-pointer shrink-0 border-2 transition ${idx === currentImageIndex ? 'border-primary ring-2 ring-primary/30' : 'border-transparent opacity-60 hover:opacity-100'}`;
+            thumb.onclick = () => {
+              currentImageIndex = idx;
+              mainImg.src = images[idx];
+              counter.textContent = `${idx + 1} / ${images.length}`;
+              updateThumbsActive(thumbsStrip, idx);
+            };
+            thumbsStrip.appendChild(thumb);
+          });
+        } else {
+          thumbsStrip.style.display = 'none';
+        }
+      } else {
+        mainImg.style.display = 'none';
+        thumbsStrip.style.display = 'none';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        counter.style.display = 'none';
+      }
+
+      // Title & Tag
+      document.getElementById('modalEventTitle').textContent = event.title || 'कार्यक्रम';
+      const tagPill = document.getElementById('modalTagPill');
+      tagPill.textContent = event.tag || 'Event';
+      tagPill.style.background = event.tagColor || '#1d4ed8';
+
+      // Dates & Location
+      const d = new Date(event.eventDate);
+      const isInvalid = isNaN(d.getTime());
+      const dateStr = isInvalid ? 'तारीख जल्द घोषित होगी' : d.toLocaleDateString('hi-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('modalDateBadge').textContent = isInvalid ? '' : d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      document.getElementById('modalDate').textContent = dateStr;
+      document.getElementById('modalLocation').textContent = event.location || 'निर्धारित नहीं';
+      document.getElementById('modalTime').textContent = event.eventTime || 'समय जल्द सूचित होगा';
+
+      // Description
+      document.getElementById('modalDescription').textContent = event.description || 'इस कार्यक्रम का विस्तृत विवरण जल्द उपलब्ध कराया जाएगा।';
+
+      // Share Handlers
+      const shareText = encodeURIComponent(`*${event.title}*\n📍 स्थान: ${event.location}\n📅 दिनांक: ${dateStr}\n🕒 समय: ${event.eventTime || ''}\nविकासशील इंसान पार्टी (VIP) आधिकारिक कार्यक्रम विवरण देखें: ${window.location.origin}/events#event-${event._id}`);
+      document.getElementById('modalShareWhatsapp').onclick = () => {
+        window.open(`https://api.whatsapp.com/send?text=${shareText}`, '_blank');
+      };
+      document.getElementById('modalShareTwitter').onclick = () => {
+        window.open(`https://twitter.com/intent/tweet?text=${shareText}`, '_blank');
+      };
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateThumbsActive(container, activeIdx) {
+      Array.from(container.children).forEach((el, i) => {
+        if (i === activeIdx) {
+          el.className = 'w-12 h-12 rounded-lg object-cover cursor-pointer shrink-0 border-2 border-primary ring-2 ring-primary/30 opacity-100';
+        } else {
+          el.className = 'w-12 h-12 rounded-lg object-cover cursor-pointer shrink-0 border-2 border-transparent opacity-60 hover:opacity-100';
+        }
+      });
+    }
+
+    function prevModalImage() {
+      if (!currentEventModalData || !currentEventModalData.images) return;
+      const images = currentEventModalData.images.filter(Boolean);
+      if (images.length <= 1) return;
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      document.getElementById('modalMainImage').src = images[currentImageIndex];
+      document.getElementById('modalImageCounter').textContent = `${currentImageIndex + 1} / ${images.length}`;
+      updateThumbsActive(document.getElementById('modalThumbsStrip'), currentImageIndex);
+    }
+
+    function nextModalImage() {
+      if (!currentEventModalData || !currentEventModalData.images) return;
+      const images = currentEventModalData.images.filter(Boolean);
+      if (images.length <= 1) return;
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      document.getElementById('modalMainImage').src = images[currentImageIndex];
+      document.getElementById('modalImageCounter').textContent = `${currentImageIndex + 1} / ${images.length}`;
+      updateThumbsActive(document.getElementById('modalThumbsStrip'), currentImageIndex);
+    }
+
+    function closeEventDetailModal() {
+      const modal = document.getElementById('eventDetailModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }
+
+    function shareEvent(title, date, location) {
+      const text = `${title} | ${date} at ${location}`;
+      if (navigator.share) {
+        navigator.share({
+          title: title,
+          text: text,
+          url: window.location.href
+        }).catch(() => {});
+      } else {
+        copyEventLink();
+      }
+    }
+
+    function copyEventLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert('कार्यक्रम लिंक क्लिपबोर्ड पर कॉपी हो गया!');
+      }).catch(() => {
+        alert(window.location.href);
+      });
+    }
+
+    // Filter Logic
+    let currentFilterType = 'all';
+
+    function setEventFilter(type) {
+      currentFilterType = type;
+      document.querySelectorAll('.filter-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-primary', 'shadow-xs');
+        btn.classList.add('text-slate-600');
+      });
+      const activeBtn = document.getElementById(`filter-${type}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-primary', 'shadow-xs');
+        activeBtn.classList.remove('text-slate-600');
+      }
+      filterEvents();
+    }
+
+    function filterEvents() {
+      const query = (document.getElementById('eventSearchInput')?.value || '').toLowerCase().trim();
+      const items = document.querySelectorAll('.event-card-item');
+      let visibleCount = 0;
+
+      items.forEach(item => {
+        const title = item.getAttribute('data-event-title') || '';
+        const loc = item.getAttribute('data-event-location') || '';
+        const type = item.getAttribute('data-event-type') || '';
+
+        const matchesQuery = !query || title.includes(query) || loc.includes(query);
+        const matchesFilter = currentFilterType === 'all' || type === currentFilterType;
+
+        if (matchesQuery && matchesFilter) {
+          item.style.display = 'flex';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      const noRes = document.getElementById('noSearchResults');
+      if (noRes) {
+        noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeEventDetailModal();
+    });
+
+    // Check hash anchor to auto-open event
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#event-')) {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          el.classList.add('ring-4', 'ring-primary/40');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
