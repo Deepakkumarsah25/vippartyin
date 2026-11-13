@@ -13,6 +13,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/vip_website';
+const EVENT_MEDIA_BASE_URL = String(process.env.EVENT_MEDIA_BASE_URL || 'https://backend-9sqs.onrender.com').replace(/\/+$/, '');
 const AUTH_COOKIE_SECRET = process.env.AUTH_COOKIE_SECRET || process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
 const scrypt = promisify(crypto.scrypt);
 
@@ -696,6 +697,57 @@ const defaultEventsData = [
   }
 ];
 
+function normalizeEventImageUrl(image) {
+  const value = typeof image === 'string'
+    ? image
+    : image && typeof image === 'object'
+      ? image.url || image.secure_url || image.secureUrl || image.imageUrl || image.src || image.path
+      : '';
+  if (!value || typeof value !== 'string') return '';
+
+  const normalized = value.trim().replace(/\\/g, '/');
+  if (!normalized) return '';
+  if (/^(?:https?:)?\/\//i.test(normalized) || /^data:image\//i.test(normalized)) return normalized;
+
+  const uploadsPath = normalized.match(/(?:^|\/)(uploads\/events\/.*)$/i);
+  if (uploadsPath) {
+    const localPath = `/${uploadsPath[1]}`;
+    return process.env.NODE_ENV === 'production'
+      ? `${EVENT_MEDIA_BASE_URL}${localPath}`
+      : localPath;
+  }
+
+  const publicUploadsPath = normalized.match(/(?:^|\/)(?:public\/)?uploads\/(.*)$/i);
+  if (publicUploadsPath) {
+    const localPath = `/uploads/${publicUploadsPath[1]}`;
+    return process.env.NODE_ENV === 'production'
+      ? `${EVENT_MEDIA_BASE_URL}${localPath}`
+      : localPath;
+  }
+
+  if (/^[^/]+\.(?:jpe?g|png|webp|gif)$/i.test(normalized)) {
+    const localPath = `/uploads/events/${normalized}`;
+    return process.env.NODE_ENV === 'production'
+      ? `${EVENT_MEDIA_BASE_URL}${localPath}`
+      : localPath;
+  }
+
+  return normalized.startsWith('/') ? normalized : `/${normalized}`;
+}
+
+function normalizeEventImages(event) {
+  const storedImages = event?.images ?? event?.image ?? event?.imageUrl ?? event?.coverImage;
+  const images = Array.isArray(storedImages)
+    ? storedImages
+    : storedImages
+      ? [storedImages]
+      : [];
+  return {
+    ...event,
+    images: images.map(normalizeEventImageUrl).filter(Boolean),
+  };
+}
+
 // Helper to render pages with consistent active navigation
 const renderRoute = (pageTitle, activeNav) => (req, res) => {
   res.render('index', { pageTitle, activeNav, heroBanners: [] });
@@ -757,13 +809,13 @@ app.get('/', async (req, res) => {
           .limit(4)
           .lean();
       }
-      homeEvents = (eventsQuery && eventsQuery.length > 0) ? eventsQuery : defaultEventsData;
+      homeEvents = ((eventsQuery && eventsQuery.length > 0) ? eventsQuery : defaultEventsData).map(normalizeEventImages);
     } else {
-      homeEvents = defaultEventsData;
+      homeEvents = defaultEventsData.map(normalizeEventImages);
     }
   } catch (err) {
     console.error('Error fetching press/media data for home:', err.message);
-    homeEvents = defaultEventsData;
+    homeEvents = defaultEventsData.map(normalizeEventImages);
   }
 
   res.render('index', {
@@ -1104,6 +1156,7 @@ app.get('/events', async (req, res) => {
     if (!events || events.length === 0) {
       events = defaultEventsData;
     }
+    events = events.map(normalizeEventImages);
     return res.render('events', {
       pageTitle: 'आगामी कार्यक्रम व रैलियां | विकासशील इंसान पार्टी (VIP)',
       activeNav: 'events',
@@ -1115,7 +1168,7 @@ app.get('/events', async (req, res) => {
     return res.render('events', {
       pageTitle: 'आगामी कार्यक्रम व रैलियां | विकासशील इंसान पार्टी (VIP)',
       activeNav: 'events',
-      events: defaultEventsData,
+      events: defaultEventsData.map(normalizeEventImages),
       loadError: false,
     });
   }

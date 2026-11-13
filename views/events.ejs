@@ -79,14 +79,6 @@
           विकासशील इंसान पार्टी (VIP) के प्रमुख जनसंवाद, रैलियां, सामाजिक उत्सव एवं संगठनात्मक आयोजनों की आधिकारिक सूची।
         </p>
 
-        <!-- Search & Quick Filter Bar -->
-        <div class="mt-8 max-w-xl mx-auto">
-          <div class="relative">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400 text-sm"></i>
-            <input type="text" id="eventSearchInput" onkeyup="filterEvents()" placeholder="कार्यक्रम का नाम या स्थान खोजें (उदा. Patna, Bhopal, Holi)..."
-              class="w-full pl-11 pr-4 py-3 bg-white/95 text-slate-900 rounded-2xl shadow-lg border border-white/30 text-sm font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all">
-          </div>
-        </div>
       </div>
     </section>
 
@@ -127,7 +119,7 @@
           <p class="mt-2 text-sm text-slate-500 max-w-md mx-auto">नए कार्यक्रमों व रैलियों की तारीख तय होते ही यहां पूरा विवरण प्रकाशित किया जाएगा।</p>
         </div>
       <% } else { %>
-        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           <% events.forEach((event, idx) => {
             const eventDate = new Date(event.eventDate);
             const isInvalidDate = isNaN(eventDate.getTime());
@@ -143,13 +135,14 @@
               data-event-title="<%= (event.title || '').toLowerCase() %>"
               data-event-location="<%= (event.location || '').toLowerCase() %>"
               data-event-type="<%= isUpcoming ? 'upcoming' : 'past' %>"
-              class="event-card-item event-card bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden flex flex-col justify-between">
+              class="event-card-item event-card bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden flex flex-col justify-between">
               
               <!-- Card Header / Image Section -->
               <div>
-                <div class="relative aspect-[16/10] overflow-hidden bg-slate-900">
+                <div class="relative aspect-[16/9] max-h-52 overflow-hidden bg-slate-900">
                   <% if (coverImage) { %>
-                    <img src="<%= coverImage %>" alt="<%= event.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    <img src="<%= coverImage %>" alt="<%= event.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="hidden w-full h-full bg-gradient-to-tr from-primary-900 to-primary-600 items-center justify-center text-5xl text-white/50"><i class="fa-regular fa-calendar-days"></i></div>
                   <% } else { %>
                     <div class="w-full h-full bg-gradient-to-tr from-primary-900 to-primary-600 flex items-center justify-center text-5xl text-white/50">
                       <i class="fa-regular fa-calendar-days"></i>
@@ -171,66 +164,51 @@
                     </div>
                   <% } %>
 
-                  <!-- Bottom Left: Date Badge Overlay -->
-                  <div class="absolute bottom-3.5 left-3.5 bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-1.5 shadow-lg flex items-center gap-2.5 border border-white/60">
-                    <span class="text-2xl font-black text-primary leading-none"><%= day %></span>
-                    <div class="text-left leading-tight">
-                      <span class="block text-[11px] font-black uppercase tracking-wider text-slate-800"><%= month %></span>
-                      <span class="block text-[10px] font-bold text-slate-400"><%= year %></span>
-                    </div>
-                  </div>
                 </div>
 
                 <!-- Card Body -->
-                <div class="p-5 sm:p-6">
-                  <!-- Tag Pill -->
-                  <span class="inline-block px-3 py-1 rounded-full text-xs font-extrabold text-white shadow-xs" style="background: <%= event.tagColor || '#1d4ed8' %>;">
-                    <%= event.tag || 'Event' %>
-                  </span>
+                <div class="p-4 sm:p-5">
+                  <div class="flex items-center justify-between gap-3 mb-2.5">
+                    <span class="inline-flex shrink-0 px-2.5 py-1 rounded-full text-[11px] font-extrabold text-white shadow-xs" style="background: <%= event.tagColor || '#1d4ed8' %>;">
+                      <%= event.tag || 'Event' %>
+                    </span>
+                    <span class="min-w-0 flex items-center justify-end gap-1.5 text-xs font-semibold text-slate-500 text-right">
+                      <i class="fa-solid fa-location-dot text-primary shrink-0"></i>
+                      <span class="capitalize truncate"><%= event.location || '—' %></span>
+                    </span>
+                  </div>
 
-                  <!-- Title -->
-                  <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-primary transition-colors mt-3 mb-2 leading-snug">
+                  <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-primary transition-colors mb-3 leading-snug line-clamp-2">
                     <%= event.title %>
                   </h3>
 
+                  <div class="grid grid-cols-2 divide-x divide-slate-200 rounded-xl bg-slate-50 px-3 py-2.5 mb-3">
+                    <div class="min-w-0 flex items-center gap-2 pr-2 text-xs sm:text-sm font-semibold text-slate-700">
+                      <i class="fa-regular fa-calendar text-primary shrink-0"></i>
+                      <span class="truncate"><%= dateStringFormatted || 'Date TBA' %></span>
+                    </div>
+                    <div class="min-w-0 flex items-center gap-2 pl-3 text-xs sm:text-sm font-semibold text-slate-700">
+                      <i class="fa-regular fa-clock text-primary shrink-0"></i>
+                      <span class="truncate"><%= event.eventTime || 'Time TBA' %></span>
+                    </div>
+                  </div>
+
                   <!-- Description (Short snippet) -->
                   <% if (event.description) { %>
-                    <p class="text-sm text-slate-600 line-clamp-3 leading-relaxed mb-4 whitespace-pre-line">
+                    <p class="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-3 whitespace-pre-line">
                       <%= event.description %>
                     </p>
                   <% } %>
 
-                  <!-- Meta Info (Stacked with icons matching screenshot) -->
-                  <div class="space-y-2 pt-2 border-t border-slate-100 text-sm text-slate-700 font-semibold">
-                    <!-- Location -->
-                    <div class="flex items-center gap-2.5">
-                      <i class="fa-solid fa-location-dot text-primary w-4 text-center"></i>
-                      <span class="capitalize"><%= event.location %></span>
-                    </div>
-
-                    <!-- Date -->
-                    <div class="flex items-center gap-2.5">
-                      <i class="fa-regular fa-calendar text-primary w-4 text-center"></i>
-                      <span><%= dateStringFormatted %></span>
-                    </div>
-
-                    <!-- Time -->
-                    <% if (event.eventTime) { %>
-                      <div class="flex items-center gap-2.5">
-                        <i class="fa-regular fa-clock text-primary w-4 text-center"></i>
-                        <span><%= event.eventTime %></span>
-                      </div>
-                    <% } %>
-                  </div>
-
                   <!-- Gallery Thumbnail Strip (If multiple images exist) -->
                   <% if (eventImages.length > 1) { %>
-                    <div class="mt-4 pt-3 border-t border-slate-100">
+                    <div class="mt-3 pt-2.5 border-t border-slate-100">
                       <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">फोटो गैलरी (<%= eventImages.length %>):</p>
                       <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
                         <% eventImages.slice(0, 5).forEach((img, i) => { %>
                           <img src="<%= img %>" alt="thumb <%= i+1 %>"
                             class="event-gallery-thumb w-12 h-12 rounded-xl object-cover cursor-pointer border border-slate-200 shrink-0 transition shadow-xs"
+                            onerror="this.onerror=null;this.style.display='none'"
                             onclick="showEventDetailModal(<%= JSON.stringify(event) %>, <%= i %>)">
                         <% }) %>
                         <% if (eventImages.length > 5) { %>
@@ -246,10 +224,10 @@
               </div>
 
               <!-- Card Action Footer -->
-              <div class="p-5 sm:p-6 pt-0 mt-auto">
+              <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 mt-auto">
                 <div class="flex items-center gap-2">
                   <button type="button" onclick="showEventDetailModal(<%= JSON.stringify(event) %>, 0)"
-                    class="flex-1 bg-primary hover:bg-primary-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition hover:shadow-md">
+                    class="flex-1 bg-primary hover:bg-primary-700 text-white font-bold py-2 px-3 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition hover:shadow-md">
                     <i class="fa-solid fa-circle-info"></i> पूरा विवरण देखें
                   </button>
                   <button type="button" title="शेयर करें" onclick="shareEvent('<%= event.title %>', '<%= dateStringFormatted %>', '<%= event.location %>')"
@@ -263,11 +241,9 @@
           <% }) %>
         </div>
 
-        <!-- No search results placeholder -->
-        <div id="noSearchResults" class="hidden rounded-3xl border border-dashed border-slate-200 bg-white p-12 text-center my-6">
-          <i class="fa-solid fa-magnifying-glass text-3xl text-slate-300 mb-3"></i>
-          <h4 class="text-lg font-bold text-slate-800">कोई कार्यक्रम नहीं मिला</h4>
-          <p class="text-xs text-slate-500 mt-1">कृपया कोई दूसरा शब्द या स्थान लिखकर खोजें।</p>
+        <div id="noFilterResults" class="hidden rounded-3xl border border-dashed border-slate-200 bg-white p-10 text-center my-6">
+          <i class="fa-regular fa-calendar-xmark text-3xl text-slate-300 mb-3"></i>
+          <h4 class="text-lg font-bold text-slate-800">इस श्रेणी में कोई कार्यक्रम नहीं है</h4>
         </div>
       <% } %>
     </section>
@@ -551,19 +527,14 @@
     }
 
     function filterEvents() {
-      const query = (document.getElementById('eventSearchInput')?.value || '').toLowerCase().trim();
       const items = document.querySelectorAll('.event-card-item');
       let visibleCount = 0;
 
       items.forEach(item => {
-        const title = item.getAttribute('data-event-title') || '';
-        const loc = item.getAttribute('data-event-location') || '';
         const type = item.getAttribute('data-event-type') || '';
-
-        const matchesQuery = !query || title.includes(query) || loc.includes(query);
         const matchesFilter = currentFilterType === 'all' || type === currentFilterType;
 
-        if (matchesQuery && matchesFilter) {
+        if (matchesFilter) {
           item.style.display = 'flex';
           visibleCount++;
         } else {
@@ -571,7 +542,7 @@
         }
       });
 
-      const noRes = document.getElementById('noSearchResults');
+      const noRes = document.getElementById('noFilterResults');
       if (noRes) {
         noRes.style.display = visibleCount === 0 ? 'block' : 'none';
       }

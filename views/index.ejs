@@ -1018,7 +1018,8 @@
                 <a id="home-event-<%= event._id %>" href="/events#event-<%= event._id %>" class="group flex gap-3 rounded-xl border border-blue-100 bg-white p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/40">
                   <div class="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg bg-blue-50">
                     <% if (coverImage) { %>
-                      <img src="<%= coverImage %>" alt="<%= event.title %>" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                      <img src="<%= coverImage %>" alt="<%= event.title %>" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">
+                      <span class="hidden h-full w-full items-center justify-center text-xl text-primary"><i class="fa-regular fa-calendar-days"></i></span>
                     <% } else { %>
                       <span class="flex h-full w-full items-center justify-center text-xl text-primary"><i class="fa-regular fa-calendar-days"></i></span>
                     <% } %>
@@ -1066,7 +1067,7 @@
           <span class="sm:hidden">मीडिया एवं प्रेस</span>
         </h2>
 
-        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+        <a href="/interview"
           class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-xs sm:text-sm bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-sm hover:shadow-md transition-all transform hover:-translate-y-0.5 shrink-0 group whitespace-nowrap">
           <i class="fa-brands fa-youtube text-sm sm:text-base text-white"></i>
           <span class="hidden sm:inline">सभी वीडियो देखें</span>
@@ -1084,7 +1085,7 @@
             <div class="w-full h-full bg-gradient-to-tr from-blue-900 to-primary flex items-center justify-center">
               <i class="fa-solid fa-video text-white/50 text-4xl"></i>
             </div>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+            <a href="/interview" class="absolute inset-0 flex items-center justify-center">
               <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
                 <i class="fa-solid fa-play ml-1"></i>
               </div>
@@ -1097,7 +1098,7 @@
             <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
               निषाद समाज के संवैधानिक अधिकारों पर श्री मुकेश सहनी का कड़ा बयान
             </h3>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
+            <a href="/interview" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
               <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
             </a>
           </div>
@@ -1109,7 +1110,7 @@
             <div class="w-full h-full bg-gradient-to-tr from-slate-800 to-blue-900 flex items-center justify-center">
               <i class="fa-solid fa-microphone-lines text-white/50 text-4xl"></i>
             </div>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+            <a href="/interview" class="absolute inset-0 flex items-center justify-center">
               <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
                 <i class="fa-solid fa-play ml-1"></i>
               </div>
@@ -1119,7 +1120,7 @@
             <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
               वीआईपी प्रदेश कार्यालय, पटना में आयोजित महत्वपूर्ण प्रेस वार्ता
             </h3>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
+            <a href="/interview" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
               <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
             </a>
           </div>
@@ -1131,7 +1132,7 @@
             <div class="w-full h-full bg-gradient-to-tr from-primary-900 to-blue-800 flex items-center justify-center">
               <i class="fa-solid fa-users text-white/50 text-4xl"></i>
             </div>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+            <a href="/interview" class="absolute inset-0 flex items-center justify-center">
               <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
                 <i class="fa-solid fa-play ml-1"></i>
               </div>
@@ -1141,7 +1142,7 @@
             <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
               युवाओं और छात्रों के भविष्य के लिए वीआईपी की नई कल्याणकारी नीतियां
             </h3>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
+            <a href="/interview" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
               <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
             </a>
           </div>
@@ -1153,7 +1154,7 @@
             <div class="w-full h-full bg-gradient-to-tr from-amber-900 to-primary flex items-center justify-center">
               <i class="fa-solid fa-bullhorn text-white/50 text-4xl"></i>
             </div>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+            <a href="/interview" class="absolute inset-0 flex items-center justify-center">
               <div class="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center text-red-600 shadow-lg group-hover:scale-110 transition-transform">
                 <i class="fa-solid fa-play ml-1"></i>
               </div>
@@ -1163,7 +1164,7 @@
             <h3 class="text-sm font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
               आगामी विधानसभा चुनाव हेतु संगठनात्मक तैयारियों पर राष्ट्रीय अध्यक्ष का संबोधन
             </h3>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
+            <a href="/interview" class="inline-flex items-center gap-1.5 text-xs text-red-600 font-semibold hover:text-red-700 mt-auto">
               <i class="fa-solid fa-play text-[10px]"></i> YouTube पर देखें
             </a>
           </div>
