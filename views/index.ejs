@@ -806,6 +806,7 @@
        SECTION 5: हमारी प्रेरणा (INTERACTIVE INSPIRATION SLIDER)
        Full interactive drag/touch carousel matching RJD
        ======================================================== -->
+  <% if (typeof inspirationLeaders !== 'undefined' && inspirationLeaders.length) { %>
   <section class="pt-8 pb-4 sm:py-[2.1rem] bg-blue-50/50 overflow-hidden border-t border-blue-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -825,76 +826,19 @@
         <div id="inspiration-slider" class="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-3 sm:pb-6 scroll-smooth select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           
           <%
-            const inspirationLeaders = [
-              {
-                name: 'अमर शहीद जुब्बा सहनी',
-                role: 'अमर स्वतंत्रता सेनानी',
-                sub: 'सर्वोच्च बलिदान व स्वाभिमान के प्रतीक',
-                icon: 'fa-fire',
-                image: '/images/inspiration_images/juba_sahini.png'
-              },
-              {
-                name: 'बाबा साहेब डॉ. भीमराव अंबेडकर',
-                role: 'संविधान निर्माता',
-                sub: 'सामाजिक समरसता एवं समानता',
-                icon: 'fa-scale-balanced',
-                image: '/images/inspiration_images/dr_ambedkar.jpg'
-              },
-              {
-                name: 'लोकनायक जयप्रकाश नारायण',
-                role: 'सम्पूर्ण क्रांति के प्रणेता',
-                sub: 'जन-आंदोलन व लोकतंत्र की रक्षा',
-                icon: 'fa-users-rays',
-                image: '/images/inspiration_images/jayprakshnarayan.jpg'
-              },
-              {
-                name: 'मौलाना अबुल कलाम आजाद',
-                role: 'महान शिक्षाविद् व स्वतंत्रता सेनानी',
-                sub: 'राष्ट्रीय एकता एवं शिक्षा क्रांति',
-                icon: 'fa-book-open-reader',
-                image: '/images/mukesh-img3.png'
-              },
-              {
-                name: 'महात्मा ज्योतिराव फुले',
-                role: 'सत्यशोधक समाज के जनक',
-                sub: 'शोषित वर्गों का उत्थान',
-                icon: 'fa-hand-holding-heart',
-                image: '/images/inspiration_images/jayotiba.jpg'
-              },
-              {
-                name: 'क्रांतिज्योति सावित्रीबाई फुले',
-                role: 'प्रथम महिला शिक्षिका',
-                sub: 'स्त्री शिक्षा एवं सशक्तिकरण',
-                icon: 'fa-graduation-cap',
-                image: '/images/mukesh-img3.png'
-              },
-              {
-                name: 'चौधरी चरण सिंह',
-                role: 'किसानों के मसीहा',
-                sub: 'कृषि व ग्रामीण स्वावलंबन',
-                icon: 'fa-wheat-awn',
-                image: '/images/mukesh-img3.png'
-              },
-              {
-                name: 'भगवान बिरसा मुंडा',
-                role: 'धरती आबा',
-                sub: 'जल, जंगल, जमीन व स्वाभिमान',
-                icon: 'fa-shield-halved',
-                image: '/images/inspiration_images/birsamunda.jpg'
-              }
-            ];
+            const inspirationCards = inspirationLeaders;
           %>
 
-          <% inspirationLeaders.forEach((leader) => { %>
+          <% inspirationCards.forEach((leader) => { %>
             <div class="insp-card flex-none w-[280px] sm:w-[45%] md:w-[31%] lg:w-[calc((100%-40px)/3)] snap-start bg-white rounded-2xl overflow-hidden border border-blue-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col justify-between">
               <!-- Image Container -->
               <div class="aspect-[4/3] sm:h-64 overflow-hidden bg-slate-900 relative">
                 <img 
-                  src="<%= leader.image %>" 
+                  src="<%= leader.imageUrl %>"
                   alt="<%= leader.name %>" 
                   class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
-                  onerror="this.onerror=null; this.src='/images/mukesh-img3.png';"
+                  onerror="this.style.visibility='hidden';"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent"></div>
                 
@@ -915,7 +859,7 @@
               <!-- Subtitle / Inspiration Message -->
               <div class="p-4 sm:p-5 text-center bg-white flex-1 flex flex-col justify-center">
                 <p class="text-xs sm:text-sm text-primary font-bold">
-                  <%= leader.sub %>
+                  <%= leader.description %>
                 </p>
               </div>
             </div>
@@ -949,6 +893,7 @@
 
     </div>
   </section>
+  <% } %>
 
 
 
@@ -1063,79 +1008,40 @@
             </a>
           </div>
 
-          <!-- 4 Event Cards with No Scrollbar & Compact Height on Mobile -->
-          <div class="space-y-2.5 sm:space-y-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            
-            <!-- Event 1 -->
-            <a href="/events" class="block bg-white p-2.5 sm:p-3.5 rounded-xl shadow-sm flex gap-3 items-center hover:shadow-md transition-all hover:-translate-y-0.5 group border border-gray-100">
-              <div class="bg-primary text-white text-center rounded-lg py-1.5 px-2 min-w-[50px] sm:min-w-[56px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
-                <span class="block text-xl sm:text-2xl font-black leading-none">15</span>
-                <span class="block text-[9px] sm:text-[10px] mt-0.5 uppercase font-bold text-blue-200">Nov '26</span>
-              </div>
-              <div class="min-w-0 flex-1">
-                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-xs sm:text-sm leading-snug truncate">
-                  विशाल निषाद आरक्षण महासम्मेलन
-                </h4>
-                <div class="text-[11px] sm:text-xs text-gray-500 mt-0.5 flex items-center gap-1.5 truncate">
-                  <i class="fa-solid fa-location-dot text-primary text-[10px] shrink-0"></i>
-                  <span class="truncate">गांधी मैदान, पटना</span>
-                </div>
-              </div>
-            </a>
-
-            <!-- Event 2 -->
-            <a href="/events" class="block bg-white p-2.5 sm:p-3.5 rounded-xl shadow-sm flex gap-3 items-center hover:shadow-md transition-all hover:-translate-y-0.5 group border border-gray-100">
-              <div class="bg-primary text-white text-center rounded-lg py-1.5 px-2 min-w-[50px] sm:min-w-[56px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
-                <span class="block text-xl sm:text-2xl font-black leading-none">22</span>
-                <span class="block text-[9px] sm:text-[10px] mt-0.5 uppercase font-bold text-blue-200">Nov '26</span>
-              </div>
-              <div class="min-w-0 flex-1">
-                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-xs sm:text-sm leading-snug truncate">
-                  जनसंवाद एवं कार्यकर्ता मिलन समारोह
-                </h4>
-                <div class="text-[11px] sm:text-xs text-gray-500 mt-0.5 flex items-center gap-1.5 truncate">
-                  <i class="fa-solid fa-location-dot text-primary text-[10px] shrink-0"></i>
-                  <span class="truncate">जिला परिषद मैदान, मुजफ्फरपुर</span>
-                </div>
-              </div>
-            </a>
-
-            <!-- Event 3 -->
-            <a href="/events" class="block bg-white p-2.5 sm:p-3.5 rounded-xl shadow-sm flex gap-3 items-center hover:shadow-md transition-all hover:-translate-y-0.5 group border border-gray-100">
-              <div class="bg-primary text-white text-center rounded-lg py-1.5 px-2 min-w-[50px] sm:min-w-[56px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
-                <span class="block text-xl sm:text-2xl font-black leading-none">05</span>
-                <span class="block text-[9px] sm:text-[10px] mt-0.5 uppercase font-bold text-blue-200">Dec '26</span>
-              </div>
-              <div class="min-w-0 flex-1">
-                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-xs sm:text-sm leading-snug truncate">
-                  अमर शहीद जुब्बा सहनी स्मृति दिवस
-                </h4>
-                <div class="text-[11px] sm:text-xs text-gray-500 mt-0.5 flex items-center gap-1.5 truncate">
-                  <i class="fa-solid fa-location-dot text-primary text-[10px] shrink-0"></i>
-                  <span class="truncate">टाउन हॉल, दरभंगा</span>
-                </div>
-              </div>
-            </a>
-
-            <!-- Event 4 -->
-            <a href="/events" class="block bg-white p-2.5 sm:p-3.5 rounded-xl shadow-sm flex gap-3 items-center hover:shadow-md transition-all hover:-translate-y-0.5 group border border-gray-100">
-              <div class="bg-primary text-white text-center rounded-lg py-1.5 px-2 min-w-[50px] sm:min-w-[56px] group-hover:bg-primary-700 transition-colors shrink-0 shadow-sm">
-                <span class="block text-xl sm:text-2xl font-black leading-none">18</span>
-                <span class="block text-[9px] sm:text-[10px] mt-0.5 uppercase font-bold text-blue-200">Dec '26</span>
-              </div>
-              <div class="min-w-0 flex-1">
-                <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors text-xs sm:text-sm leading-snug truncate">
-                  युवा वीआईपी रोजगार अधिकार मार्च
-                </h4>
-                <div class="text-[11px] sm:text-xs text-gray-500 mt-0.5 flex items-center gap-1.5 truncate">
-                  <i class="fa-solid fa-location-dot text-primary text-[10px] shrink-0"></i>
-                  <span class="truncate">सैंडिस कंपाउंड, भागलपुर</span>
-                </div>
-              </div>
-            </a>
-
+          <div class="space-y-3">
+            <% if (homeEvents && homeEvents.length) { %>
+              <% homeEvents.forEach((event) => { 
+                const eventDate = new Date(event.eventDate); 
+                const eventImages = Array.isArray(event.images) ? event.images.filter(Boolean) : [];
+                const coverImage = eventImages[0] || ''; 
+              %>
+                <a id="home-event-<%= event._id %>" href="/events#event-<%= event._id %>" class="group flex gap-3 rounded-xl border border-blue-100 bg-white p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/40">
+                  <div class="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg bg-blue-50">
+                    <% if (coverImage) { %>
+                      <img src="<%= coverImage %>" alt="<%= event.title %>" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                    <% } else { %>
+                      <span class="flex h-full w-full items-center justify-center text-xl text-primary"><i class="fa-regular fa-calendar-days"></i></span>
+                    <% } %>
+                    <% if (eventImages.length > 1) { %>
+                      <span class="absolute bottom-1 right-1 bg-black/65 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5 shadow-xs">
+                        <i class="fa-solid fa-images text-[8px]"></i><%= eventImages.length %>
+                      </span>
+                    <% } %>
+                  </div>
+                  <span class="min-w-0 flex-1 flex flex-col justify-between">
+                    <span class="mb-1 flex flex-wrap items-center gap-1.5">
+                      <span class="rounded-full px-2 py-0.5 text-[10px] font-bold text-white shadow-xs" style="background: <%= event.tagColor || '#1d4ed8' %>"><%= event.tag || 'Event' %></span>
+                      <span class="text-[10px] font-semibold text-slate-500"><%= isNaN(eventDate.getTime()) ? '' : eventDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %></span>
+                    </span>
+                    <span class="block truncate text-sm font-extrabold text-slate-900 group-hover:text-primary transition-colors"><%= event.title %></span>
+                    <span class="mt-1 flex items-center gap-1.5 truncate text-xs text-slate-500"><i class="fa-solid fa-location-dot text-primary"></i><span class="capitalize"><%= event.location %></span><% if (event.eventTime) { %><span class="ml-1 text-slate-400">·</span> <i class="fa-regular fa-clock text-primary"></i><span><%= event.eventTime %></span><% } %></span>
+                  </span>
+                </a>
+              <% }) %>
+            <% } else { %>
+              <div class="rounded-xl border border-dashed border-blue-200 bg-white p-5 text-center text-sm text-slate-500">अभी कोई आगामी कार्यक्रम प्रकाशित नहीं है।</div>
+            <% } %>
           </div>
-
           <a href="/events" class="w-full mt-4 sm:mt-5 bg-primary hover:bg-primary-700 text-white py-2.5 sm:py-3 rounded-xl font-bold transition shadow-md flex items-center justify-center hover:-translate-y-0.5 text-xs sm:text-sm group">
             <span>कार्यक्रम में शामिल हों</span>
             <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
@@ -1338,23 +1244,8 @@
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       })[char]);
       const plainText = value => String(value ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-      const extractRows = payload => Array.isArray(payload) ? payload : (payload?.data || payload?.news || payload?.videos || payload?.media || []);
-
-      async function fetchAll(path) {
-        const all = [];
-        let page = 1;
-        let hasMore = true;
-        while (hasMore) {
-          const response = await fetch(`${path}?page=${page}&limit=30`);
-          if (!response.ok) throw new Error(`Request failed: ${path}`);
-          const payload = await response.json();
-          const rows = extractRows(payload);
-          all.push(...rows);
-          hasMore = Boolean(payload?.hasMore) && rows.length > 0;
-          page += 1;
-        }
-        return all;
-      }
+      const homeNews = <%- JSON.stringify(homeNews || []).replace(/</g, '\\u003c') %>;
+      const homeVideos = <%- JSON.stringify(homeVideos || []).replace(/</g, '\\u003c') %>;
 
       const formatDate = value => {
         if (!value) return '';
@@ -1362,7 +1253,8 @@
         return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
       };
 
-      fetchAll('/api/press/news').then(items => {
+      {
+        const items = homeNews;
         newsGrid.innerHTML = items.length ? items.slice(0, 3).map(item => {
           const title = item.title || 'VIP Party';
           const summary = plainText(item.description || item.content || '');
@@ -1410,12 +1302,10 @@
             </div>
           </a>`;
         }).join('') : '<p class="rounded-xl bg-white p-5 text-gray-500">अभी कोई समाचार उपलब्ध नहीं है।</p>';
-      }).catch(error => {
-        console.error('Homepage news could not be loaded:', error);
-        newsGrid.innerHTML = '<p class="rounded-xl bg-white p-5 text-gray-500">समाचार अभी लोड नहीं हो सके।</p>';
-      });
+      }
 
-      fetchAll('/api/press/interviews').then(items => {
+      {
+        const items = homeVideos;
         videoGrid.innerHTML = items.length ? items.map(item => {
           const title = item.title || 'VIP Party Video';
           const videoId = item.youtubeId || '';
@@ -1442,10 +1332,7 @@
             </div>
           </article>`;
         }).join('') : '<p class="col-span-full rounded-xl bg-gray-50 p-5 text-center text-gray-500">अभी कोई वीडियो उपलब्ध नहीं है।</p>';
-      }).catch(error => {
-        console.error('Homepage videos could not be loaded:', error);
-        videoGrid.innerHTML = '<p class="col-span-full rounded-xl bg-gray-50 p-5 text-center text-gray-500">वीडियो अभी लोड नहीं हो सके।</p>';
-      });
+      }
 
     })();
 

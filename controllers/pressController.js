@@ -1,108 +1,48 @@
 const { News, Video, MediaGallery } = require('../models/publicContent');
 
-const getBackendUrls = () => [...new Set([
-  process.env.ADMIN_API_URL
-].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
+const sendRows = (res, rows, key) => res.json({ success: true, count: rows.length, [key]: rows, data: rows });
 
-const getItemsFromPayload = (payload) => {
-  if (Array.isArray(payload)) return payload;
-  for (const key of ['data', 'news', 'videos', 'media', 'items']) {
-    if (Array.isArray(payload?.[key])) return payload[key];
-  }
-  return [];
-};
-
-const backendRequest = (backendPath) => async (req, res) => {
-  const query = new URLSearchParams(req.query).toString();
-  let emptyResponse = null;
-
+const sendMongoRows = (model, filter, sort, key) => async (req, res) => {
   try {
-    for (const backendUrl of getBackendUrls()) {
-      try {
-        const response = await fetch(`${backendUrl}${backendPath}${query ? `?${query}` : ''}`, {
-          signal: AbortSignal.timeout(5000)
-        });
-        const body = await response.text();
-        if (!response.ok) continue;
-
-        let payload;
-        try { payload = JSON.parse(body); } catch { payload = null; }
-        if (getItemsFromPayload(payload).length > 0) {
-          return res.status(response.status)
-            .type(response.headers.get('content-type') || 'application/json')
-            .send(body);
-        }
-        emptyResponse = { status: response.status, contentType: response.headers.get('content-type'), body };
-      } catch (error) {
-        console.warn(`Press API request failed (${backendPath}, ${backendUrl}):`, error.message);
-      }
-    }
-
-    if (emptyResponse) {
-      return res.status(emptyResponse.status)
-        .type(emptyResponse.contentType || 'application/json')
-        .send(emptyResponse.body);
-    }
-    return res.status(502).json({ success: false, message: 'Press service is unavailable.' });
+    const requestedLimit = Number.parseInt(req.query.limit, 10);
+    const limit = Number.isInteger(requestedLimit) ? Math.min(Math.max(requestedLimit, 1), 100) : 30;
+    const rows = await model.find(filter).sort(sort).limit(limit).lean();
+    return sendRows(res, rows, key);
   } catch (error) {
-    console.error(`Press API request failed (${backendPath}):`, error.message);
-    res.status(502).json({ success: false, message: 'Press service is unavailable.' });
+    console.error(`${key} MongoDB query failed:`, error.message);
+    return res.status(503).json({ success: false, message: 'Press service is unavailable.' });
   }
 };
 
-const renderWithMongoData = (model, filter, sort, view, backendPath, remoteFilter = () => true) => async (req, res) => {
+const renderFromMongo = (model, filter, sort, view, activeNav = 'press') => async (req, res) => {
   let initialItems = [];
-  for (const backendUrl of getBackendUrls()) {
-    try {
-      const response = await fetch(`${backendUrl}${backendPath}`, { signal: AbortSignal.timeout(5000) });
-      if (!response.ok) continue;
-      const payload = await response.json();
-      const rows = getItemsFromPayload(payload).filter(remoteFilter);
-      if (rows.length) {
-        initialItems = rows.slice(0, 30);
-        break;
-      }
-    } catch (error) {
-      console.warn(`${view} admin API request failed:`, error.message);
-    }
+  try {
+    initialItems = await model.find(filter).sort(sort).limit(100).lean();
+  } catch (error) {
+    console.error(`${view} MongoDB query failed:`, error.message);
   }
-
-  if (!initialItems.length) {
-    try {
-      initialItems = await model.find(filter).sort(sort).limit(30).lean();
-    } catch (error) {
-      console.error(`${view} MongoDB query failed:`, error.message);
-    }
-  }
-
-  res.render(view, { activeNav: 'press', initialItems });
+  return res.render(view, { activeNav, initialItems });
 };
 
-exports.renderNewsPage = renderWithMongoData(
+exports.renderNewsPage = renderFromMongo(
   News,
   { active: true },
   { featured: -1, displayOrder: 1, date: -1, createdAt: -1 },
-  'press/news',
-  '/api/news?limit=30',
-  (item) => item.active !== false
+  'press/news'
 );
-exports.renderInterviewPage = renderWithMongoData(
+exports.renderInterviewPage = renderFromMongo(
   Video,
   { isPublished: true, category: /^interview$/i },
   { createdAt: -1, _id: -1 },
-  'press/interview',
-  '/api/videos?limit=30',
-  (item) => item.isPublished !== false && String(item.category || '').toLowerCase() === 'interview'
+  'press/interview'
 );
-exports.renderPressReleasePage = renderWithMongoData(
+exports.renderPressReleasePage = renderFromMongo(
   MediaGallery,
   { isPublished: true, category: 'pressrelease' },
   { date: -1, createdAt: -1 },
-  'press/press-release',
-  '/api/media/pressrelease',
-  (item) => item.isPublished !== false && String(item.category || '').toLowerCase() === 'pressrelease'
+  'press/press-release'
 );
 
-exports.getNews = backendRequest('/api/news');
-exports.getPressReleases = backendRequest('/api/media/pressrelease');
-exports.getInterviews = backendRequest('/api/videos');
+exports.getNews = sendMongoRows(News, { active: true }, { featured: -1, displayOrder: 1, date: -1, createdAt: -1 }, 'news');
+exports.getPressReleases = sendMongoRows(MediaGallery, { isPublished: true, category: 'pressrelease' }, { date: -1, createdAt: -1 }, 'media');
+exports.getInterviews = sendMongoRows(Video, { isPublished: true, category: /^interview$/i }, { createdAt: -1, _id: -1 }, 'videos');
