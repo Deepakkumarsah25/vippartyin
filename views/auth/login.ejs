@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,13 +19,6 @@
 
   <link rel="stylesheet" href="/css/auth.css">
 
-  <% if (googleClientId) { %>
-    <script
-      src="https://accounts.google.com/gsi/client"
-      async
-      defer
-    ></script>
-  <% } %>
 </head>
 
 <body class="auth-body">
@@ -62,10 +55,6 @@
     <!-- RIGHT SIDE -->
     <section class="auth-content">
 
-      <a class="auth-back" href="/">
-        ← Back to website
-      </a>
-
       <div class="auth-card">
 
         <a class="auth-brand auth-mobile-brand" href="/">
@@ -73,9 +62,12 @@
           <span style="color:#10253f">VIP PARTY</span>
         </a>
 
-        <div class="auth-kicker">Welcome back</div>
+        <div class="auth-heading-row login-heading-row">
+          <div class="auth-kicker">Welcome back</div>
+        
+        </div>
 
-        <h2>Sign in to your account</h2>
+        <h2>Sign in account</h2>
 
         <p class="auth-subtitle">
           Pick up where you left off. Your community is waiting.
@@ -94,16 +86,16 @@
           <div class="auth-fields">
 
             <div class="auth-field">
-              <label for="loginPhone">Mobile number</label>
+              <label for="loginIdentifier">Email address or mobile number</label>
 
               <input
-                id="loginPhone"
-                name="phone"
-                type="tel"
-                inputmode="numeric"
-                autocomplete="tel-national"
-                maxlength="10"
-                placeholder="10-digit mobile number"
+                id="loginIdentifier"
+                name="identifier"
+                type="text"
+                inputmode="text"
+                autocomplete="username"
+                maxlength="254"
+                placeholder="Email address or Mobile number"
                 required
               >
             </div>
@@ -131,13 +123,15 @@
 
           </div>
 
-          <button
-            id="loginSubmitBtn"
-            class="auth-primary"
-            type="submit"
-          >
-            Sign in <span aria-hidden="true">→</span>
-          </button>
+          <div class="auth-submit-row">
+            <button
+              id="loginSubmitBtn"
+              class="auth-primary"
+              type="submit"
+            >
+              Sign in <span aria-hidden="true">→</span>
+            </button>
+          </div>
 
         </form>
 
@@ -148,31 +142,19 @@
         <!-- GOOGLE LOGIN -->
         <div
           id="googleButton"
-          class="google-button<%= googleClientId ? '' : ' is-disabled' %>"
-          role="group"
+          class="google-button"
+          role="button"
+          tabindex="0"
+          data-return-to="<%= returnTo %>"
           aria-label="Sign in with Google"
         >
-          <% if (googleClientId) { %>
-            <!-- Google Identity Services renders the button here -->
-          <% } %>
+          <span class="google-mark" aria-hidden="true">G</span>
+          <span>Continue with Google</span>
         </div>
-
-        <% if (!googleClientId) { %>
-          <p class="google-hint">
-            Google sign-in needs a Google OAuth client ID.
-            Follow the
-            <a
-              href="/google-login-setup"
-              target="_blank"
-              rel="noopener noreferrer"
-            >setup steps</a>
-            to enable it.
-          </p>
-        <% } %>
 
         <div class="auth-switch">
           New to the community?
-          <a href="/signup">Create an account</a>
+          <a href="/signup?returnTo=<%= encodeURIComponent(returnTo) %>">Create account</a>
         </div>
 
         <p class="auth-legal">
@@ -189,7 +171,6 @@
     const form = document.getElementById('loginForm');
     const alertBox = document.getElementById('loginAlert');
     const submit = document.getElementById('loginSubmitBtn');
-    const googleButton = document.getElementById('googleButton');
 
     function message(text, type = 'error') {
       alertBox.textContent = text;
@@ -208,7 +189,7 @@
         );
 
         throw new Error(
-          'Server response invalid hai. Please try again later.'
+          'Something went wrong. Please try again.'
         );
       }
     }
@@ -230,8 +211,9 @@
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            phone: document.getElementById('loginPhone').value.trim(),
-            password: document.getElementById('loginPassword').value
+            identifier: document.getElementById('loginIdentifier').value.trim(),
+            password: document.getElementById('loginPassword').value,
+            returnTo: <%- JSON.stringify(returnTo) %>
           })
         });
 
@@ -262,125 +244,11 @@
       }
     });
 
-    // GOOGLE LOGIN CALLBACK
-    async function googleCredential(response) {
-      try {
-        if (!response || !response.credential) {
-          throw new Error(
-            'Google credential nahi mila. Please try again.'
-          );
-        }
-
-        alertBox.className = 'auth-alert';
-
-        googleButton.style.pointerEvents = 'none';
-        googleButton.style.opacity = '0.65';
-
-        const result = await fetch('/auth/google', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            credential: response.credential
-          })
-        });
-
-        const data = await readResponse(result);
-
-        console.log(
-          'Google login HTTP status:',
-          result.status
-        );
-
-        if (!result.ok || data.success !== true) {
-          console.error(
-            'Google login failed:',
-            result.status,
-            data.message || 'Unknown server error'
-          );
-
-          throw new Error(
-            data.message ||
-            `Google login failed (HTTP ${result.status}).`
-          );
-        }
-
-        message(
-          'Google login successful. Redirecting...',
-          'success'
-        );
-
-        window.location.assign(data.redirect || '/');
-
-      } catch (error) {
-        console.error('Google login error:', error);
-
-        message(
-          error.message ||
-          'Google sign-in could not be completed.'
-        );
-
-      } finally {
-        googleButton.style.pointerEvents = '';
-        googleButton.style.opacity = '';
-      }
-    }
-
-    // INITIALIZE GOOGLE IDENTITY SERVICES
-    <% if (googleClientId) { %>
-      window.addEventListener('load', () => {
-        if (!window.google || !window.google.accounts) {
-          message(
-            'Google sign-in load nahi hua. Page reload karke try karein.'
-          );
-          return;
-        }
-
-        try {
-          window.google.accounts.id.initialize({
-            client_id: <%- JSON.stringify(googleClientId) %>,
-            callback: googleCredential
-          });
-
-          const renderGoogleButton = () => {
-            const availableWidth = Math.floor(googleButton.getBoundingClientRect().width);
-            if (!availableWidth) return;
-            googleButton.replaceChildren();
-            window.google.accounts.id.renderButton(googleButton, {
-              type: 'standard',
-              theme: 'outline',
-              size: 'large',
-              text: 'continue_with',
-              shape: 'rectangular',
-              width: Math.min(400, availableWidth),
-              logo_alignment: 'left'
-            });
-          };
-
-          renderGoogleButton();
-          let resizeTimer;
-          window.addEventListener('resize', () => {
-            window.clearTimeout(resizeTimer);
-            resizeTimer = window.setTimeout(renderGoogleButton, 150);
-          });
-
-        } catch (error) {
-          console.error(
-            'Google initialization error:',
-            error
-          );
-
-          message(
-            'Google sign-in initialize nahi ho saka.'
-          );
-        }
-      });
-    <% } %>
   </script>
+  <script type="module" src="/js/google-auth.js"></script>
   
 
 </body>
 </html>
+
+

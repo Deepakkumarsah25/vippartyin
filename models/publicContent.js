@@ -9,5 +9,8 @@ module.exports = {
   News: modelFor('News'),
   MediaGallery: modelFor('MediaGallery'),
   CmsPage: mongoose.models.CmsPage || mongoose.model('CmsPage', new mongoose.Schema({}, { strict: false }), 'cmspages'),
-  MajorIssue: mongoose.models.MajorIssue || mongoose.model('MajorIssue', new mongoose.Schema({}, { strict: false }), 'majorissues')
+  MajorIssue: mongoose.models.MajorIssue || mongoose.model('MajorIssue', new mongoose.Schema({}, { strict: false }), 'majorissues'),
+  TickerAnnouncement: mongoose.models.TickerAnnouncement || mongoose.model('TickerAnnouncement', new mongoose.Schema({}, { strict: false })),
+  InspirationLeader: mongoose.models.InspirationLeader || mongoose.model('InspirationLeader', new mongoose.Schema({}, { strict: false }), 'inspirationleaders'),
+  Event: mongoose.models.Event || mongoose.model('Event', new mongoose.Schema({}, { strict: false }), 'events')
 };

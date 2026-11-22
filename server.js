@@ -2,16 +2,117 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const { promisify } = require('util');
+const { v2: cloudinary } = require('cloudinary');
 
 const galleryRoutes = require('./routes/galleryRoutes');
 const pressRoutes = require('./routes/pressRoutes');
-const { CmsPage, MajorIssue } = require('./models/publicContent');
+const { CmsPage, MajorIssue, News, Video, TickerAnnouncement, InspirationLeader, Event } = require('./models/publicContent');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/vip_website';
+const EVENT_MEDIA_BASE_URL = String(process.env.EVENT_MEDIA_BASE_URL || 'https://backend-9sqs.onrender.com').replace(/\/+$/, '');
+const APP_API_URL = String(process.env.APP_API_URL || 'https://backend-9sqs.onrender.com').replace(/\/+$/, '');
 const AUTH_COOKIE_SECRET = process.env.AUTH_COOKIE_SECRET || process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+const scrypt = promisify(crypto.scrypt);
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+function uploadImageToCloudinary(buffer, folder) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder, resource_type: 'image' },
+      (error, result) => error ? reject(error) : resolve(result)
+    );
+    stream.end(buffer);
+  });
+}
+
+function createRateLimiter({ windowMs, max, keyGenerator = (req) => req.ip || req.socket.remoteAddress || 'unknown' }) {
+  const attempts = new Map();
+  let lastCleanup = Date.now();
+  return (req, res, next) => {
+    const now = Date.now();
+    if (now - lastCleanup > windowMs) {
+      for (const [key, entry] of attempts) if (entry.resetAt <= now) attempts.delete(key);
+      lastCleanup = now;
+    }
+    const key = String(keyGenerator(req)).slice(0, 200);
+    let entry = attempts.get(key);
+    if (!entry || entry.resetAt <= now) {
+      entry = { count: 0, resetAt: now + windowMs };
+      attempts.set(key, entry);
+    }
+    entry.count += 1;
+    res.setHeader('RateLimit-Limit', String(max));
+    res.setHeader('RateLimit-Remaining', String(Math.max(0, max - entry.count)));
+    res.setHeader('RateLimit-Reset', String(Math.ceil(entry.resetAt / 1000)));
+    if (entry.count > max) {
+      res.setHeader('Retry-After', String(Math.max(1, Math.ceil((entry.resetAt - now) / 1000))));
+      return res.status(429).json({ success: false, message: 'Too many requests. Please try again later.' });
+    }
+    return next();
+  };
+}
+
+const loginRateLimit = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  keyGenerator: (req) => `${req.ip || req.socket.remoteAddress || 'unknown'}:${String(req.body?.identifier || req.body?.email || req.body?.phone || '').trim().toLowerCase().slice(0, 120)}`
+});
+const loginIpRateLimit = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 30 });
+const authRateLimit = createRateLimiter({ windowMs: 60 * 1000, max: 20 });
+const publicFormRateLimit = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 10 });
+const contactRateLimit = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 5 });
+const downloadTrackRateLimit = createRateLimiter({ windowMs: 60 * 1000, max: 60 });
+const earlyPostRateLimit = createRateLimiter({ windowMs: 60 * 1000, max: 40 });
+
+function validatePublicFormPayload(req, res, next) {
+  const inspect = (value, depth = 0) => {
+    if (depth > 4) return false;
+    if (typeof value === 'string') return value.length <= 2000;
+    if (Array.isArray(value)) return value.length <= 20 && value.every((item) => inspect(item, depth + 1));
+    if (value && typeof value === 'object') {
+      const entries = Object.entries(value);
+      return entries.length <= 40 && entries.every(([key, item]) => key.length <= 80 && inspect(item, depth + 1));
+    }
+    return value == null;
+  };
+  if (!inspect(req.body || {})) return res.status(400).json({ success: false, message: 'One or more fields exceed the allowed size.' });
+  return next();
+}
+
+async function hashPassword(password) {
+  const salt = crypto.randomBytes(16);
+  const derived = await scrypt(password, salt, 64);
+  return `scrypt$${salt.toString('base64url')}$${derived.toString('base64url')}`;
+}
+
+async function verifyPassword(password, storedPassword) {
+  if (typeof storedPassword !== 'string' || !storedPassword) return false;
+  const [algorithm, saltText, hashText] = storedPassword.split('$');
+  if (algorithm === 'scrypt' && saltText && hashText) {
+    try {
+      const salt = Buffer.from(saltText, 'base64url');
+      const expected = Buffer.from(hashText, 'base64url');
+      const actual = await scrypt(password, salt, expected.length);
+      return expected.length > 0 && crypto.timingSafeEqual(expected, actual);
+    } catch {
+      return false;
+    }
+  }
+
+  // Existing accounts used plain-text passwords; upgrade them after a successful login.
+  const supplied = Buffer.from(password);
+  const legacy = Buffer.from(storedPassword);
+  return supplied.length === legacy.length && crypto.timingSafeEqual(supplied, legacy);
+}
 
 function createAuthToken(uid) {
   const encodedUid = Buffer.from(String(uid)).toString('base64url');
@@ -35,6 +136,16 @@ function setAuthCookie(res, uid) {
   res.setHeader('Set-Cookie', `vip_session=${createAuthToken(uid)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800${secure}`);
 }
 
+function safeReturnPath(value, fallback = '/profile') {
+  if (typeof value !== 'string' || !value.startsWith('/') || value.startsWith('//') || value.includes('\\')) return fallback;
+  try {
+    const parsed = new URL(value, 'http://localhost');
+    return parsed.origin === 'http://localhost' ? `${parsed.pathname}${parsed.search}${parsed.hash}` : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 // ------------------------------------
 // 1. Database Connection & Models
 // ------------------------------------
@@ -42,9 +153,10 @@ let isDbConnected = false;
 
 mongoose
   .connect(MONGODB_URI)
-  .then(() => {
+  .then(async () => {
+    await ensureUserMembershipIdIndex();
     isDbConnected = true;
-    console.log('✅ MongoDB connected successfully to:', MONGODB_URI);
+    console.log('✅ MongoDB connected successfully to database:', mongoose.connection.name || 'configured database');
   })
   .catch((err) => {
     isDbConnected = false;
@@ -66,28 +178,46 @@ const scrollerSchema = new mongoose.Schema(
 );
 const Scroller = mongoose.models.Scroller || mongoose.model('Scroller', scrollerSchema);
 
-const fs = require('fs');
 const multer = require('multer');
 
-// Configure Multer Storage for Member Photos
-const uploadDir = path.join(__dirname, 'public', 'uploads', 'members');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname) || '.jpg';
-    cb(null, 'member_' + Date.now() + '_' + Math.round(Math.random() * 1e6) + ext);
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = new Set(['image/jpeg', 'image/png', 'image/webp']);
+    cb(allowed.has(file.mimetype) ? null : new Error('Profile photo must be JPG, PNG, or WebP.'), allowed.has(file.mimetype));
   }
 });
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }
-});
+
+const hasImageSignature = (buffer, mimeType) => {
+  if (!Buffer.isBuffer(buffer) || buffer.length < 12) return false;
+  if (mimeType === 'image/jpeg') return buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+  if (mimeType === 'image/png') return buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+  if (mimeType === 'image/webp') return buffer.toString('ascii', 0, 4) === 'RIFF' && buffer.toString('ascii', 8, 12) === 'WEBP';
+  return false;
+};
+
+function validateUploadedImage(file) {
+  if (file && !hasImageSignature(file.buffer, file.mimetype)) {
+    const error = new Error('Uploaded file content must be a valid JPG, PNG, or WebP image.');
+    error.code = 'INVALID_IMAGE';
+    throw error;
+  }
+}
+
+const handlePhotoUpload = (req, res, next) => {
+  upload.single('photo')(req, res, (error) => {
+    if (!error) return next();
+    if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ success: false, message: 'Profile photo must be 5 MB or smaller.' });
+    }
+    if (error.message === 'Profile photo must be JPG, PNG, or WebP.') {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+    console.error('Photo upload parsing failed:', error.message);
+    return res.status(400).json({ success: false, message: 'The photo upload could not be processed.' });
+  });
+};
 
 // Join Schema (Synchronized with vip-a MongoDB collections)
 const joinSchema = new mongoose.Schema(
@@ -172,12 +302,37 @@ const userSchema = new mongoose.Schema(
     password: { type: String, default: '' },
     district: { type: String, default: '' },
     state: { type: String, default: 'Bihar' },
-    membershipId: { type: String, default: null },
+    // The shared users collection has a unique membershipId index. Omit this
+    // field until a real membership ID is assigned; repeated nulls collide.
+    membershipId: { type: String, default: undefined },
     photoURL: { type: String, default: '' }
   },
   { timestamps: true }
 );
 const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+async function ensureUserMembershipIdIndex() {
+  const indexes = await User.collection.indexes();
+  const current = indexes.find((index) => index.name === 'membershipId_1');
+  const isCorrectPartialIndex =
+    current?.unique === true &&
+    current.partialFilterExpression?.membershipId?.$type === 'string';
+
+  if (current && !isCorrectPartialIndex) {
+    await User.collection.dropIndex(current.name);
+  }
+
+  if (!isCorrectPartialIndex) {
+    await User.collection.createIndex(
+      { membershipId: 1 },
+      {
+        name: 'membershipId_1',
+        unique: true,
+        partialFilterExpression: { membershipId: { $type: 'string' } }
+      }
+    );
+  }
+}
 
 // Volunteer Schema
 const volunteerSchema = new mongoose.Schema(
@@ -338,7 +493,7 @@ const downloadItemSchema = new mongoose.Schema(
 );
 const DownloadItem = mongoose.models.DownloadItem || mongoose.model('DownloadItem', downloadItemSchema);
 
-// Helper function to fetch active downloads from DB with API fallback
+// Helper function to fetch published downloads from MongoDB.
 async function getDownloadItems(category = 'all', searchQuery = '') {
   try {
     if (mongoose.connection.readyState === 1) {
@@ -347,7 +502,7 @@ async function getDownloadItems(category = 'all', searchQuery = '') {
         filter.category = category;
       }
       if (searchQuery && searchQuery.trim()) {
-        const q = searchQuery.trim();
+        const q = searchQuery.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         filter.$or = [
           { title: { $regex: q, $options: 'i' } },
           { caption: { $regex: q, $options: 'i' } },
@@ -364,37 +519,7 @@ async function getDownloadItems(category = 'all', searchQuery = '') {
     console.warn('DB download fetch note:', err.message);
   }
 
-  // The admin app may use a separate database connection. Try local admin first,
-  // then the configured remote admin API when the local service is unavailable.
-  const adminUrls = [...new Set([
-    'http://localhost:9191',
-    process.env.ADMIN_API_URL
-  ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
-  for (const adminUrl of adminUrls) {
-    try {
-      const endpoint = category && category !== 'all'
-        ? `${adminUrl}/api/downloads/api/list/${encodeURIComponent(category)}`
-        : `${adminUrl}/api/downloads/api/list`;
-      const response = await fetch(endpoint, { signal: AbortSignal.timeout(5000) });
-      if (!response.ok) continue;
-
-      const payload = await response.json();
-      if (!payload.success || !Array.isArray(payload.data)) continue;
-
-      let items = payload.data;
-      if (searchQuery && searchQuery.trim()) {
-        const q = searchQuery.trim().toLowerCase();
-        items = items.filter((item) =>
-          [item.title, item.caption, item.author, ...(item.tags || [])]
-            .some((value) => String(value || '').toLowerCase().includes(q))
-        );
-      }
-      if (items.length > 0) return items;
-    } catch (apiErr) {
-      console.warn('Download API fallback note:', apiErr.message);
-    }
-  }
-
+  // No remote API fallback: public download data comes from this MongoDB connection.
   return [];
 }
 
@@ -433,7 +558,7 @@ async function getDownloadStats() {
   };
 }
 
-// Helper function to fetch active hero banners from DB with API fallback
+// Helper function to fetch active hero banners from MongoDB.
 async function getHeroBanners() {
   try {
     if (mongoose.connection.readyState === 1) {
@@ -468,64 +593,45 @@ async function getHeroBanners() {
     console.warn('⚠️ Error querying hero banners from MongoDB:', dbErr.message);
   }
 
-  // 3. Fetch from the local admin API first, then try the configured remote API.
-  const adminUrls = [...new Set([
-    'http://localhost:9191',
-    process.env.ADMIN_API_URL
-  ].filter(Boolean).map((url) => url.replace(/\/+$/, '')))];
-
-  for (const adminUrl of adminUrls) {
-    try {
-      const response = await fetch(`${adminUrl}/api/scroller?t=${Date.now()}`);
-      if (!response.ok) continue;
-
-      const payload = await response.json();
-      const items = Array.isArray(payload)
-        ? payload
-        : Array.isArray(payload?.banners)
-          ? payload.banners
-          : [];
-      const banners = items
-        .filter((item) => item.type === 'image' && item.active !== false && (item.mediaUrl || item.imageUrl))
-        .map((item) => ({
-          _id: String(item._id),
-          imageUrl: item.mediaUrl || item.imageUrl,
-          title: item.originalName || item.title || 'VIP Party Hero Banner',
-          type: 'image',
-          source: 'scroller'
-        }));
-
-      if (banners.length > 0) return banners;
-    } catch (apiErr) {
-      // Try the next configured admin API.
-    }
-  }
-
   return [];
 }
 
 // ------------------------------------
 // 2. Middlewares & Static File Setup
 // ------------------------------------
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '64kb' }));
+app.use(express.urlencoded({ extended: true, limit: '64kb', parameterLimit: 100 }));
+app.use((req, res, next) => req.method === 'POST' ? earlyPostRateLimit(req, res, next) : next());
 
 // Serve static assets from 'public' folder (CSS, JS, Images, Fonts)
 app.use(express.static(path.join(__dirname, 'public')));
+// Serve uploaded images from backend uploads directory and local uploads directory
+app.use('/uploads', express.static(path.resolve(__dirname, '../backend/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Configure View Engine (EJS) and Views Directory
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(async (req, res, next) => {
+  const isStaticAsset = req.path.startsWith('/js/') || req.path.startsWith('/css/') || req.path.startsWith('/images/') || req.path.startsWith('/uploads/');
+  if (isStaticAsset) return next();
   try {
     const cookies = Object.fromEntries((req.headers.cookie || '').split(';').map((part) => {
       const index = part.indexOf('=');
       return index < 0 ? ['', ''] : [part.slice(0, index).trim(), part.slice(index + 1).trim()];
     }).filter(([key]) => key));
     const uid = readAuthToken(cookies.vip_session);
-    if (uid && mongoose.connection.readyState === 1) {
+    if (uid && mongoose.connection.readyState === 1 && (req.method === 'GET' || req.path === '/api/profile')) {
       req.currentUser = await User.findOne({ uid }).select('-password').lean();
+    }
+    if (req.method === 'GET' && mongoose.connection.readyState === 1) {
+      res.locals.tickerAnnouncements = await TickerAnnouncement.find({ active: true })
+        .select('tickerText title slug displayOrder')
+        .sort({ displayOrder: 1, createdAt: 1 })
+        .limit(30)
+        .lean();
+      res.locals.tickerAnnouncementsAvailable = res.locals.tickerAnnouncements.length > 0;
     }
   } catch (error) {
     console.warn('Could not restore the signed-in user:', error.message);
@@ -539,9 +645,14 @@ app.use((req, res, next) => {
   res.locals.isDbConnected = isDbConnected;
   res.locals.siteName = 'विकासशील इंसान पार्टी (VIP)';
   res.locals.heroBanners = [];
+  res.locals.issues = [];
+  res.locals.homeNews = [];
+  res.locals.homeVideos = [];
+  res.locals.inspirationLeaders = [];
+  res.locals.homeEvents = [];
   res.locals.currentUser = req.currentUser || null;
-  res.locals.tickerAnnouncements = [];
-  res.locals.tickerAnnouncementsAvailable = false;
+  res.locals.tickerAnnouncements = res.locals.tickerAnnouncements || [];
+  res.locals.tickerAnnouncementsAvailable = Boolean(res.locals.tickerAnnouncementsAvailable);
   next();
 });
 
@@ -549,18 +660,175 @@ app.use((req, res, next) => {
 // 3. Application Routes
 // ------------------------------------
 
+// Default fallback events matching backend & mobile app dataset
+const defaultEventsData = [
+  {
+    _id: "6a96c9321825c58f475c6be4",
+    title: "Hoily",
+    description: "VIP Party के तत्वावधान में इस वर्ष होली मिलन समारोह का भव्य आयोजन किया जा रहा है। इस विशेष अवसर पर पार्टी के पदाधिकारी, कार्यकर्ता, युवा साथी एवं आम नागरिक एक साथ मिलकर होली का पर्व उत्साह और भाईचारे के साथ मनाएंगे।\n\nकार्यक्रम के दौरान रंगोत्सव, होली मिलन एवं सांस्कृतिक कार्यक्रमों का आयोजन किया जाएगा। सभी उपस्थित अतिथियों एवं कार्यकर्ताओं के लिए आपसी सौहार्द, प्रेम और सामाजिक एकता का संदेश देने वाली विभिन्न गतिविधियां आयोजित की जाएंगी।\n\nइस कार्यक्रम का मुख्य उद्देश्य समाज में आपसी भाईचारा, एकता और सद्भावना को मजबूत करना है।",
+    location: "patna",
+    eventDate: new Date("2026-09-17T00:00:00.000Z"),
+    eventTime: "04:55",
+    tag: "Event",
+    tagColor: "#d71d55",
+    images: [
+      "/uploads/events/1788266802618-94724-3a272f8f-0e58-4c89-95f6-cd6635eb3d4d.png",
+      "/uploads/events/1788266802673-77551-7599ff4d-ab71-4b9e-8cdd-9c91cbe55dac.png",
+      "/uploads/events/1788266802690-52877-d5e76d22-4b48-463b-816f-32334c971b20.png",
+      "/uploads/events/1788266802700-81378-a622a195-87f4-47ff-8c63-739255b8099b.png"
+    ],
+    published: true,
+    featured: false
+  },
+  {
+    _id: "6a96dfcb1825c58f475c6be6",
+    title: "Chhat pooja",
+    description: "Chhath Puja Mahaparv\n\nChhath Puja hamari aastha, sanskriti aur parampara se juda hua pavitra mahaparv hai. Is avsar par vrati Surya Dev ko arghya arpit karte hain aur Chhathi Maiya se parivar ki sukh-shanti, samriddhi aur mangal ki kamna karte hain.\n\nIs pavitra parv ke avsar par samaj ke sabhi logon ko ekjut hokar parampara aur sanskriti ka samman karne ka sandesh diya jata hai.\n\nमुख्य आकर्षण:\n• Chhathi Maiya ki pooja\n• Sandhya Arghya\n• Usha Arghya\n• Sanskritik karyakram\n• Samajik ekta aur seva",
+    location: "bhopal",
+    eventDate: new Date("2026-09-10T00:00:00.000Z"),
+    eventTime: "04:55",
+    tag: "Event",
+    tagColor: "#1d4ed8",
+    images: [
+      "/uploads/events/1788272587130-4123-3a272f8f-0e58-4c89-95f6-cd6635eb3d4d.png",
+      "/uploads/events/1788272587152-51842-7599ff4d-ab71-4b9e-8cdd-9c91cbe55dac.png"
+    ],
+    published: true,
+    featured: false
+  }
+];
+
+function normalizeEventImageUrl(image) {
+  const value = typeof image === 'string'
+    ? image
+    : image && typeof image === 'object'
+      ? image.url || image.secure_url || image.secureUrl || image.imageUrl || image.src || image.path
+      : '';
+  if (!value || typeof value !== 'string') return '';
+
+  const normalized = value.trim().replace(/\\/g, '/');
+  if (!normalized) return '';
+  if (/^(?:https?:)?\/\//i.test(normalized) || /^data:image\//i.test(normalized)) return normalized;
+
+  const uploadsPath = normalized.match(/(?:^|\/)(uploads\/events\/.*)$/i);
+  if (uploadsPath) {
+    const localPath = `/${uploadsPath[1]}`;
+    return process.env.NODE_ENV === 'production'
+      ? `${EVENT_MEDIA_BASE_URL}${localPath}`
+      : localPath;
+  }
+
+  const publicUploadsPath = normalized.match(/(?:^|\/)(?:public\/)?uploads\/(.*)$/i);
+  if (publicUploadsPath) {
+    const localPath = `/uploads/${publicUploadsPath[1]}`;
+    return process.env.NODE_ENV === 'production'
+      ? `${EVENT_MEDIA_BASE_URL}${localPath}`
+      : localPath;
+  }
+
+  if (/^[^/]+\.(?:jpe?g|png|webp|gif)$/i.test(normalized)) {
+    const localPath = `/uploads/events/${normalized}`;
+    return process.env.NODE_ENV === 'production'
+      ? `${EVENT_MEDIA_BASE_URL}${localPath}`
+      : localPath;
+  }
+
+  return normalized.startsWith('/') ? normalized : `/${normalized}`;
+}
+
+function normalizeEventImages(event) {
+  const storedImages = event?.images ?? event?.image ?? event?.imageUrl ?? event?.coverImage;
+  const images = Array.isArray(storedImages)
+    ? storedImages
+    : storedImages
+      ? [storedImages]
+      : [];
+  return {
+    ...event,
+    images: images.map(normalizeEventImageUrl).filter(Boolean),
+  };
+}
+
 // Helper to render pages with consistent active navigation
 const renderRoute = (pageTitle, activeNav) => (req, res) => {
   res.render('index', { pageTitle, activeNav, heroBanners: [] });
 };
 
-// Home (Loads dynamic hero section images from vip-a)
+// Home (Loads banners, major issues, mission, news, and interviews from MongoDB)
 app.get('/', async (req, res) => {
-  const heroBanners = await getHeroBanners();
+  let heroBanners = [];
+  let issues = [];
+  let missionPage = null;
+  let homeNews = [];
+  let homeVideos = [];
+  let inspirationLeaders = [];
+  let homeEvents = [];
+
+  try {
+    heroBanners = await getHeroBanners();
+  } catch (err) {
+    console.error('Error fetching hero banners for home:', err.message);
+  }
+
+  try {
+    if (mongoose.connection.readyState === 1) {
+      issues = await MajorIssue.find({ isPublished: { $ne: false } }).sort({ order: 1 }).lean();
+    }
+  } catch (err) {
+    console.error('Error fetching major issues for home:', err.message);
+  }
+
+  try {
+    if (mongoose.connection.readyState === 1) {
+      missionPage = await CmsPage.findOne({ pageKey: 'mission-vision' }).lean();
+    }
+  } catch (err) {
+    console.error('Error fetching mission CMS page for home:', err.message);
+  }
+
+  try {
+    if (mongoose.connection.readyState === 1) {
+      homeNews = await News.find({ active: true })
+        .sort({ featured: -1, displayOrder: 1, date: -1, createdAt: -1 })
+        .limit(30)
+        .lean();
+      homeVideos = await Video.find({ isPublished: true, category: /^interview$/i })
+        .sort({ createdAt: -1, _id: -1 })
+        .limit(30)
+        .lean();
+      inspirationLeaders = await InspirationLeader.find({ isPublished: true })
+        .sort({ displayOrder: 1, createdAt: 1 })
+        .limit(30)
+        .lean();
+      let eventsQuery = await Event.find({ published: true, eventDate: { $gte: new Date() } })
+        .sort({ featured: -1, eventDate: 1 })
+        .limit(4)
+        .lean();
+      if (!eventsQuery || eventsQuery.length === 0) {
+        eventsQuery = await Event.find({ published: true })
+          .sort({ featured: -1, eventDate: -1, createdAt: -1 })
+          .limit(4)
+          .lean();
+      }
+      homeEvents = ((eventsQuery && eventsQuery.length > 0) ? eventsQuery : defaultEventsData).map(normalizeEventImages);
+    } else {
+      homeEvents = defaultEventsData.map(normalizeEventImages);
+    }
+  } catch (err) {
+    console.error('Error fetching press/media data for home:', err.message);
+    homeEvents = defaultEventsData.map(normalizeEventImages);
+  }
+
   res.render('index', {
     pageTitle: 'विकासशील इंसान पार्टी (VIP) – आधिकारिक वेबसाइट',
     activeNav: 'home',
-    heroBanners
+    heroBanners,
+    issues: issues || [],
+    missionPage: missionPage || null,
+    homeNews: homeNews || [],
+    homeVideos: homeVideos || [],
+    inspirationLeaders: inspirationLeaders || [],
+    homeEvents: homeEvents || []
   });
 });
 
@@ -573,15 +841,11 @@ app.get('/api/hero-banners', async (req, res) => {
 app.use('/api/gallery', galleryRoutes);
 app.get('/announcements/:slug', async (req, res) => {
   try {
-    const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
-    const response = await fetch(`${adminUrl}/admin/website/ticker-announcements/api/${encodeURIComponent(req.params.slug)}`, { signal: AbortSignal.timeout(3500) });
-    if (response.status === 404) return res.status(404).render('index', { pageTitle: 'पेज नहीं मिला | VIP Party', activeNav: 'news', heroBanners: [] });
-    if (!response.ok) return res.status(503).send('Announcement abhi load nahi ho pa raha. Kripya kuch der baad try karein.');
-    const payload = await response.json();
-    if (!payload.success || !payload.data) return res.status(404).render('index', { pageTitle: 'पेज नहीं मिला | VIP Party', activeNav: 'news', heroBanners: [] });
-    res.render('announcement', { announcement: payload.data, pageTitle: `${payload.data.title} | VIP Party`, activeNav: 'news' });
+    const announcement = await TickerAnnouncement.findOne({ slug: req.params.slug, active: true }).lean();
+    if (!announcement) return res.status(404).render('index', { pageTitle: 'पेज नहीं मिला | VIP Party', activeNav: 'news', heroBanners: [] });
+    return res.render('announcement', { announcement, pageTitle: `${announcement.title} | VIP Party`, activeNav: 'news' });
   } catch (error) {
-    console.error('Announcement page fetch failed:', error.message);
+    console.error('Announcement MongoDB query failed:', error.message);
     res.status(503).send('Announcement abhi load nahi ho pa raha. Kripya kuch der baad try karein.');
   }
 });
@@ -686,6 +950,7 @@ app.get('/active-member', (req, res) => {
 // Member Registration Processing Handler
 const handleMemberRegistration = async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Membership service is temporarily unavailable.' });
     const {
       name,
       fullName,
@@ -718,10 +983,19 @@ const handleMemberRegistration = async (req, res) => {
       });
     }
 
+    if (applicantName.length > 100 || !/^[6-9]\d{9}$/.test(applicantMobile) || [email, gender, education, state, district, loksabha, vidhansabha, assembly, block, panchayat, ward, referred_by, referredBy, address].some((value) => value != null && (typeof value !== 'string' || value.length > 500))) {
+      return res.status(400).json({ success: false, message: 'Please check the entered details and try again.' });
+    }
+    validateUploadedImage(req.file);
+
     const uniqueId = await generateUniqueMemberId();
     let photoUrl = '';
     if (req.file) {
-      photoUrl = `/uploads/members/${req.file.filename}`;
+      if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+        return res.status(503).json({ success: false, message: 'Photo uploads are temporarily unavailable. Please try again later.' });
+      }
+      const uploadedPhoto = await uploadImageToCloudinary(req.file.buffer, 'vip-party/members');
+      photoUrl = uploadedPhoto.secure_url;
     }
 
     // Save to MongoDB Atlas in 'joins' collection (same as vip-a)
@@ -772,7 +1046,9 @@ const handleMemberRegistration = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('Member processing error:', err);
+    console.error('Member processing error:', err.message);
+    if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ success: false, message: 'Profile photo must be 5 MB or smaller.' });
+    if (err.code === 'INVALID_IMAGE') return res.status(400).json({ success: false, message: err.message });
     return res.status(500).json({
       success: false,
       message: 'सर्वर पर सदस्यता दर्ज करने में त्रुटि हुई। कृपया पुनः प्रयास करें।'
@@ -780,9 +1056,9 @@ const handleMemberRegistration = async (req, res) => {
   }
 };
 
-app.post('/actions/process_member', upload.single('photo'), handleMemberRegistration);
-app.post('/api/member/register', upload.single('photo'), handleMemberRegistration);
-app.post('/api/join', upload.single('photo'), handleMemberRegistration);
+app.post('/actions/process_member', publicFormRateLimit, handlePhotoUpload, validatePublicFormPayload, handleMemberRegistration);
+app.post('/api/member/register', publicFormRateLimit, handlePhotoUpload, validatePublicFormPayload, handleMemberRegistration);
+app.post('/api/join', publicFormRateLimit, handlePhotoUpload, validatePublicFormPayload, handleMemberRegistration);
 
 // Other Nav & Footer Links
 app.get('/it-cell', renderRoute('आईटी सेल एवं डिजिटल विंग | VIP Party', 'it-cell'));
@@ -828,22 +1104,25 @@ app.get('/support', (req, res) => res.redirect('/donate'));
 app.get('/support-us', (req, res) => res.redirect('/donate'));
 
 // API to submit donation acknowledgment / pledge
-app.post('/api/donate/submit', async (req, res) => {
+app.post('/api/donate/submit', publicFormRateLimit, validatePublicFormPayload, async (req, res) => {
   try {
-    const { donorName, donorPhone, donorEmail, panNumber, amount, utrNumber, paymentMode, state, district, message } = req.body;
-    if (!donorName || !donorPhone || !amount) {
+    const { donorName, donorPhone, donorEmail, panNumber, amount, utrNumber, paymentMode, state, district, message } = req.body || {};
+    if (typeof donorName !== 'string' || typeof donorPhone !== 'string' || donorName.trim().length < 2 || donorName.length > 100 || !/^[6-9]\d{9}$/.test(donorPhone.trim()) || !/^\d+(\.\d{1,2})?$/.test(String(amount))) {
       return res.status(400).json({ success: false, message: 'कृपया नाम, मोबाइल नंबर और सहयोग राशि अनिवार्य रूप से भरें।' });
     }
 
-    const receiptNumber = 'VIP-DON-' + new Date().getFullYear() + '-' + Math.floor(10000 + Math.random() * 90000);
-    if (mongoose.connection.readyState === 1) {
+    const donationAmount = Number(amount);
+    if (!Number.isFinite(donationAmount) || donationAmount < 1 || donationAmount > 10000000 || [donorEmail, panNumber, utrNumber, paymentMode, state, district, message].some((value) => value != null && (typeof value !== 'string' || value.length > 500))) return res.status(400).json({ success: false, message: 'One or more fields are invalid or too long.' });
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Donation service is temporarily unavailable.' });
+    const receiptNumber = `VIP-DON-${new Date().getFullYear()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    {
       await DonationRecord.create({
         receiptNumber,
         donorName: donorName.trim(),
         donorPhone: donorPhone.trim(),
         donorEmail: (donorEmail || '').trim(),
         panNumber: (panNumber || '').trim().toUpperCase(),
-        amount: Number(amount),
+        amount: donationAmount,
         utrNumber: (utrNumber || '').trim(),
         paymentMode: paymentMode || 'UPI',
         state: state || 'Bihar',
@@ -858,8 +1137,8 @@ app.post('/api/donate/submit', async (req, res) => {
       success: true,
       message: 'धन्यवाद! आपके बहुमूल्य सहयोग की सूचना सफलतापूर्वक दर्ज कर ली गई है।',
       receiptNumber,
-      amount,
-      donorName
+      amount: donationAmount,
+      donorName: donorName.trim()
     });
   } catch (err) {
     console.error('Donation pledge error:', err);
@@ -867,7 +1146,34 @@ app.post('/api/donate/submit', async (req, res) => {
   }
 });
 app.use('/', pressRoutes);
-app.get('/events', renderRoute('आगामी कार्यक्रम व रैलियां | VIP Party', 'events'));
+app.get('/events', async (req, res) => {
+  try {
+    let events = [];
+    if (mongoose.connection.readyState === 1) {
+      events = await Event.find({ published: true })
+        .sort({ featured: -1, eventDate: -1, createdAt: -1 })
+        .lean();
+    }
+    if (!events || events.length === 0) {
+      events = defaultEventsData;
+    }
+    events = events.map(normalizeEventImages);
+    return res.render('events', {
+      pageTitle: 'आगामी कार्यक्रम व रैलियां | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'events',
+      events: events || [],
+      loadError: false,
+    });
+  } catch (error) {
+    console.error('Could not load public events:', error.message);
+    return res.render('events', {
+      pageTitle: 'आगामी कार्यक्रम व रैलियां | विकासशील इंसान पार्टी (VIP)',
+      activeNav: 'events',
+      events: defaultEventsData.map(normalizeEventImages),
+      loadError: false,
+    });
+  }
+});
 app.get('/media', renderRoute('मीडिया एवं प्रेस कॉन्फ्रेंस | VIP Party', 'media'));
 
 // Menu 1: About Sub-Items
@@ -934,7 +1240,7 @@ app.get('/press', renderRoute('प्रेस एवं मीडिया | �
 
 // Menu 1: Download Section (Fully dynamic, responsive & connected to shared database)
 app.get('/download', async (req, res) => {
-  const searchQuery = (req.query.q || '').trim();
+    const searchQuery = (typeof req.query.q === 'string' ? req.query.q : '').trim().slice(0, 100);
   const items = await getDownloadItems('all', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
@@ -948,7 +1254,7 @@ app.get('/download', async (req, res) => {
 });
 
 app.get('/download/leaders-photo', async (req, res) => {
-  const searchQuery = (req.query.q || '').trim();
+  const searchQuery = (typeof req.query.q === 'string' ? req.query.q : '').trim().slice(0, 100);
   const items = await getDownloadItems('leaders-photo', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
@@ -962,7 +1268,7 @@ app.get('/download/leaders-photo', async (req, res) => {
 });
 
 app.get('/download/infographics-banner', async (req, res) => {
-  const searchQuery = (req.query.q || '').trim();
+  const searchQuery = (typeof req.query.q === 'string' ? req.query.q : '').trim().slice(0, 100);
   const items = await getDownloadItems('infographics-banner', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
@@ -976,7 +1282,7 @@ app.get('/download/infographics-banner', async (req, res) => {
 });
 
 app.get('/download/quotes', async (req, res) => {
-  const searchQuery = (req.query.q || '').trim();
+  const searchQuery = (typeof req.query.q === 'string' ? req.query.q : '').trim().slice(0, 100);
   const items = await getDownloadItems('quotes', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
@@ -990,7 +1296,7 @@ app.get('/download/quotes', async (req, res) => {
 });
 
 app.get('/download/mobile-wallpaper', async (req, res) => {
-  const searchQuery = (req.query.q || '').trim();
+  const searchQuery = (typeof req.query.q === 'string' ? req.query.q : '').trim().slice(0, 100);
   const items = await getDownloadItems('mobile-wallpaper', searchQuery);
   const stats = await getDownloadStats();
   res.render('download/index', {
@@ -1070,9 +1376,10 @@ app.get('/download/file/:id', async (req, res) => {
 });
 
 // Download Counter Track API
-app.post('/api/download/track/:id', async (req, res) => {
+app.post('/api/download/track/:id', downloadTrackRateLimit, async (req, res) => {
   try {
     const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) return res.status(400).json({ success: false, message: 'Invalid download item ID.' });
     if (mongoose.connection.readyState === 1) {
       const item = await DownloadItem.findByIdAndUpdate(
         id,
@@ -1105,32 +1412,110 @@ app.get('/up-2027-candidature', (req, res) => res.redirect('/forms/candidature-u
 
 app.get('/forms/join-vip', (req, res) => res.redirect('/member'));
 
-// Menu 2: Dedicated Auth Pages (Login & SignUp in separate views/auth/ folder)
-app.get('/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
-app.get('/auth/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', googleClientId: process.env.GOOGLE_CLIENT_ID || '' }));
+app.get('/profile', (req, res) => {
+  if (!req.currentUser) return res.redirect(`/login?returnTo=${encodeURIComponent('/profile')}`);
+  return res.render('profile', {
+    pageTitle: 'My Profile | VIP Party',
+    activeNav: 'profile',
+    profileUser: req.currentUser
+  });
+});
 
-app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup' }));
-app.get('/auth/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup' }));
+app.get('/forgot-password', (req, res) => {
+  res.render('auth/forgot-password', {
+    pageTitle: 'Forgot password | VIP Party',
+    activeNav: 'login'
+  });
+});
+
+app.post('/api/profile', authRateLimit, handlePhotoUpload, async (req, res) => {
+  try {
+    if (!req.currentUser) return res.status(401).json({ success: false, message: 'Please sign in to update your profile.' });
+    validateUploadedImage(req.file);
+    const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
+    const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+    const phone = typeof req.body?.phone === 'string' ? req.body.phone.trim() : '';
+    const address = typeof req.body?.address === 'string' ? req.body.address.trim() : '';
+    const district = typeof req.body?.district === 'string' ? req.body.district.trim() : '';
+    const state = typeof req.body?.state === 'string' ? req.body.state.trim() : '';
+
+    if (!name || name.length > 100) return res.status(400).json({ success: false, message: 'Enter a name up to 100 characters.' });
+    if (email && (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))) {
+      return res.status(400).json({ success: false, message: 'Enter a valid email address.' });
+    }
+    if (phone && !/^[6-9]\d{9}$/.test(phone)) return res.status(400).json({ success: false, message: 'Enter a valid 10-digit Indian mobile number.' });
+    if ([address, district, state].some(value => value.length > 400)) return res.status(400).json({ success: false, message: 'Profile details are too long.' });
+
+    const duplicateConditions = [];
+    if (email) duplicateConditions.push({ email, _id: { $ne: req.currentUser._id } });
+    if (phone) duplicateConditions.push({ phone, _id: { $ne: req.currentUser._id } });
+    if (duplicateConditions.length && await User.findOne({ $or: duplicateConditions }).select('_id')) {
+      return res.status(409).json({ success: false, message: 'That email or mobile number is already used by another account.' });
+    }
+
+    const updates = { name, email, phone: phone || req.currentUser.phone, address, district, state };
+    if (req.file) {
+      if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) return res.status(503).json({ success: false, message: 'Photo uploads are temporarily unavailable. Please try again later.' });
+      const uploadedPhoto = await uploadImageToCloudinary(req.file.buffer, 'vip-party/profiles');
+      updates.photoURL = uploadedPhoto.secure_url;
+    }
+    const user = await User.findByIdAndUpdate(req.currentUser._id, { $set: updates }, { new: true, runValidators: true }).select('-password').lean();
+    if (!user) return res.status(404).json({ success: false, message: 'Account was not found.' });
+    return res.json({ success: true, message: 'Profile updated successfully.', user });
+  } catch (error) {
+    console.error('Profile update error:', error.message);
+    if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ success: false, message: 'Profile photo must be 5 MB or smaller.' });
+    }
+    if (error.code === 'INVALID_IMAGE') return res.status(400).json({ success: false, message: error.message });
+    if (error.message === 'Profile photo must be JPG, PNG, or WebP.') {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+    return res.status(500).json({ success: false, message: 'Could not update your profile. Please try again.' });
+  }
+});
+
+// Menu 2: Dedicated Auth Pages (Login & SignUp in separate views/auth/ folder)
+app.get('/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', returnTo: safeReturnPath(req.query.returnTo) }));
+app.get('/auth/login', (req, res) => res.render('auth/login', { pageTitle: 'VIP Party | Sign in', activeNav: 'login', returnTo: safeReturnPath(req.query.returnTo) }));
+
+app.get('/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', returnTo: safeReturnPath(req.query.returnTo) }));
+app.get('/auth/signup', (req, res) => res.render('auth/signup', { pageTitle: 'साइन अप (Sign Up) | VIP Party', activeNav: 'signup', returnTo: safeReturnPath(req.query.returnTo) }));
 
 // Auth Form Handlers (Connecting to same MongoDB 'users' collection)
-app.post('/auth/signup', async (req, res) => {
+app.post('/auth/signup', authRateLimit, validatePublicFormPayload, async (req, res) => {
   try {
-    const { name, phone, email, district, password } = req.body;
-    const cleanName = String(name || '').trim();
-    const cleanPhone = String(phone || '').replace(/\D/g, '');
-    const cleanEmail = String(email || '').trim().toLowerCase();
-    const cleanDistrict = String(district || '').trim();
+    const { name, phone, email, district, state, password } = req.body || {};
+    const cleanName = typeof name === 'string' ? name.trim() : '';
+    const cleanPhone = typeof phone === 'string' ? phone.trim() : '';
+    const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    const cleanDistrict = typeof district === 'string' ? district.trim() : '';
+    const cleanState = typeof state === 'string' ? state.trim() : '';
+    const cleanPassword = typeof password === 'string' ? password : '';
 
-    if (!cleanName || !cleanPhone || !cleanEmail || !cleanDistrict || !password) {
-      return res.status(400).json({ success: false, message: 'Name, mobile, email, district and password are required.' });
+    if (!cleanName || !cleanPhone || !cleanEmail || !cleanDistrict || !cleanPassword) {
+      return res.status(400).json({ success: false, message: 'Please complete all required fields.' });
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
+    const signupDistricts = {
+      'Bihar': ['Araria','Arwal','Aurangabad','Banka','Begusarai','Bhagalpur','Bhojpur','Buxar','Darbhanga','East Champaran','Gaya','Gopalganj','Jamui','Jehanabad','Kaimur','Katihar','Khagaria','Kishanganj','Lakhisarai','Madhepura','Madhubani','Munger','Muzaffarpur','Nalanda','Nawada','Patna','Purnia','Rohtas','Saharsa','Samastipur','Saran','Sheikhpura','Sheohar','Sitamarhi','Siwan','Supaul','Vaishali','West Champaran'],
+      'Uttar Pradesh': ['Agra','Aligarh','Ambedkar Nagar','Amethi','Amroha','Auraiya','Ayodhya','Azamgarh','Baghpat','Bahraich','Ballia','Balrampur','Banda','Barabanki','Bareilly','Basti','Bhadohi','Bijnor','Budaun','Bulandshahr','Chandauli','Chitrakoot','Deoria','Etah','Etawah','Farrukhabad','Fatehpur','Firozabad','Gautam Buddha Nagar','Ghaziabad','Ghazipur','Gonda','Gorakhpur','Hamirpur','Hapur','Hardoi','Hathras','Jalaun','Jaunpur','Jhansi','Kannauj','Kanpur Dehat','Kanpur Nagar','Kasganj','Kaushambi','Kushinagar','Lakhimpur Kheri','Lalitpur','Lucknow','Maharajganj','Mahoba','Mainpuri','Mathura','Mau','Meerut','Mirzapur','Moradabad','Muzaffarnagar','Pilibhit','Pratapgarh','Prayagraj','Rae Bareli','Rampur','Sambhal','Sant Kabir Nagar','Shahjahanpur','Shamli','Shravasti','Siddharthnagar','Sitapur','Sonbhadra','Sultanpur','Unnao','Varanasi']
+    };
+    if (!signupDistricts[cleanState]?.includes(cleanDistrict)) {
+      return res.status(400).json({ success: false, message: 'Choose a valid state and district.' });
+    }
+    if (cleanName.length > 100 || cleanDistrict.length > 100) {
+      return res.status(400).json({ success: false, message: 'Name and district must be 100 characters or fewer.' });
+    }
+    if (cleanEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
       return res.status(400).json({ success: false, message: 'Enter a valid email address.' });
     }
     if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       return res.status(400).json({ success: false, message: 'Enter a valid 10-digit Indian mobile number.' });
     }
-    if (mongoose.connection.readyState !== 1) {
+    if (cleanPassword.length < 6 || cleanPassword.length > 128) {
+      return res.status(400).json({ success: false, message: 'Password must be between 6 and 128 characters.' });
+    }
+    if (!isDbConnected || mongoose.connection.readyState !== 1) {
       return res.status(503).json({ success: false, message: 'Account service is temporarily unavailable. Please try again shortly.' });
     }
 
@@ -1148,7 +1533,8 @@ app.post('/auth/signup', async (req, res) => {
       phone: cleanPhone,
       email: cleanEmail,
       district: cleanDistrict,
-      password: String(password),
+      state: cleanState,
+      password: await hashPassword(cleanPassword),
       uid: `VIP-USR-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`
     });
     console.log(`New VIP User registered: ${newUser.name} (${newUser.phone})`);
@@ -1162,74 +1548,85 @@ app.post('/auth/signup', async (req, res) => {
       if (err.keyPattern?.email || err.keyValue?.email) {
         return res.status(409).json({ success: false, field: 'email', message: 'This email address is already registered. Please sign in.' });
       }
-      return res.status(500).json({ success: false, message: 'Could not create your account because of a database conflict. Please try again.' });
+      return res.status(500).json({ success: false, message: 'We could not create your account right now. Please check your details and try again.' });
     }
     return res.status(500).json({ success: false, message: 'Could not create your account. Please try again.' });
   }
 });
-app.post('/auth/login', async (req, res) => {
+app.post('/auth/login', loginIpRateLimit, loginRateLimit, validatePublicFormPayload, async (req, res) => {
   try {
-    const phone = String(req.body?.phone || '').replace(/\D/g, '');
-    const password = String(req.body?.password || '');
-    if (!/^[6-9]\d{9}$/.test(phone) || !password) {
-      return res.status(400).json({ success: false, message: 'Enter your valid 10-digit mobile number and password.' });
+    const rawIdentifier = req.body?.identifier ?? req.body?.email ?? req.body?.phone;
+    const identifier = typeof rawIdentifier === 'string' ? rawIdentifier.trim() : '';
+    const password = typeof req.body?.password === 'string' ? req.body.password : '';
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(identifier);
+    const isPhone = /^[6-9]\d{9}$/.test(identifier);
+    if ((!isEmail && !isPhone) || !password || password.length > 128) {
+      return res.status(400).json({ success: false, message: 'Enter your email address or 10-digit mobile number and password.' });
     }
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ success: false, message: 'Login service is temporarily unavailable. Please try again shortly.' });
     }
 
-    const user = await User.findOne({ phone });
-    if (!user || user.password !== password) {
-      return res.status(401).json({ success: false, message: 'Mobile number or password is incorrect.' });
+    const user = await User.findOne(isEmail ? { email: identifier.toLowerCase() } : { phone: identifier });
+    if (!user || !(await verifyPassword(password, user.password))) {
+      return res.status(401).json({ success: false, message: 'Email/mobile number or password is incorrect.' });
+    }
+    if (!user.password.startsWith('scrypt$')) {
+      user.password = await hashPassword(password);
+      await user.save();
     }
     setAuthCookie(res, user.uid);
-    return res.json({ success: true, message: 'Signed in successfully.', redirect: '/' });
+    return res.json({ success: true, message: 'Signed in successfully.', redirect: safeReturnPath(req.body?.returnTo) });
   } catch (err) {
     console.error('Login error:', err);
     return res.status(500).json({ success: false, message: 'Could not sign in. Please try again.' });
   }
 });
 
-app.post('/auth/logout', (req, res) => {
+app.post('/auth/logout', authRateLimit, (req, res) => {
   const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
   res.setHeader('Set-Cookie', `vip_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${secure}`);
   res.redirect('/');
 });
 
-app.post('/auth/google', async (req, res) => {
+app.post('/auth/google', authRateLimit, validatePublicFormPayload, async (req, res) => {
   try {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const credential = String(req.body?.credential || '');
-    if (!clientId || !credential) {
-      return res.status(400).json({ success: false, message: 'Google sign-in is not configured.' });
+    const idToken = String(req.body?.idToken || '');
+    if (!idToken) {
+      return res.status(400).json({ success: false, message: 'Google sign-in token is missing.' });
     }
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ success: false, message: 'Login service is temporarily unavailable.' });
-    }
-
-    const verifyResponse = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
-    if (!verifyResponse.ok) {
-      return res.status(401).json({ success: false, message: 'Google could not verify this sign-in. Please try again.' });
-    }
-    const profile = await verifyResponse.json();
-    if (profile.aud !== clientId || profile.email_verified !== 'true' || !profile.email || !profile.sub) {
-      return res.status(401).json({ success: false, message: 'Google account verification failed.' });
+    if (idToken.length > 12000) {
+      return res.status(400).json({ success: false, message: 'Google sign-in token is invalid.' });
     }
 
-    const email = profile.email.toLowerCase();
-    let user = await User.findOne({ email });
-    if (!user) {
-      user = await User.create({
-        uid: `VIP-GGL-${profile.sub}`,
-        name: profile.name || 'VIP Member',
-        phone: `google:${profile.sub}`,
-        email,
-        password: '',
-        photoURL: profile.picture || ''
+    // Firebase verifies the identity token and upserts the user into the same
+    // MongoDB users collection used by the mobile app.
+    const saveResponse = await fetch(`${APP_API_URL}/api/user/save`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({ provider: 'google' }),
+      signal: AbortSignal.timeout(15000)
+    });
+    let saveResult;
+    try {
+      saveResult = await saveResponse.json();
+    } catch {
+      saveResult = null;
+    }
+    if (!saveResponse.ok || saveResult?.success !== true || !saveResult?.user?.uid) {
+      console.error('Google Firebase user sync failed:', saveResponse.status, saveResult?.message || 'Invalid backend response');
+      return res.status(saveResponse.status === 401 ? 401 : 503).json({
+        success: false,
+        message: saveResult?.message || 'Login service is temporarily unavailable. Please try again.'
       });
     }
-    setAuthCookie(res, user.uid);
-    return res.json({ success: true, redirect: '/' });
+
+    setAuthCookie(res, saveResult.user.uid);
+    return res.json({ success: true, redirect: safeReturnPath(req.body?.returnTo) });
   } catch (err) {
     console.error('Google login error:', err);
     return res.status(500).json({ success: false, message: 'Google sign-in could not be completed.' });
@@ -1237,10 +1634,11 @@ app.post('/auth/google', async (req, res) => {
 });
 
 // Forms Submissions APIs (Saving to same MongoDB)
-app.post('/api/forms/volunteer', async (req, res) => {
+app.post('/api/forms/volunteer', publicFormRateLimit, validatePublicFormPayload, async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Volunteer service is temporarily unavailable.' });
     const { fullName, mobile, email, gender, state, district, assemblyConstituency, village, volunteerTypes, availability, skills } = req.body;
-    if (!fullName || !mobile || !district) {
+    if ([fullName, mobile, district].some((value) => typeof value !== 'string' || !value.trim()) || !/^[6-9]\d{9}$/.test(mobile.trim())) {
       return res.status(400).json({ success: false, message: 'कृपया आवश्यक विवरण भरें।' });
     }
 
@@ -1271,10 +1669,11 @@ app.post('/api/forms/volunteer', async (req, res) => {
   }
 });
 
-app.post('/api/forms/scholarship', async (req, res) => {
+app.post('/api/forms/scholarship', publicFormRateLimit, validatePublicFormPayload, async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Scholarship service is temporarily unavailable.' });
     const { studentName, fatherName, mobile, email, gender, category, currentCourse, institute, percentageMarks, familyAnnualIncome, district, assembly, address } = req.body;
-    if (!studentName || !fatherName || !mobile || !currentCourse || !institute || !district) {
+    if ([studentName, fatherName, mobile, currentCourse, institute, district].some((value) => typeof value !== 'string' || !value.trim()) || !/^[6-9]\d{9}$/.test(mobile.trim())) {
       return res.status(400).json({ success: false, message: 'कृपया सभी आवश्यक फ़ील्ड भरें।' });
     }
 
@@ -1307,10 +1706,11 @@ app.post('/api/forms/scholarship', async (req, res) => {
   }
 });
 
-app.post('/api/forms/candidature-up-2027', async (req, res) => {
+app.post('/api/forms/candidature-up-2027', publicFormRateLimit, validatePublicFormPayload, async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Application service is temporarily unavailable.' });
     const { applicantName, fatherOrHusbandName, mobile, whatsapp, age, gender, district, assemblyConstituency, casteCommunity, education, profession, activeInVipSince, politicalExperience, criminalCases } = req.body;
-    if (!applicantName || !fatherOrHusbandName || !mobile || !district || !assemblyConstituency) {
+    if ([applicantName, fatherOrHusbandName, mobile, district, assemblyConstituency].some((value) => typeof value !== 'string' || !value.trim()) || !/^[6-9]\d{9}$/.test(mobile.trim())) {
       return res.status(400).json({ success: false, message: 'कृपया सभी आवश्यक फ़ील्ड भरें।' });
     }
 
@@ -1357,6 +1757,9 @@ app.get('/contact', (req, res) => {
 const handleContactSubmission = async (req, res) => {
   try {
     const { name, phone, email, subject, message } = req.body;
+    if ([name, phone, email, subject, message].some((value) => value != null && typeof value !== 'string')) {
+      return res.status(400).json({ success: false, message: 'Please check the message details and try again.' });
+    }
     const senderName = (name || '').trim();
     const senderPhone = String(phone || '').replace(/\D/g, '');
     const senderEmail = (email || '').trim().toLowerCase();
@@ -1376,6 +1779,10 @@ const handleContactSubmission = async (req, res) => {
         field: 'phone',
         message: 'कृपया 6 से 9 से शुरू होने वाला सही 10 अंकों का मोबाइल नंबर दर्ज करें।'
       });
+    }
+
+    if (senderName.length > 100 || senderEmail.length > 254 || senderSubject.length > 160 || senderMsg.length > 1000 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(senderEmail)) {
+      return res.status(400).json({ success: false, message: 'One or more fields exceed the allowed length or format.' });
     }
 
     let referenceId = `VIP-CON-${Date.now().toString().slice(-8)}`;
@@ -1407,25 +1814,7 @@ const handleContactSubmission = async (req, res) => {
       savedDirectly = true;
     }
 
-    // Only fallback to Admin API if direct MongoDB connection was not available
-    if (!savedDirectly) {
-      try {
-        const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:9191';
-        await fetch(`${adminUrl}/api/website-feedback`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: senderName,
-            phone: senderPhone,
-            email: senderEmail,
-            subject: senderSubject,
-            message: senderMsg,
-            source: 'website'
-          }),
-          signal: AbortSignal.timeout(3000)
-        });
-      } catch (_) {}
-    }
+    if (!savedDirectly) return res.status(503).json({ success: false, message: 'Contact service is temporarily unavailable.' });
 
     return res.json({
       success: true,
@@ -1441,8 +1830,8 @@ const handleContactSubmission = async (req, res) => {
   }
 };
 
-app.post('/contact', handleContactSubmission);
-app.post('/api/contact', handleContactSubmission);
+app.post('/contact', contactRateLimit, validatePublicFormPayload, handleContactSubmission);
+app.post('/api/contact', contactRateLimit, validatePublicFormPayload, handleContactSubmission);
 
 // Dedicated Privacy Policy Page
 app.get('/privacy-policy', (req, res) => {
@@ -1532,7 +1921,9 @@ app.get('/sitemap.xml', (req, res) => {
 app.use((req, res) => {
   res.status(404).render('index', {
     pageTitle: '404 - पेज नहीं मिला | VIP Party',
-    activeNav: '404'
+    activeNav: '404',
+    heroBanners: [],
+    issues: []
   });
 });
 
@@ -1549,3 +1940,5 @@ app.listen(PORT, () => {
   console.log(`🚀 VIP Party Website running on: http://localhost:${PORT}`);
  
 });
+
+

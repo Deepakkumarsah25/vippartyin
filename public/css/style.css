@@ -478,3 +478,454 @@ body {
     display: block;
   }
 }
+
+@media (max-width: 767.98px) {
+  #vipNavbar .desktop-nav-actions { display: none !important; }
+  #vipNavbar .mobile-top-actions { display: flex !important; }
+}
+
+/* ==========================================================================
+   Popping Up Animation for Social Issues & Cards
+   ========================================================================== */
+@keyframes cardPopUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.95);
+  }
+  60% {
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.issue-pop-card {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+  will-change: transform, box-shadow;
+}
+
+.issue-pop-card:hover {
+  transform: translateY(-8px) scale(1.025);
+  box-shadow: 0 20px 30px -10px rgba(0, 102, 178, 0.22),
+              0 10px 15px -5px rgba(0, 0, 0, 0.06);
+}
+
+.issue-pop-card:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* ==========================================================================
+   Vision & Mission Showcase Section (Refined UI & Animation)
+   Borderless, Dark Translucent Glass Card, Clean Typography & Gold CTA
+   ========================================================================== */
+
+.why-section-card {
+    background: linear-gradient(135deg, #003a6c 0%, #00508f 50%, #002c52 100%);
+    color: #fff;
+    padding: 44px 36px 52px;
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 60px -15px rgba(0, 46, 84, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.why-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1.12fr;
+    gap: 40px;
+    align-items: center;
+}
+
+/* LEFT IMAGE AREA (BORDERLESS, POP-UP ZOOM, DARK GLASS STAT CARD) */
+.why-image-area {
+    position: relative;
+    padding: 10px 0 20px;
+}
+
+.why-image-area.wow {
+    visibility: hidden;
+}
+
+.why-image-area.animated,
+.why-image-area.in-view {
+    visibility: visible !important;
+    animation: popZoomIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes popZoomIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.why-main-image {
+    width: 96%;
+    overflow: hidden;
+    border-radius: 24px;
+    position: relative;
+    z-index: 1;
+    border: none !important;
+    outline: none !important;
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.4);
+}
+
+.why-main-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: none !important;
+    transform: scale(1);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.why-main-image:hover img {
+    transform: scale(1.04);
+}
+
+.why-secondary-image {
+    width: 55%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    border-radius: 22px;
+    overflow: hidden;
+    border: none !important;
+    outline: none !important;
+    box-shadow: 0 24px 55px rgba(0, 0, 0, 0.5);
+    background: #002b4e;
+}
+
+.why-secondary-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: none !important;
+    transform: scale(1);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.why-secondary-image:hover img {
+    transform: scale(1.04);
+}
+
+.why-stat-card {
+    position: absolute;
+    bottom: 22px;
+    left: 16px;
+    z-index: 3;
+    width: 185px;
+    padding: 20px 18px;
+    text-align: left;
+    border-radius: 18px;
+    background: rgba(10, 24, 46, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.why-image-area.animated .why-stat-card,
+.why-image-area.in-view .why-stat-card {
+    animation: statCardPop 0.6s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes statCardPop {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.why-stat-card h2 {
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: #fbbf24;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.why-stat-card p {
+    font-size: 12px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    font-weight: 600;
+}
+
+/* RIGHT CONTENT */
+.why-content {
+    padding-left: 0;
+}
+
+.why-title.wow,
+.why-title-desc.wow,
+.why-action.wow {
+    visibility: hidden;
+}
+
+.why-title.animated,
+.why-title-desc.animated,
+.why-action.animated,
+.why-title.in-view,
+.why-title-desc.in-view,
+.why-action.in-view {
+    visibility: visible !important;
+    animation: featureFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.why-title {
+    font-size: 38px;
+    line-height: 1.18;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.why-title-desc {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.82);
+    margin-bottom: 24px;
+}
+
+.why-features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 24px;
+}
+
+.why-feature {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: transform 0.25s ease;
+}
+
+.why-feature.wow {
+    visibility: hidden;
+}
+
+.why-feature.animated,
+.why-feature.in-view {
+    visibility: visible !important;
+    animation: featureFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.why-feature:hover {
+    transform: translateY(-3px);
+}
+
+@keyframes featureFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.why-feature.in-view {
+    visibility: visible !important;
+    animation: visionSlideFromRight 0.58s var(--vision-delay, 0s) cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes visionSlideFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(34px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.why-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fbbf24;
+    color: #0f172a;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 2px;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.why-feature-text {
+    flex: 1;
+}
+
+.why-feature-text h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    color: #ffffff;
+    line-height: 1.3;
+}
+
+.why-feature-text p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.78);
+    margin: 0;
+}
+
+.why-action {
+    margin-top: 26px;
+}
+
+.why-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fbbf24;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 14.5px;
+    padding: 12px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.35);
+}
+
+.why-btn i {
+    font-size: 13px;
+    transition: transform 0.25s ease;
+}
+
+.why-btn:hover {
+    background: #ffffff;
+    color: #003a6c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+.why-btn:hover i {
+    transform: translateX(4px);
+}
+
+@media (max-width: 991px) {
+    .why-section-card {
+        padding: 36px 24px;
+    }
+
+    .why-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .why-image-area {
+        max-width: 540px;
+        width: 100%;
+        margin: auto;
+    }
+
+    .why-title {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 576px) {
+    .why-section-card {
+        padding: 26px 16px 30px;
+        border-radius: 22px;
+    }
+
+    .why-grid {
+        gap: 30px;
+    }
+
+    .why-title {
+        font-size: 26px;
+        margin-bottom: 12px;
+    }
+
+    .why-features {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .why-feature {
+        gap: 12px;
+    }
+
+    .why-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 9px;
+        font-size: 14px;
+    }
+
+    .why-feature-text h4 {
+        font-size: 15px;
+    }
+
+    .why-feature-text p {
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+    .why-title-desc {
+        font-size: 13.5px;
+        margin-bottom: 20px;
+    }
+
+    .why-action {
+        margin-top: 22px;
+    }
+
+    .why-btn {
+        max-width: 100%;
+        justify-content: center;
+        padding: 11px 20px;
+        font-size: 13px;
+    }
+
+    .why-stat-card {
+        width: 145px;
+        padding: 14px 12px;
+        left: 8px;
+        bottom: 12px;
+    }
+
+    .why-stat-card h2 {
+        font-size: 28px;
+    }
+
+    .why-stat-card p {
+        font-size: 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .why-section-card * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

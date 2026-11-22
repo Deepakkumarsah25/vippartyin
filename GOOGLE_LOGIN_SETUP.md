@@ -31,7 +31,7 @@ This integration uses Google Identity Services' popup callback, so it does not n
 
 ## Profile photos and MongoDB profile data
 
-Profile photos upload from the server to Cloudinary. The returned `secure_url` is stored in the logged-in user's `photoURL` field in MongoDB together with name, email, mobile, address, district and state. Add these server-only values to the root `.env` using the Cloudinary Dashboard values:
+Member join-form photos and profile photos upload from the server to Cloudinary. The returned `secure_url` is stored in the join record's `profilePhoto` or the logged-in user's `photoURL` field in MongoDB. Add these server-only values to `vippartyin/.env` using the Cloudinary Dashboard values:
 
 ```dotenv
 CLOUDINARY_CLOUD_NAME=your-cloud-name
@@ -39,4 +39,4 @@ CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
 ```
 
-Restart the Node server after saving the values. Keep `CLOUDINARY_API_SECRET` private and never add it to browser code or share it in chat. Profile uploads accept JPG, PNG and WebP up to 5 MB. Other profile fields can be saved without Cloudinary; uploading a photo requires these three settings.
+Restart the Node server after saving the values. Keep `CLOUDINARY_API_SECRET` private and never add it to browser code or share it in chat. Member and profile uploads accept JPG, PNG and WebP up to 5 MB; the server checks the file signature before sending it to Cloudinary. Profile fields can still be saved without a photo; a photo upload requires all three Cloudinary settings. The join form also requires Cloudinary configuration when a photo is attached. Existing photos previously saved on local disk are not migrated automatically.
