@@ -114,6 +114,7 @@
         grid.classList.toggle('hidden', visible.length === 0);
       };
       search.addEventListener('input', drawItems);
+<<<<<<< HEAD
       const initialRows = <%- JSON.stringify(initialItems || []).replace(/</g, '\\u003c') %>;
       const url = '/api/press/interviews?limit=50';
       const getRows = result => Array.isArray(result) ? result : (result?.data || result?.news || result?.media || result?.videos || result?.items || []);
@@ -122,6 +123,23 @@
         .then(response => { if (!response.ok) throw new Error('Press content request failed'); return response.json(); })
         .then(result => renderRows(getRows(result)))
         .catch(() => renderRows(initialRows));
+=======
+      const rows = <%- JSON.stringify(initialItems || []).replace(/</g, '\\u003c') %>;
+      if (Array.isArray(rows) && rows.length > 0) {
+        const interviewItems = rows.filter(item => String(item.category || '').toLowerCase() === 'interview');
+        items = interviewItems.length > 0 ? interviewItems : rows;
+        drawChips();
+        drawItems();
+      } else {
+        const url = '/api/press/interviews?limit=50';
+        fetch(url).then(response => { if (!response.ok) throw new Error('Press content request failed'); return response.json(); }).then(result => {
+          const apiRows = Array.isArray(result) ? result : (result.data || result.news || result.media || result.videos || []);
+          const interviewItems = apiRows.filter(item => String(item.category || '').toLowerCase() === 'interview');
+          items = interviewItems.length > 0 ? interviewItems : apiRows;
+          drawChips(); drawItems();
+        }).catch(() => { grid.innerHTML = '<div class="col-span-full rounded-2xl bg-white p-10 text-center text-slate-500">अभी सामग्री लोड नहीं हो सकी। कृपया बाद में फिर प्रयास करें।</div>'; });
+      }
+>>>>>>> bd23c1d222d2b1c6acd2f4366fafb3bd7770c62a
     })();
   </script>
 </body>
