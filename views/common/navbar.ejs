@@ -52,14 +52,14 @@
       <span data-i18n="ticker.helpline">हेल्पलाइन: 0612-2506830</span>
     </a>
     <!-- Top Language Switcher Toggle -->
-    <div class="flex items-center bg-white/10 rounded-full p-0.5 border border-white/20 shadow-inner">
-      <button type="button" class="lang-btn active text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all bg-primary text-white shadow-sm"
-        data-lang="hi">
-        🇮🇳 हिंदी
+    <div class="notranslate flex items-center bg-white/10 rounded-full p-0.5 border border-white/20 shadow-inner select-none" translate="no">
+      <button type="button" class="notranslate lang-btn active text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all duration-200 bg-primary text-white shadow-sm flex items-center justify-center min-w-[62px]"
+        data-lang="hi" data-label="🇮🇳 हिंदी" translate="no">
+        <span class="notranslate" translate="no">🇮🇳 हिंदी</span>
       </button>
-      <button type="button" class="lang-btn text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all text-white hover:text-amber-300"
-        data-lang="en">
-        English
+      <button type="button" class="notranslate lang-btn text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all duration-200 text-white hover:text-amber-300 flex items-center justify-center min-w-[56px]"
+        data-lang="en" data-label="English" translate="no">
+        <span class="notranslate" translate="no">English</span>
       </button>
     </div>
   </div>
@@ -336,12 +336,22 @@
       <!-- Mobile Top Actions: Language Pill + Hamburger -->
       <div class="mobile-top-actions xl:hidden flex items-center gap-2">
         <!-- Mobile Compact Language Switcher -->
-        <div class="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 text-xs">
-          <button type="button" class="lang-btn active text-[10px] font-bold px-2 py-0.5 rounded-full" data-lang="hi">
-            हिं
+        <div class="notranslate flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 text-xs shadow-inner select-none" translate="no">
+          <button type="button"
+            class="notranslate lang-btn active text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all duration-200 bg-primary text-white shadow-sm flex items-center justify-center min-w-[28px] leading-tight"
+            data-lang="hi"
+            data-label="हिं"
+            translate="no"
+            aria-label="हिंदी">
+            <span class="notranslate" translate="no">हिं</span>
           </button>
-          <button type="button" class="lang-btn text-[10px] font-bold px-2 py-0.5 rounded-full" data-lang="en">
-            EN
+          <button type="button"
+            class="notranslate lang-btn text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all duration-200 text-gray-700 hover:text-primary flex items-center justify-center min-w-[28px] leading-tight"
+            data-lang="en"
+            data-label="EN"
+            translate="no"
+            aria-label="English">
+            <span class="notranslate" translate="no">EN</span>
           </button>
         </div>
         <!-- Hamburger Button -->
@@ -365,16 +375,23 @@
     <div class="px-4 pt-3 pb-8 space-y-1">
       <!-- Mobile Language Switcher Full Banner -->
       <div class="bg-blue-50/70 p-3 rounded-xl border border-blue-100 flex items-center justify-between mb-3">
-        <span class="text-xs font-bold text-gray-700 flex items-center gap-1.5">
-          <i class="fa-solid fa-language text-primary"></i> भाषा चुनें (Language):
+        <span class="text-xs font-bold text-gray-700 flex items-center gap-1.5 notranslate" translate="no">
+          <i class="fa-solid fa-language text-primary"></i> <span>भाषा चुनें (Language):</span>
         </span>
-        <div class="flex items-center bg-white p-0.5 rounded-full border border-gray-200 shadow-sm">
-          <button type="button" class="lang-btn active text-xs font-bold px-3 py-1 rounded-full transition-all"
-            data-lang="hi">
-            🇮🇳 हिंदी
+        <div class="notranslate flex items-center bg-white p-0.5 rounded-full border border-gray-200 shadow-sm select-none" translate="no">
+          <button type="button"
+            class="notranslate lang-btn active text-xs font-bold px-3 py-1 rounded-full transition-all duration-200 bg-primary text-white shadow-sm flex items-center justify-center"
+            data-lang="hi"
+            data-label="🇮🇳 हिंदी"
+            translate="no">
+            <span class="notranslate" translate="no">🇮🇳 हिंदी</span>
           </button>
-          <button type="button" class="lang-btn text-xs font-bold px-3 py-1 rounded-full transition-all" data-lang="en">
-            English
+          <button type="button"
+            class="notranslate lang-btn text-xs font-bold px-3 py-1 rounded-full transition-all duration-200 text-gray-700 hover:text-primary flex items-center justify-center"
+            data-lang="en"
+            data-label="English"
+            translate="no">
+            <span class="notranslate" translate="no">English</span>
           </button>
         </div>
       </div>
