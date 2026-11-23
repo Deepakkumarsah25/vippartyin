@@ -351,7 +351,10 @@ window.VIP_LANG = {
   currentLang: 'hi',
 
   init() {
-    // 1. Check saved language or default to Hindi
+    // 1. Guard and lock language button labels against external auto-translation (Google / Chrome)
+    this.protectLanguageButtons();
+
+    // 2. Check saved language or default to Hindi
     const saved = localStorage.getItem('vip_language') || 'hi';
     this.setLanguage(saved, false);
     this.bindButtons();
@@ -392,19 +395,55 @@ window.VIP_LANG = {
       }
     });
 
-    // 3. Update active state of language toggle buttons
+    // 3. Update active state of language toggle buttons and keep labels locked
+    this.updateButtons(lang);
+
+    // 4. Trigger Google Translate for dynamic body content
+    if (triggerGoogle) {
+      this.triggerGoogleTranslate(lang);
+    }
+  },
+
+  restoreButtonLabels() {
+    document.querySelectorAll('.lang-btn').forEach((btn) => {
+      let label = btn.getAttribute('data-label');
+      if (!label) {
+        const btnLang = btn.getAttribute('data-lang');
+        const txt = btn.textContent.trim();
+        if (btnLang === 'hi') {
+          label = (txt.includes('हिंदी') || txt.includes('Hindi')) ? '🇮🇳 हिंदी' : 'हिं';
+        } else {
+          label = (txt.includes('English')) ? 'English' : 'EN';
+        }
+        btn.setAttribute('data-label', label);
+      }
+
+      // Ensure class="notranslate" and translate="no" are enforced
+      if (!btn.classList.contains('notranslate')) btn.classList.add('notranslate');
+      if (btn.getAttribute('translate') !== 'no') btn.setAttribute('translate', 'no');
+
+      const span = btn.querySelector('span.notranslate');
+      if (span) {
+        if (span.textContent !== label) span.textContent = label;
+      } else {
+        btn.innerHTML = `<span class="notranslate" translate="no">${label}</span>`;
+      }
+    });
+  },
+
+  updateButtons(lang) {
     document.querySelectorAll('.lang-btn').forEach((btn) => {
       const btnLang = btn.getAttribute('data-lang');
       const isTopTicker = btn.closest('.sticky-ticker') || btn.closest('.bg-primary-950') || btn.closest('.bg-primary-900');
 
       if (btnLang === lang) {
-        btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
+        btn.classList.add('active', 'bg-primary', 'text-white', 'shadow-sm');
         btn.classList.remove('text-gray-700', 'hover:text-primary');
         if (isTopTicker) {
           btn.classList.remove('hover:text-amber-300');
         }
       } else {
-        btn.classList.remove('bg-primary', 'shadow-sm');
+        btn.classList.remove('active', 'bg-primary', 'shadow-sm');
         if (isTopTicker) {
           btn.classList.remove('text-gray-700', 'hover:text-primary');
           btn.classList.add('text-white', 'hover:text-amber-300');
@@ -415,10 +454,27 @@ window.VIP_LANG = {
       }
     });
 
-    // 4. Trigger Google Translate for dynamic body content
-    if (triggerGoogle) {
-      this.triggerGoogleTranslate(lang);
-    }
+    this.restoreButtonLabels();
+  },
+
+  protectLanguageButtons() {
+    this.restoreButtonLabels();
+
+    document.querySelectorAll('.lang-btn').forEach((btn) => {
+      const label = btn.getAttribute('data-label');
+      if (!label) return;
+
+      const observer = new MutationObserver(() => {
+        const span = btn.querySelector('span.notranslate') || btn;
+        if (span.textContent.trim() !== label) {
+          observer.disconnect();
+          span.textContent = label;
+          observer.observe(btn, { childList: true, characterData: true, subtree: true });
+        }
+      });
+
+      observer.observe(btn, { childList: true, characterData: true, subtree: true });
+    });
   },
 
   bindButtons() {
@@ -467,18 +523,38 @@ window.VIP_LANG = {
     try {
       const select = document.querySelector('#google_translate_element select');
       if (select) {
-        select.value = lang;
-        select.dispatchEvent(new Event('change'));
+        let opt = Array.from(select.options).find((o) => o.value === lang);
+        if (!opt && lang === 'hi') {
+          opt = Array.from(select.options).find(
+            (o) => o.value === '' || o.value.toLowerCase().includes('original') || o.value === 'hi'
+          );
+        }
+        if (opt) {
+          select.value = opt.value;
+          select.dispatchEvent(new Event('change'));
+        }
       } else {
         // Set cookies as fallback
         const host = window.location.hostname;
-        const target = lang === 'en' ? '/hi/en' : '/en/hi';
-        document.cookie = `googtrans=${target}; path=/; domain=${host}`;
-        document.cookie = `googtrans=${target}; path=/;`;
+        if (lang === 'hi') {
+          document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${host}`;
+          document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+          document.cookie = `googtrans=/hi/hi; path=/; domain=${host}`;
+          document.cookie = `googtrans=/hi/hi; path=/;`;
+        } else {
+          document.cookie = `googtrans=/hi/en; path=/; domain=${host}`;
+          document.cookie = `googtrans=/hi/en; path=/;`;
+        }
       }
     } catch (e) {
       console.warn('Google translate note:', e);
     }
+
+    // Force restore button labels across Google Translate async render cycles
+    setTimeout(() => this.restoreButtonLabels(), 150);
+    setTimeout(() => this.restoreButtonLabels(), 400);
+    setTimeout(() => this.restoreButtonLabels(), 900);
+    setTimeout(() => this.restoreButtonLabels(), 1800);
   }
 };
 

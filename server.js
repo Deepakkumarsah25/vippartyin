@@ -219,6 +219,20 @@ const handlePhotoUpload = (req, res, next) => {
   });
 };
 
+const handleScreenshotUpload = (req, res, next) => {
+  upload.single('screenshot')(req, res, (error) => {
+    if (!error) return next();
+    if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ success: false, message: 'स्क्रीनशॉट फ़ाइल 5 MB या उससे छोटी होनी चाहिए।' });
+    }
+    if (error.message && error.message.includes('JPG, PNG')) {
+      return res.status(400).json({ success: false, message: 'कृपया केवल JPG, PNG या WebP फॉर्मेट का स्क्रीनशॉट अपलोड करें।' });
+    }
+    console.error('Screenshot upload parsing failed:', error.message);
+    return res.status(400).json({ success: false, message: 'स्क्रीनशॉट प्रोसेस करने में समस्या आई।' });
+  });
+};
+
 // Join Schema (Synchronized with vip-a MongoDB collections)
 const joinSchema = new mongoose.Schema(
   {
@@ -450,7 +464,8 @@ const donationRecordSchema = new mongoose.Schema(
     donorPhone: { type: String, required: true, trim: true },
     donorEmail: { type: String, default: '', trim: true },
     panNumber: { type: String, default: '', trim: true },
-    amount: { type: Number, required: true },
+    amount: { type: Number, default: 0 },
+    screenshotUrl: { type: String, default: '', trim: true },
     utrNumber: { type: String, default: '', trim: true },
     paymentMode: { type: String, default: 'UPI' },
     state: { type: String, default: 'Bihar' },
@@ -1090,10 +1105,30 @@ app.get('/donate', async (req, res) => {
         isVerified: true
       };
     }
+    let qrCodeData = (settings && settings.qrCodeUrl) ? settings.qrCodeUrl : '';
+    if (!qrCodeData) {
+      try {
+        const QRCode = require('qrcode');
+        const upiUri = `upi://pay?pa=${settings.upiId || 'vipparty@sbi'}&pn=${encodeURIComponent(settings.partyNameEnglish || 'Vikassheel Insaan Party')}&cu=INR`;
+        qrCodeData = await QRCode.toDataURL(upiUri, {
+          width: 320,
+          margin: 1,
+          color: {
+            dark: '#0f172a',
+            light: '#ffffff'
+          }
+        });
+      } catch (qrErr) {
+        console.warn('QR Code generation error:', qrErr.message);
+        qrCodeData = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent('upi://pay?pa=' + (settings.upiId || 'vipparty@sbi') + '&pn=' + (settings.partyNameEnglish || 'Vikassheel Insaan Party') + '&cu=INR')}`;
+      }
+    }
+
     res.render('donate', {
       pageTitle: 'सहयोग करें - दान दें | Support Vikassheel Insaan Party',
       activeNav: 'donate',
-      settings
+      settings,
+      qrCodeData
     });
   } catch (err) {
     console.error('Error rendering donate page:', err);
@@ -1104,18 +1139,48 @@ app.get('/support', (req, res) => res.redirect('/donate'));
 app.get('/support-us', (req, res) => res.redirect('/donate'));
 
 // API to submit donation acknowledgment / pledge
-app.post('/api/donate/submit', publicFormRateLimit, validatePublicFormPayload, async (req, res) => {
+app.post('/api/donate/submit', publicFormRateLimit, handleScreenshotUpload, validatePublicFormPayload, async (req, res) => {
   try {
     const { donorName, donorPhone, donorEmail, panNumber, amount, utrNumber, paymentMode, state, district, message } = req.body || {};
-    if (typeof donorName !== 'string' || typeof donorPhone !== 'string' || donorName.trim().length < 2 || donorName.length > 100 || !/^[6-9]\d{9}$/.test(donorPhone.trim()) || !/^\d+(\.\d{1,2})?$/.test(String(amount))) {
-      return res.status(400).json({ success: false, message: 'कृपया नाम, मोबाइल नंबर और सहयोग राशि अनिवार्य रूप से भरें।' });
+    if (typeof donorName !== 'string' || typeof donorPhone !== 'string' || donorName.trim().length < 2 || donorName.length > 100 || !/^[6-9]\d{9}$/.test(donorPhone.trim())) {
+      return res.status(400).json({ success: false, message: 'कृपया अपना पूरा नाम और 10 अंकों का मोबाइल नंबर अनिवार्य रूप से भरें।' });
     }
 
-    const donationAmount = Number(amount);
-    if (!Number.isFinite(donationAmount) || donationAmount < 1 || donationAmount > 10000000 || [donorEmail, panNumber, utrNumber, paymentMode, state, district, message].some((value) => value != null && (typeof value !== 'string' || value.length > 500))) return res.status(400).json({ success: false, message: 'One or more fields are invalid or too long.' });
-    if (mongoose.connection.readyState !== 1) return res.status(503).json({ success: false, message: 'Donation service is temporarily unavailable.' });
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'कृपया भुगतान (Payment) का स्क्रीनशॉट अनिवार्य रूप से अपलोड करें।' });
+    }
+
+    validateUploadedImage(req.file);
+
+    let screenshotUrl = '';
+    if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+      try {
+        const uploadedImg = await uploadImageToCloudinary(req.file.buffer, 'vip-party/donations');
+        if (uploadedImg && uploadedImg.secure_url) {
+          screenshotUrl = uploadedImg.secure_url;
+        }
+      } catch (cloudErr) {
+        console.warn('Cloudinary upload warning:', cloudErr.message);
+      }
+    }
+
+    if (!screenshotUrl) {
+      const fs = require('fs');
+      const path = require('path');
+      const uploadDir = path.join(__dirname, 'public', 'uploads', 'donations');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      const ext = req.file.mimetype === 'image/png' ? '.png' : (req.file.mimetype === 'image/webp' ? '.webp' : '.jpg');
+      const filename = `donation-${Date.now()}-${crypto.randomBytes(3).toString('hex')}${ext}`;
+      fs.writeFileSync(path.join(uploadDir, filename), req.file.buffer);
+      screenshotUrl = `/uploads/donations/${filename}`;
+    }
+
+    const donationAmount = (amount && /^\d+(\.\d{1,2})?$/.test(String(amount).trim())) ? Number(amount) : 0;
     const receiptNumber = `VIP-DON-${new Date().getFullYear()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
-    {
+
+    if (mongoose.connection.readyState === 1) {
       await DonationRecord.create({
         receiptNumber,
         donorName: donorName.trim(),
@@ -1123,6 +1188,7 @@ app.post('/api/donate/submit', publicFormRateLimit, validatePublicFormPayload, a
         donorEmail: (donorEmail || '').trim(),
         panNumber: (panNumber || '').trim().toUpperCase(),
         amount: donationAmount,
+        screenshotUrl,
         utrNumber: (utrNumber || '').trim(),
         paymentMode: paymentMode || 'UPI',
         state: state || 'Bihar',
@@ -1130,19 +1196,20 @@ app.post('/api/donate/submit', publicFormRateLimit, validatePublicFormPayload, a
         message: (message || '').trim(),
         status: 'Pending Verification'
       });
-      console.log(`🙏 New Donation pledge/receipt recorded: ${donorName} - ₹${amount} (${receiptNumber})`);
+      console.log(`🙏 New Donation payment proof received: ${donorName} (₹${donationAmount}) - ${receiptNumber} - ${screenshotUrl}`);
     }
 
     return res.json({
       success: true,
-      message: 'धन्यवाद! आपके बहुमूल्य सहयोग की सूचना सफलतापूर्वक दर्ज कर ली गई है।',
+      message: 'धन्यवाद! आपके बहुमूल्य सहयोग व भुगतान का स्क्रीनशॉट सफलतापूर्वक दर्ज कर लिया गया है।',
       receiptNumber,
       amount: donationAmount,
-      donorName: donorName.trim()
+      donorName: donorName.trim(),
+      screenshotUrl
     });
   } catch (err) {
-    console.error('Donation pledge error:', err);
-    return res.status(500).json({ success: false, message: 'सर्वर पर दान की जानकारी दर्ज करने में त्रुटि हुई।' });
+    console.error('Donation proof submit error:', err);
+    return res.status(500).json({ success: false, message: 'सर्वर पर भुगतान स्क्रीनशॉट दर्ज करने में त्रुटि हुई।' });
   }
 });
 app.use('/', pressRoutes);
